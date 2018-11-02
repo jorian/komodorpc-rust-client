@@ -1,13 +1,12 @@
-use serde::{de, Deserialize, Deserializer, Serialize, Serializer};
-
-
 #[derive(Deserialize, Serialize, Debug, PartialEq)]
 pub struct Info {
     pub version: u32,
     pub protocolversion: u32,
-    pub KMDversion: String,
+    #[serde(rename = "KMDversion")]
+    pub kmdversion: String,
     pub notarized: u32,
-    pub prevMoMheight: u32,
+    #[serde(rename = "prevMoMheight")]
+    pub prev_mom_height: u32,
     pub notarizedhash: String,
     pub notarizedtxid: String,
     pub notarizedtxid_height: String,

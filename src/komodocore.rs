@@ -6,6 +6,8 @@ use jsonrpc_client::{
 use serde::{de::DeserializeOwned, ser::Serialize};
 use std::fmt::Debug;
 use types::BlockHash;
+use types::Transaction;
+use TransactionId;
 
 pub struct KomodoClient {
     client: RpcClient
@@ -57,7 +59,22 @@ impl KomodoClient {
         ))
     }
 
-    fn send<R: DeserializeOwned + Debug, P: Serialize + Debug>(&self, request: &RpcRequest<P>) -> Result<Result<R, RpcError>, ClientError> {
+    pub fn get_transaction(
+        &self,
+        tx: &TransactionId,
+    ) -> Result<Result<Transaction, RpcError>, ClientError> {
+        self.send(&RpcRequest::new1(
+            JsonRpcVersion::V1,
+            "777",
+            "gettransaction",
+            tx,
+        ))
+    }
+
+    fn send<R: DeserializeOwned + Debug, P: Serialize + Debug>(
+        &self,
+        request: &RpcRequest<P>
+    ) -> Result<Result<R, RpcError>, ClientError> {
         let result = self.client.send::<R, P>(request);
 
         match result {

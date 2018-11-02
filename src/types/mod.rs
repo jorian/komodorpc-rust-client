@@ -1,6 +1,8 @@
+mod transaction;
 mod info;
 #[macro_use]
 mod from_str;
+
 
 // https://stackoverflow.com/questions/52256104/how-to-instantiate-a-public-tuple-structwith-private-field-from-a-different-mo
 #[derive(Deserialize, Serialize, Debug, PartialEq)]
@@ -14,4 +16,4 @@ impl BlockHash {
     } // little tryout
 }
 
-pub use self::{info::*};
+pub use self::{info::*, transaction::*};
