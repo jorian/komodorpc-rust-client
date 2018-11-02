@@ -7,7 +7,9 @@ use serde::{de::DeserializeOwned, ser::Serialize};
 use std::fmt::Debug;
 use types::BlockHash;
 use types::Transaction;
+use types::Info;
 use TransactionId;
+use KomodoRpcApi;
 
 pub struct KomodoClient {
     client: RpcClient
@@ -38,39 +40,6 @@ impl KomodoClient {
         }
     }
 
-    pub fn get_info<R: Debug>(
-        &self,
-    ) -> Result<Result<R, RpcError>, ClientError>
-        where
-            R: DeserializeOwned
-    {
-        self.send(&RpcRequest::new0(
-            JsonRpcVersion::V1,
-            "curltest",
-            "getinfo"
-        ))
-    }
-
-    pub fn get_best_block_hash(&self) -> Result<Result<BlockHash, RpcError>, ClientError> {
-        self.send(&RpcRequest::new0(
-            JsonRpcVersion::V1,
-            "777",
-            "getbestblockhash",
-        ))
-    }
-
-    pub fn get_transaction(
-        &self,
-        tx: &TransactionId,
-    ) -> Result<Result<Transaction, RpcError>, ClientError> {
-        self.send(&RpcRequest::new1(
-            JsonRpcVersion::V1,
-            "777",
-            "gettransaction",
-            tx,
-        ))
-    }
-
     fn send<R: DeserializeOwned + Debug, P: Serialize + Debug>(
         &self,
         request: &RpcRequest<P>
@@ -84,5 +53,37 @@ impl KomodoClient {
             _ => return result
         }
         self.client.send(request)
+    }
+}
+
+impl KomodoRpcApi for KomodoClient {
+    fn get_transaction(
+        &self,
+        tx: &TransactionId,
+    ) -> Result<Result<Transaction, RpcError>, ClientError> {
+        self.send(&RpcRequest::new1(
+            JsonRpcVersion::V1,
+            "777",
+            "gettransaction",
+            tx,
+        ))
+    }
+
+    fn get_info(
+        &self,
+    ) -> Result<Result<Info, RpcError>, ClientError> {
+        self.send(&RpcRequest::new0(
+            JsonRpcVersion::V1,
+            "curltest",
+            "getinfo"
+        ))
+    }
+
+    fn get_best_block_hash(&self) -> Result<Result<BlockHash, RpcError>, ClientError> {
+        self.send(&RpcRequest::new0(
+            JsonRpcVersion::V1,
+            "777",
+            "getbestblockhash",
+        ))
     }
 }
