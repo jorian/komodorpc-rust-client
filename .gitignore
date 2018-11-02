@@ -3,3 +3,4 @@
 /Cargo.lock
 /komodotest.iml
 /.idea
+/src/main.rs

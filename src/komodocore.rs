@@ -52,7 +52,7 @@ impl KomodoClient {
     pub fn get_best_block_hash(&self) -> Result<Result<BlockHash, RpcError>, ClientError> {
         self.send(&RpcRequest::new0(
             JsonRpcVersion::V1,
-            "curltest",
+            "777",
             "getbestblockhash",
         ))
     }
