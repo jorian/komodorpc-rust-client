@@ -102,4 +102,13 @@ impl KomodoRpcApi for KomodoClient {
             "getdifficulty",
         ))
     }
+
+    fn dump_privkey(&self, address: &str) -> Result<Result<String, RpcError>, ClientError> {
+        self.send(&RpcRequest::new1(
+            JsonRpcVersion::V1,
+            "777",
+            "dumpprivkey",
+            address
+        ))
+    }
 }

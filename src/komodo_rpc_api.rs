@@ -20,6 +20,8 @@ pub trait KomodoRpcApi {
 
     fn get_difficulty(&self) -> Result<Result<f64, RpcError>, ClientError>;
 
+    fn dump_privkey(&self, address: &str) -> Result<Result<String, RpcError>, ClientError>;
+
 //    == FSM ==
 //    FSMaddress [pubkey]
 //    FSMcreate name states
