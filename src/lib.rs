@@ -21,6 +21,6 @@ pub use jsonrpc_client::{ClientError, RpcError};
 
 pub use bitcoin::network::constants::Network;
 pub use bitcoin::util::privkey::Privkey;
-pub use bitcoin::Address;
+//pub use bitcoin::Address;
 pub use bitcoin::Script;
 

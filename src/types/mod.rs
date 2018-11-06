@@ -16,4 +16,4 @@ impl BlockHash {
     } // little tryout
 }
 
-pub use self::{info::*, transaction::*};
+pub use self::{info::*, transaction::*, address::*};

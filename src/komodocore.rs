@@ -86,4 +86,20 @@ impl KomodoRpcApi for KomodoClient {
             "getbestblockhash",
         ))
     }
+
+    fn get_new_address(&self) -> Result<Result<String, RpcError>, ClientError> {
+        self.send(&RpcRequest::new0(
+            JsonRpcVersion::V1,
+            "777",
+            "getnewaddress",
+        ))
+    }
+
+    fn get_difficulty(&self) -> Result<Result<f64, RpcError>, ClientError> {
+        self.send(&RpcRequest::new0(
+            JsonRpcVersion::V1,
+            "777",
+            "getdifficulty",
+        ))
+    }
 }
