@@ -1,7 +1,12 @@
 mod transaction;
 mod info;
+mod blockchain;
+mod address;
+mod address_index;
 #[macro_use]
 mod from_str;
+
+pub mod arguments;
 
 
 // https://stackoverflow.com/questions/52256104/how-to-instantiate-a-public-tuple-structwith-private-field-from-a-different-mo
@@ -16,4 +21,4 @@ impl BlockHash {
     } // little tryout
 }
 
-pub use self::{info::*, transaction::*};
+pub use self::{info::*, transaction::*, blockchain::*, address::*, address_index::*};

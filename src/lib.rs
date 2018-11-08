@@ -8,7 +8,7 @@ extern crate serde;
 extern crate serde_derive;
 extern crate serde_json;
 
-mod types;
+mod rpc;
 mod komodocore;
 mod komodo_rpc_api;
 
@@ -16,7 +16,7 @@ pub type TransactionId = bitcoin::util::hash::Sha256dHash;
 
 pub use komodo_rpc_api::KomodoRpcApi;
 pub use komodocore::*; // this basically eliminates mentioning 'komodocore'
-pub use types::*; // this basically eliminates mentioning 'types'
+pub use rpc::*; // this basically eliminates mentioning 'rpc'
 pub use jsonrpc_client::{ClientError, RpcError};
 
 pub use bitcoin::network::constants::Network;

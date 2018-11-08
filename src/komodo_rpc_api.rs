@@ -4,6 +4,10 @@ use TransactionId;
 use Transaction;
 use Info;
 use BlockHash;
+//use ChainTips;
+use Snapshot;
+use AddressBalance;
+use arguments;
 
 pub trait KomodoRpcApi {
     // Komodo has a large set of RPC calls
@@ -22,16 +26,25 @@ pub trait KomodoRpcApi {
 
     fn dump_privkey(&self, address: &str) -> Result<Result<String, RpcError>, ClientError>;
 
+    // getting a snapshot takes an optional parameter. need to create 2 API calls:
+    fn get_snapshot_max(&self, n: u32) -> Result<Result<Snapshot, RpcError>, ClientError>;
+
+    fn get_snapshot(&self) -> Result<Result<Snapshot, RpcError>, ClientError>;
+
+    fn get_address_balance(&self, addresses: arguments::AddressList) -> Result<Result<AddressBalance, RpcError>, ClientError>;// todo replace address to type
+
+//    fn get_chaintips(&self) -> Result<Result<ChainTips, RpcError>, ClientError>;
+
 //    == FSM ==
 //    FSMaddress [pubkey]
 //    FSMcreate name states
 //    FSMinfo fundingtxid
 //    FSMlist
 //
-//    == MofN ==
+//    == MofN ==String
 //    mofnaddress [pubkey]
 //
-//    == Addressindex ==
+//  p == Addressindex ==
 //    getaddressbalance
 //    getaddressdeltas
 //    getaddressmempool

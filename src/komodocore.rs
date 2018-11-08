@@ -5,11 +5,15 @@ use jsonrpc_client::{
 };
 use serde::{de::DeserializeOwned, ser::Serialize};
 use std::fmt::Debug;
-use types::BlockHash;
-use types::Transaction;
-use types::Info;
+//use rpc::BlockHash;
+//use rpc::Transaction;
+//use rpc::Info;
+//use rpc::ChainTips;
+use rpc::*;
 use TransactionId;
 use KomodoRpcApi;
+
+use arguments;
 
 pub struct KomodoClient {
     client: RpcClient
@@ -111,4 +115,39 @@ impl KomodoRpcApi for KomodoClient {
             address
         ))
     }
+
+    fn get_snapshot_max(&self, n: u32) -> Result<Result<Snapshot, RpcError>, ClientError> {
+        self.send(&RpcRequest::new1(
+            JsonRpcVersion::V1,
+            "777",
+            "getsnapshot",
+            n
+        ))
+    }
+
+    fn get_snapshot(&self) -> Result<Result<Snapshot, RpcError>, ClientError> {
+        self.send(&RpcRequest::new0(
+            JsonRpcVersion::V1,
+            "777",
+            "getsnapshot"
+        ))
+    }
+
+    fn get_address_balance(&self, addresses: arguments::AddressList) -> Result<Result<AddressBalance, RpcError>, ClientError> {
+        self.send(&RpcRequest::new1(
+            JsonRpcVersion::V1,
+            "777",
+            "getaddressbalance",
+            addresses
+        ))
+    }
+
+
+//    fn get_chaintips(&self) -> Result<Result<ChainTips, RpcError>, ClientError> {
+//        self.send(&RpcRequest::new0(
+//            JsonRpcVersion::V1,
+//            "777",
+//            "getchaintips"
+//        ))
+//    }
 }
