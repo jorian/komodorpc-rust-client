@@ -18,6 +18,7 @@ pub fn main() {
             match client_response {
                 Err(error) => println!("{}", error.message),
                 Ok(info) => println!("{:?}", info)
+      // or use Ok(info) => println!("{:?}", info.balance) to get balance, etc.
             }
         }
     }
