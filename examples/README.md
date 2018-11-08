@@ -12,7 +12,7 @@ Add the following in Cargo.toml:
 
 ```toml
 [dependencies]
-komodo_rpc_client = "0.0.1"
+komodo_rpc_client = "0.0.2"
 ```
 
 See the examples in this folder for guidance on your first RPC to Komodo using Rust.
