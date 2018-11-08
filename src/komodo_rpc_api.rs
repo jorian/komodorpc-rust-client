@@ -1,13 +1,15 @@
 use jsonrpc_client::ClientError;
 use jsonrpc_client::RpcError;
 use TransactionId;
-use Transaction;
-use Info;
-use BlockHash;
-//use ChainTips;
-use Snapshot;
-use AddressBalance;
-use arguments;
+//use Transaction;
+//use Info;
+//use BlockHash;
+////use ChainTips;
+//use Snapshot;
+//use AddressBalance;
+//use arguments;
+
+use rpc::*;
 
 pub trait KomodoRpcApi {
     // Komodo has a large set of RPC calls
@@ -26,12 +28,20 @@ pub trait KomodoRpcApi {
 
     fn dump_privkey(&self, address: &str) -> Result<Result<String, RpcError>, ClientError>;
 
+    /*
+        Addressindex
+    */
+    fn get_address_balance(&self, addresses: &arguments::AddressList) -> Result<Result<AddressBalance, RpcError>, ClientError>;
+    fn get_address_deltas(&self, addresses: &arguments::AddressList)  -> Result<Result<AddressDeltas, RpcError>, ClientError>;
+    fn get_address_mempool(&self, addresses: &arguments::AddressList) -> Result<Result<AddressMempool, RpcError>, ClientError>;
+    fn get_address_tx_ids(&self, addresses: &arguments::AddressList)  -> Result<Result<AddressTxIDs, RpcError>, ClientError>;
+    fn get_address_utxos(&self, addresses: &arguments::AddressList)   -> Result<Result<AddressUtxos, RpcError>, ClientError>;
+
     // getting a snapshot takes an optional parameter. need to create 2 API calls:
     fn get_snapshot_max(&self, n: u32) -> Result<Result<Snapshot, RpcError>, ClientError>;
-
     fn get_snapshot(&self) -> Result<Result<Snapshot, RpcError>, ClientError>;
 
-    fn get_address_balance(&self, addresses: arguments::AddressList) -> Result<Result<AddressBalance, RpcError>, ClientError>;// todo replace address to type
+
 
 //    fn get_chaintips(&self) -> Result<Result<ChainTips, RpcError>, ClientError>;
 
@@ -45,7 +55,7 @@ pub trait KomodoRpcApi {
 //    mofnaddress [pubkey]
 //
 //  p == Addressindex ==
-//    getaddressbalance
+//  v getaddressbalance
 //    getaddressdeltas
 //    getaddressmempool
 //    getaddresstxids

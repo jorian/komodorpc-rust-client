@@ -13,7 +13,7 @@ use rpc::*;
 use TransactionId;
 use KomodoRpcApi;
 
-use arguments;
+use arguments::AddressList;
 
 pub struct KomodoClient {
     client: RpcClient
@@ -31,6 +31,8 @@ impl KomodoClient {
                 base64::encode(&format!("{}:{}", username, password))
             )).unwrap(),
         );
+
+        // todo: show helpful error when credentials are false
 
         let client = HTTPClient::builder()
             .default_headers(headers)
@@ -133,7 +135,7 @@ impl KomodoRpcApi for KomodoClient {
         ))
     }
 
-    fn get_address_balance(&self, addresses: arguments::AddressList) -> Result<Result<AddressBalance, RpcError>, ClientError> {
+    fn get_address_balance(&self, addresses: &arguments::AddressList) -> Result<Result<AddressBalance, RpcError>, ClientError> {
         self.send(&RpcRequest::new1(
             JsonRpcVersion::V1,
             "777",
@@ -142,12 +144,39 @@ impl KomodoRpcApi for KomodoClient {
         ))
     }
 
+    fn get_address_deltas(&self, addresses: &AddressList) -> Result<Result<AddressDeltas, RpcError>, ClientError> {
+        self.send(&RpcRequest::new1(
+            JsonRpcVersion::V1,
+            "777",
+            "getaddressdeltas",
+            addresses
+        ))
+    }
 
-//    fn get_chaintips(&self) -> Result<Result<ChainTips, RpcError>, ClientError> {
-//        self.send(&RpcRequest::new0(
-//            JsonRpcVersion::V1,
-//            "777",
-//            "getchaintips"
-//        ))
-//    }
+    fn get_address_mempool(&self, addresses: &AddressList) -> Result<Result<AddressMempool, RpcError>, ClientError> {
+        self.send(&RpcRequest::new1(
+            JsonRpcVersion::V1,
+            "777",
+            "getaddressmempool",
+            addresses
+        ))
+    }
+
+    fn get_address_tx_ids(&self, addresses: &AddressList) -> Result<Result<AddressTxIDs, RpcError>, ClientError> {
+        self.send(&RpcRequest::new1(
+            JsonRpcVersion::V1,
+            "777",
+            "getaddresstxids",
+            addresses
+        ))
+    }
+
+    fn get_address_utxos(&self, addresses: &AddressList) -> Result<Result<AddressUtxos, RpcError>, ClientError> {
+        self.send(&RpcRequest::new1(
+            JsonRpcVersion::V1,
+            "777",
+            "getaddressutxos",
+            addresses
+        ))
+    }
 }

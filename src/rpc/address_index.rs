@@ -106,9 +106,7 @@ pub struct AddressDelta {
 }
 
 #[derive(Debug, Deserialize)]
-pub struct AddressMempool {
-    pub vec: Vec<AddressMempoolDelta>
-}
+pub struct AddressMempool(Vec<AddressMempoolDelta>);
 
 #[derive(Debug, Deserialize)]
 pub struct AddressMempoolDelta {
@@ -122,14 +120,7 @@ pub struct AddressMempoolDelta {
 }
 
 #[derive(Debug, Deserialize)]
-pub struct AddressTxIDs {
-    pub vec: Vec<TransactionID>
-}
-
-#[derive(Debug, Deserialize)]
-pub struct TransactionID {
-    pub transactionid: String // todo: TransactionID as a type
-}
+pub struct AddressTxIDs(Vec<String>); // todo: a vec with txids, needs work.
 
 #[derive(Debug, Deserialize)]
 pub struct AddressUtxos {
