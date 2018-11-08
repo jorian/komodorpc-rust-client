@@ -5,8 +5,8 @@ use komodo_rpc_client::KomodoRpcApi;
 use komodo_rpc_client::arguments::AddressList;
 
 pub fn main() {
-    let rpc_user = "komodouser";
-    let rpc_password = "4j2kgkljtFYHGL56R57Df568d5687D57D97DG67h8";
+    let rpc_user = "<rpcuser>";
+    let rpc_password = "<rpcpassword>";
     let rpc_url = "http://127.0.0.1:7771";
 
     let komodo_client = KomodoClient::new(rpc_url, rpc_user, rpc_password);
