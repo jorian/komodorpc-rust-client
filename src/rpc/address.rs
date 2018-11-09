@@ -34,8 +34,15 @@
 //    }
 //}
 
-#[derive(Debug, Deserialize)]
-pub struct Address {
-    pub address: String,
-    pub amount: f64
+pub enum KomodoAddress {
+    Transparent (TAddress),
+    Shielded (ZAddress)
+}
+
+pub struct TAddress {
+
+}
+
+pub struct ZAddress {
+
 }

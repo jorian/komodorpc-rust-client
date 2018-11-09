@@ -51,6 +51,7 @@ impl KomodoClient {
         request: &RpcRequest<P>
     ) -> Result<Result<R, RpcError>, ClientError> {
         let result = self.client.send::<R, P>(request);
+        println!("{:#?}", result);
 
         match result {
             Ok(Err(ref rpc_error)) if rpc_error.code == -28 => {
@@ -119,6 +120,8 @@ impl KomodoRpcApi for KomodoClient {
     }
 
     fn get_snapshot_max(&self, n: u32) -> Result<Result<Snapshot, RpcError>, ClientError> {
+        // parameter must be string:
+        let n = n.to_string();
         self.send(&RpcRequest::new1(
             JsonRpcVersion::V1,
             "777",

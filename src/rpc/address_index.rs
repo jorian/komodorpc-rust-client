@@ -1,5 +1,3 @@
-use Address;
-
 #[derive(Debug, Deserialize)]
 pub struct AddressBalance {
     pub balance: u64,
@@ -53,13 +51,19 @@ pub struct AddressUtxo {
 
 #[derive(Debug, Deserialize)]
 pub struct Snapshot {
-    pub addresses: Vec<Address>,
+    pub start_time: u64,
+    pub addresses: Vec<SnapshotAddress>,
     pub total: f64,
     pub average: f64,
     pub utxos: u64,
     pub total_addresses: u64,
     pub start_height: u64,
     pub ending_height: u64,
-    pub start_time: u64,
     pub end_time: u64,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct SnapshotAddress {
+    pub addr: String,
+    pub amount: String
 }
