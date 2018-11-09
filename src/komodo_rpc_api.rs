@@ -42,7 +42,7 @@ pub trait KomodoRpcApi {
     fn get_snapshot(&self) -> Result<Result<Snapshot, RpcError>, ClientError>;
 
 
-
+    // todo list:
 //    fn get_chaintips(&self) -> Result<Result<ChainTips, RpcError>, ClientError>;
 
 //    == FSM ==
@@ -54,13 +54,13 @@ pub trait KomodoRpcApi {
 //    == MofN ==String
 //    mofnaddress [pubkey]
 //
-//  p == Addressindex ==
+//    == Addressindex ==
 //  v getaddressbalance
-//    getaddressdeltas
-//    getaddressmempool
-//    getaddresstxids
-//    getaddressutxos
-//    getsnapshot
+//  v getaddressdeltas
+//  v getaddressmempool
+//  v getaddresstxids
+//  v getaddressutxos
+//  v getsnapshot
 //
 //    == Auction ==
 //    auctionaddress [pubkey]
