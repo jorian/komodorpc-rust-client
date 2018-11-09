@@ -46,3 +46,19 @@ pub struct TAddress {
 pub struct ZAddress {
 
 }
+
+impl KomodoAddress {
+    pub fn is_transparent(&self) -> bool {
+        match self {
+            KomodoAddress::Transparent(_) => true,
+            KomodoAddress::Shielded(_)    => false,
+        }
+    }
+
+    pub fn is_shielded(&self) -> bool {
+        match self {
+            KomodoAddress::Transparent(_) => false,
+            KomodoAddress::Shielded(_)    => true,
+        }
+    }
+}
