@@ -1,3 +1,5 @@
+use std::fs;
+
 use base64;
 use jsonrpc_client::{
     header::{HeaderMap, HeaderValue, AUTHORIZATION},
@@ -5,22 +7,19 @@ use jsonrpc_client::{
 };
 use serde::{de::DeserializeOwned, ser::Serialize};
 use std::fmt::Debug;
-//use rpc::BlockHash;
-//use rpc::Transaction;
-//use rpc::Info;
-//use rpc::ChainTips;
 use rpc::*;
 use TransactionId;
 use KomodoRpcApi;
 use assetchains::Assetchain;
+use dirs;
 
 use arguments::AddressList;
+use std::collections::HashMap;
 
 pub struct Client {
-    client: RpcClient
+    client: RpcClient,
 }
 
-#[allow(dead_code)]
 impl Client {
     pub fn new(username: &str, password: &str) -> Self {
         let mut headers = HeaderMap::new();
@@ -43,18 +42,21 @@ impl Client {
         let rpc_client = RpcClient::new(client, "http://127.0.0.1:7771");
 
         Client {
-            client: rpc_client
+            client: rpc_client,
         }
     }
 
-    pub fn new_assetchain(ac: Assetchain, username: &str, password: &str) -> Self {
+    pub fn new_assetchain(ac: Assetchain) -> Self {
+
+        let config = Config::get(ac);
+
         let mut headers = HeaderMap::new();
 
         headers.insert(
             AUTHORIZATION,
             HeaderValue::from_str(&format!(
                 "Basic {}",
-                base64::encode(&format!("{}:{}", username, password))
+                base64::encode(&format!("{}:{}", config.rpc_user, config.rpc_password))
             )).unwrap(),
         );
 
@@ -67,11 +69,11 @@ impl Client {
 
         let rpc_client = RpcClient::new(
             client,
-            &format!("http://127.0.0.1:{}", ac as u32)
+            &format!("http://127.0.0.1:{}", config.rpc_port)
         );
 
         Client {
-            client: rpc_client
+            client: rpc_client,
         }
     }
 
@@ -209,5 +211,47 @@ impl KomodoRpcApi for Client {
             "777",
             "getsnapshot"
         ))
+    }
+}
+
+struct Config {
+    rpc_user: String,
+    rpc_password: String,
+    rpc_port: u16,
+}
+
+impl Config {
+    pub fn get(ac: Assetchain) -> Self {
+        let config_file_path;
+        if let Some(mut path) = dirs::home_dir() {
+            path.push(".komodo/");
+            path.push(ac.to_string());
+            path.push(format!("{}.conf", ac.to_string()));
+            config_file_path = path.to_str().unwrap().to_owned();
+        } else {
+            config_file_path = String::new();
+        }
+
+        let contents = fs::read_to_string(config_file_path).expect("unable to open config file");
+
+        let map: HashMap<String, String> = contents.as_str()
+            .split('\n')
+            .map(|line| line.splitn(2, '=').collect::<Vec<&str>>())
+            .filter(|vec| vec.len() == 2)
+            .map(|vec| (
+                vec[0].to_string(),
+                vec[1].to_string()
+            ))
+            .collect::<HashMap<String, String>>();
+
+        let _rpc_user = map.get("rpcuser").expect("no rpcuser in config file");
+        let _rpc_password = map.get("rpcpassword").expect("no rpcpassword in config file");
+        let _rpc_port = map.get("rpcport").expect("no rpcport in config file");
+
+        Config {
+            rpc_user:       _rpc_user.to_owned(),
+            rpc_password:   _rpc_password.to_owned(),
+            rpc_port:       _rpc_port.parse::<u16>().unwrap()
+        }
     }
 }
