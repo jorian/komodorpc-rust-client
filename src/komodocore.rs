@@ -12,16 +12,17 @@ use std::fmt::Debug;
 use rpc::*;
 use TransactionId;
 use KomodoRpcApi;
+use assetchains::Assetchain;
 
 use arguments::AddressList;
 
-pub struct KomodoClient {
+pub struct Client {
     client: RpcClient
 }
 
 #[allow(dead_code)]
-impl KomodoClient {
-    pub fn new(url: &str, username: &str, password: &str) -> Self {
+impl Client {
+    pub fn new(username: &str, password: &str) -> Self {
         let mut headers = HeaderMap::new();
 
         headers.insert(
@@ -39,9 +40,37 @@ impl KomodoClient {
             .build()
             .expect("unable to create http client");
 
-        let rpc_client = RpcClient::new(client, url);
+        let rpc_client = RpcClient::new(client, "http://127.0.0.1:7771");
 
-        KomodoClient {
+        Client {
+            client: rpc_client
+        }
+    }
+
+    pub fn new_assetchain(ac: Assetchain, username: &str, password: &str) -> Self {
+        let mut headers = HeaderMap::new();
+
+        headers.insert(
+            AUTHORIZATION,
+            HeaderValue::from_str(&format!(
+                "Basic {}",
+                base64::encode(&format!("{}:{}", username, password))
+            )).unwrap(),
+        );
+
+        // todo: show helpful error when credentials are false
+
+        let client = HTTPClient::builder()
+            .default_headers(headers)
+            .build()
+            .expect("unable to create http client");
+
+        let rpc_client = RpcClient::new(
+            client,
+            &format!("http://127.0.0.1:{}", ac as u32)
+        );
+
+        Client {
             client: rpc_client
         }
     }
@@ -51,7 +80,6 @@ impl KomodoClient {
         request: &RpcRequest<P>
     ) -> Result<Result<R, RpcError>, ClientError> {
         let result = self.client.send::<R, P>(request);
-        println!("{:#?}", result);
 
         match result {
             Ok(Err(ref rpc_error)) if rpc_error.code == -28 => {
@@ -63,7 +91,7 @@ impl KomodoClient {
     }
 }
 
-impl KomodoRpcApi for KomodoClient {
+impl KomodoRpcApi for Client {
     fn get_transaction(
         &self,
         tx: &TransactionId,
@@ -119,25 +147,6 @@ impl KomodoRpcApi for KomodoClient {
         ))
     }
 
-    fn get_snapshot_max(&self, n: u32) -> Result<Result<Snapshot, RpcError>, ClientError> {
-        // parameter must be string:
-        let n = n.to_string();
-        self.send(&RpcRequest::new1(
-            JsonRpcVersion::V1,
-            "777",
-            "getsnapshot",
-            n
-        ))
-    }
-
-    fn get_snapshot(&self) -> Result<Result<Snapshot, RpcError>, ClientError> {
-        self.send(&RpcRequest::new0(
-            JsonRpcVersion::V1,
-            "777",
-            "getsnapshot"
-        ))
-    }
-
     fn get_address_balance(&self, addresses: &arguments::AddressList) -> Result<Result<AddressBalance, RpcError>, ClientError> {
         self.send(&RpcRequest::new1(
             JsonRpcVersion::V1,
@@ -180,6 +189,25 @@ impl KomodoRpcApi for KomodoClient {
             "777",
             "getaddressutxos",
             addresses
+        ))
+    }
+
+    fn get_snapshot_max(&self, n: u32) -> Result<Result<Snapshot, RpcError>, ClientError> {
+        // parameter must be string:
+        let n = n.to_string();
+        self.send(&RpcRequest::new1(
+            JsonRpcVersion::V1,
+            "777",
+            "getsnapshot",
+            n
+        ))
+    }
+
+    fn get_snapshot(&self) -> Result<Result<Snapshot, RpcError>, ClientError> {
+        self.send(&RpcRequest::new0(
+            JsonRpcVersion::V1,
+            "777",
+            "getsnapshot"
         ))
     }
 }

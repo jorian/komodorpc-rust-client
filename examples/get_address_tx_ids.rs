@@ -1,6 +1,6 @@
 extern crate komodo_rpc_client;
 
-use komodo_rpc_client::KomodoClient;
+use komodo_rpc_client::Client;
 use komodo_rpc_client::KomodoRpcApi;
 use komodo_rpc_client::arguments::AddressList;
 
@@ -9,7 +9,7 @@ pub fn main() {
     let rpc_password = "<rpcpassword>";
     let rpc_url = "http://127.0.0.1:7771";
 
-    let komodo_client = KomodoClient::new(rpc_url, rpc_user, rpc_password);
+    let komodo_client = Client::new(rpc_url, rpc_user, rpc_password);
 
     let mut list_of_addresses = AddressList::new();
     list_of_addresses.add("RBpNURYPcr2yDDAX3UEVKHNvkMfXMMmRDZ");

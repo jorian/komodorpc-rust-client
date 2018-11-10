@@ -13,7 +13,7 @@ pub struct Info {
     pub notarized_confirms: u32,
     pub walletversion: u32,
     pub balance: f32,
-    pub interest: f32,
+    pub interest: Option<f32>,
     pub blocks: u32,
     pub longestchain: u32,
     pub timeoffset: u32,
