@@ -57,8 +57,6 @@ impl Client {
             )).unwrap(),
         );
 
-        // todo: show helpful error when credentials are false
-
         let client = HTTPClient::builder()
             .default_headers(headers)
             .build()
@@ -127,15 +125,6 @@ impl Config {
             .collect::<HashMap<String, String>>();
 
         // todo this shouldn't panic:
-
-//        let mut _rpc_user;
-//        let mut _rpc_password;
-//        let mut _rpc_port;
-//
-//        match map.get("rpcuser") {
-//            Ok(result) => _rpc_user = result,
-//            Err(e) => return Result::Err()
-//        }
 
         let _rpc_user = map.get("rpcuser").expect("no rpcuser in config file");
         let _rpc_password = map.get("rpcpassword").expect("no rpcpassword in config file");
