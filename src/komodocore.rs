@@ -10,46 +10,46 @@ use std::fmt::Debug;
 use rpc::*;
 use TransactionId;
 use KomodoRpcApi;
-use assetchains::Assetchain;
+use chains::Chain;
 use dirs;
 
 use arguments::AddressList;
 use std::collections::HashMap;
+use std::error::Error;
 
 pub struct Client {
     client: RpcClient,
+    config: Config,
 }
 
 impl Client {
-    pub fn new(username: &str, password: &str) -> Self {
-        let mut headers = HeaderMap::new();
+    /// Constructs a new `Client` that talks to the Komodo main chain. It assumes Komodo has
+    /// been installed, since it fetches the needed RPC authentication parameters from the config file.
+    pub fn new_komodo_client() -> Self {
 
-        headers.insert(
-            AUTHORIZATION,
-            HeaderValue::from_str(&format!(
-                "Basic {}",
-                base64::encode(&format!("{}:{}", username, password))
-            )).unwrap(),
-        );
+        let config = Config::get_for(Chain::KMD);
 
-        // todo: show helpful error when credentials are false
-
-        let client = HTTPClient::builder()
-            .default_headers(headers)
-            .build()
-            .expect("unable to create http client");
-
-        let rpc_client = RpcClient::new(client, "http://127.0.0.1:7771");
+        let rpc_client = Client::construct_rpc_client(&config);
 
         Client {
             client: rpc_client,
+            config,
         }
     }
 
-    pub fn new_assetchain(ac: Assetchain) -> Self {
+    pub fn new_assetchain_client(ac: Chain) -> Self {
 
-        let config = Config::get(ac);
+        let config = Config::get_for(ac);
 
+        let rpc_client = Client::construct_rpc_client(&config);
+
+        Client {
+            client: rpc_client,
+            config,
+        }
+    }
+
+    fn construct_rpc_client(config: &Config) -> RpcClient {
         let mut headers = HeaderMap::new();
 
         headers.insert(
@@ -67,14 +67,7 @@ impl Client {
             .build()
             .expect("unable to create http client");
 
-        let rpc_client = RpcClient::new(
-            client,
-            &format!("http://127.0.0.1:{}", config.rpc_port)
-        );
-
-        Client {
-            client: rpc_client,
-        }
+        RpcClient::new(client, &format!("http://127.0.0.1:{}", config.rpc_port))
     }
 
     fn send<R: DeserializeOwned + Debug, P: Serialize + Debug>(
@@ -221,14 +214,26 @@ struct Config {
 }
 
 impl Config {
-    pub fn get(ac: Assetchain) -> Self {
+    pub fn get_for(chain: Chain) -> Self {
         let config_file_path;
+
         if let Some(mut path) = dirs::home_dir() {
+            // todo: location of komodo files differ for each platform
             path.push(".komodo/");
-            path.push(ac.to_string());
-            path.push(format!("{}.conf", ac.to_string()));
+
+            match chain {
+                Chain::KMD => {
+                    path.push("komodo.conf");
+                }
+                _ => {
+                    path.push(chain.to_string());
+                    path.push(format!("{}.conf", chain.to_string()));
+                }
+            }
+
             config_file_path = path.to_str().unwrap().to_owned();
         } else {
+            // todo: what happens when no home dir is found
             config_file_path = String::new();
         }
 
@@ -244,9 +249,24 @@ impl Config {
             ))
             .collect::<HashMap<String, String>>();
 
+        // todo this shouldn't panic:
+
+//        let mut _rpc_user;
+//        let mut _rpc_password;
+//        let mut _rpc_port;
+//
+//        match map.get("rpcuser") {
+//            Ok(result) => _rpc_user = result,
+//            Err(e) => return Result::Err()
+//        }
+
         let _rpc_user = map.get("rpcuser").expect("no rpcuser in config file");
         let _rpc_password = map.get("rpcpassword").expect("no rpcpassword in config file");
-        let _rpc_port = map.get("rpcport").expect("no rpcport in config file");
+        let _rpc_port =
+            match chain {
+                Chain::KMD => "7771", // todo: KMD doesn't put rpcport in conf file at install
+                _ => map.get("rpcport").expect("no rpcport in config file"),
+            };
 
         Config {
             rpc_user:       _rpc_user.to_owned(),

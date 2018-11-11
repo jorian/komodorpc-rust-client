@@ -3,7 +3,8 @@
 use core::fmt;
 
 #[derive(Debug)]
-pub enum Assetchain {
+pub enum Chain {
+    KMD     ,
     REVS    ,
     SUPERNET,
     DEX     ,
@@ -45,7 +46,7 @@ pub enum Assetchain {
     DION    ,
 }
 
-impl fmt::Display for Assetchain {
+impl fmt::Display for Chain {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
          fmt::Debug::fmt(self, f)
     }

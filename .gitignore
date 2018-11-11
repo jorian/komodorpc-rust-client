@@ -1,6 +1,6 @@
 /target
 **/*.rs.bk
 /Cargo.lock
-/komodotest.iml
+/komodo-rpc-client.iml
 /.idea
 /src/main.rs
