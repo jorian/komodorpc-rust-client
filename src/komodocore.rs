@@ -275,4 +275,39 @@ impl KomodoRpcApi for Client {
             "getsnapshot"
         ))
     }
+
+    fn coinsupply(&self, n: u32) -> Result<Result<Coinsupply, RpcError>, ClientError> {
+        let n = n.to_string();
+        self.send(&RpcRequest::new1(
+            JsonRpcVersion::V1,
+            "777",
+            "coinsupply",
+            n
+        ))
+    }
+
+    fn get_blockchain_info(&self) -> Result<Result<BlockchainInfo, RpcError>, ClientError> {
+        self.send(&RpcRequest::new0(
+            JsonRpcVersion::V1,
+            "777",
+            "getblockchaininfo"
+        ))
+    }
+
+    fn get_block_count(&self) -> Result<Result<Blockcount, RpcError>, ClientError> {
+        self.send(&RpcRequest::new0(
+            JsonRpcVersion::V1,
+            "777",
+            "getblockcount"
+        ))
+    }
+
+    fn get_block_hash(&self, n: u32) -> Result<Result<BlockHash, RpcError>, ClientError> {
+        self.send(&RpcRequest::new1(
+            JsonRpcVersion::V1,
+            "777",
+            "getblockhash",
+            n
+        ))
+    }
 }

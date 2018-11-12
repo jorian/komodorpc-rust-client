@@ -46,16 +46,21 @@ pub trait KomodoRpcApi {
     fn get_snapshot(&self) -> Result<Result<Snapshot, RpcError>, ClientError>;
 
 
+    fn coinsupply(&self, n: u32) -> Result<Result<Coinsupply, RpcError>, ClientError>;
+    fn get_blockchain_info(&self) -> Result<Result<BlockchainInfo, RpcError>, ClientError>;
+    fn get_block_count(&self) -> Result<Result<Blockcount, RpcError>, ClientError>;
+    fn get_block_hash(&self, n: u32) -> Result<Result<BlockHash, RpcError>, ClientError>;
+
     // todo list:
 //    fn get_chaintips(&self) -> Result<Result<ChainTips, RpcError>, ClientError>;
 
-//    == FSM ==
+//    == FSM == todo: not functional
 //    FSMaddress [pubkey]
 //    FSMcreate name states
 //    FSMinfo fundingtxid
 //    FSMlist
 //
-//    == MofN ==String
+//    == MofN ==String todo: not functional
 //    mofnaddress [pubkey]
 //
 //    == Addressindex ==
@@ -66,25 +71,24 @@ pub trait KomodoRpcApi {
 //  v getaddressutxos
 //  v getsnapshot
 //
-//    == Auction ==
+//    == Auction == // todo: not functional
 //    auctionaddress [pubkey]
 //
 //    == Blockchain ==
-//    coinsupply <height>
+//  v coinsupply <height>
 //  v getbestblockhash
 //    getblock "hash|height" ( verbose )
-//    getblockchaininfo
-//    getblockcount
-//
-//    getblockhash index
-//    getblockhashes timestamp
+//  v getblockchaininfo
+//  v getblockcount
+//  v getwalletinfo
+//  v getblockhash index
+//    getblockhashes timestamp // todo: can't get it to work on CLI
 //    getblockheader "hash" ( verbose )
 //    getchaintips
 //  v getdifficulty
 //    getmempoolinfo
 //    getrawmempool ( verbose )
 //    getspentinfo
-//  v getwalletinfo
 //    gettxout "txid" n ( includemempool )
 //    gettxoutproof ["txid",...] ( blockhash )
 //    gettxoutsetinfo

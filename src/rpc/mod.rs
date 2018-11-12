@@ -11,7 +11,7 @@ pub mod arguments;
 
 // https://stackoverflow.com/questions/52256104/how-to-instantiate-a-public-tuple-structwith-private-field-from-a-different-mo
 #[derive(Deserialize, Serialize, Debug, PartialEq)]
-pub struct BlockHash(String);
+pub struct BlockHash(pub String);
 
 from_str!(BlockHash);
 
