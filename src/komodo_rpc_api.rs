@@ -20,6 +20,9 @@ pub trait KomodoRpcApi {
 
     fn get_info(&self) -> Result<Result<Info, RpcError>, ClientError>;
 
+    fn get_wallet_info(&self) -> Result<Result<WalletInfo, RpcError>, ClientError>;
+    fn get_tx_out_set_info(&self) -> Result<Result<TXOutSetInfo, RpcError>, ClientError>;
+
     fn get_best_block_hash(&self) -> Result<Result<BlockHash, RpcError>, ClientError>;
 
     fn get_new_address(&self) -> Result<Result<String, RpcError>, ClientError>;
@@ -27,6 +30,7 @@ pub trait KomodoRpcApi {
     fn get_difficulty(&self) -> Result<Result<f64, RpcError>, ClientError>;
 
     fn dump_privkey(&self, address: &str) -> Result<Result<String, RpcError>, ClientError>;
+
 
     /*
         Addressindex
@@ -80,6 +84,7 @@ pub trait KomodoRpcApi {
 //    getmempoolinfo
 //    getrawmempool ( verbose )
 //    getspentinfo
+//  v getwalletinfo
 //    gettxout "txid" n ( includemempool )
 //    gettxoutproof ["txid",...] ( blockhash )
 //    gettxoutsetinfo

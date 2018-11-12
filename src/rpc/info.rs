@@ -29,3 +29,26 @@ pub struct Info {
     pub errors: String,
     pub name: String,
 }
+
+#[derive(Deserialize, Serialize, Debug, PartialEq)]
+pub struct WalletInfo {
+    pub walletversion: u32,
+    pub balance: f64,
+    pub unconfirmed_balance: f64,
+    pub immature_balance: f64,
+    pub txcount: u32,
+    pub keypoololdest: u64,
+    pub keypoolsize: u32,
+    pub paytxfee: f32,
+}
+
+#[derive(Deserialize, Debug, PartialEq)]
+pub struct TXOutSetInfo {
+    pub height: u32,
+    pub bestblock: String,
+    pub transactions: u32,
+    pub txouts: u32,
+    pub bytes_serialized: u32,
+    pub hash_serialized: String,
+    pub total_amount: f64,
+}

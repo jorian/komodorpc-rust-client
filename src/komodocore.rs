@@ -155,13 +155,27 @@ impl KomodoRpcApi for Client {
         ))
     }
 
-    fn get_info(
-        &self,
-    ) -> Result<Result<Info, RpcError>, ClientError> {
+    fn get_info(&self) -> Result<Result<Info, RpcError>, ClientError> {
         self.send(&RpcRequest::new0(
             JsonRpcVersion::V1,
             "curltest",
             "getinfo"
+        ))
+    }
+
+    fn get_wallet_info(&self) -> Result<Result<WalletInfo, RpcError>, ClientError> {
+        self.send(&RpcRequest::new0(
+            JsonRpcVersion::V1,
+            "curltest",
+            "getwalletinfo"
+        ))
+    }
+
+    fn get_tx_out_set_info(&self) -> Result<Result<TXOutSetInfo, RpcError>, ClientError> {
+        self.send(&RpcRequest::new0(
+            JsonRpcVersion::V1,
+            "curltest",
+            "gettxoutsetinfo"
         ))
     }
 
