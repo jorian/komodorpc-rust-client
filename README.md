@@ -19,7 +19,7 @@ This wrapper aims to:
 ##### MofN 
 - [ ]    mofnaddress [pubkey]
 
- == Addressindex ==
+##### Addressindex
 - [x]    getaddressbalance
 - [x]    getaddressdeltas
 - [x]    getaddressmempool
@@ -54,8 +54,8 @@ This wrapper aims to:
 - [ ]    notaries height timestamp
 - [ ]    verifychain ( checklevel numblocks )
 - [ ]    verifytxoutproof "proof"
-- [ ]
-- [ ]    == Channels ==
+
+##### Channels
 - [ ]    channelsaddress destpubkey
 - [ ]    channelscollect paytxid origtxid n amount
 - [ ]    channelsinfo
