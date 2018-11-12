@@ -51,8 +51,12 @@ pub trait KomodoRpcApi {
     fn get_block_count(&self) -> Result<Result<Blockcount, RpcError>, ClientError>;
     fn get_block_hash(&self, n: u32) -> Result<Result<BlockHash, RpcError>, ClientError>;
 
-    // todo list:
-//    fn get_chaintips(&self) -> Result<Result<ChainTips, RpcError>, ClientError>;
+    fn get_block_header(&self, hash: String) -> Result<Result<BlockHeader, RpcError>, ClientError>;
+
+    fn get_chaintips(&self) -> Result<Result<ChainTips, RpcError>, ClientError>;
+    fn get_mempool_info(&self) -> Result<Result<MempoolInfo, RpcError>, ClientError>;
+    fn get_raw_mempool(&self) -> Result<Result<RawMempool, RpcError>, ClientError>;
+    fn get_raw_mempool_verbose(&self) -> Result<Result<RawMempoolVerbose, RpcError>, ClientError>;
 
 //    == FSM == todo: not functional
 //    FSMaddress [pubkey]
@@ -82,12 +86,12 @@ pub trait KomodoRpcApi {
 //  v getblockcount
 //  v getwalletinfo
 //  v getblockhash index
-//    getblockhashes timestamp // todo: can't get it to work on CLI
-//    getblockheader "hash" ( verbose )
-//    getchaintips
+//    getblockhashes timestamp // todo: can't get it to work on CLI > requires timestampindex=1
+//  v getblockheader "hash" ( verbose )
+//  v getchaintips
 //  v getdifficulty
-//    getmempoolinfo
-//    getrawmempool ( verbose )
+//  v getmempoolinfo
+//  v getrawmempool ( verbose ) //
 //    getspentinfo
 //    gettxout "txid" n ( includemempool )
 //    gettxoutproof ["txid",...] ( blockhash )

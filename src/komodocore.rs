@@ -310,4 +310,46 @@ impl KomodoRpcApi for Client {
             n
         ))
     }
+
+    fn get_block_header(&self, hash: String) -> Result<Result<BlockHeader, RpcError>, ClientError> {
+        self.send(&RpcRequest::new1(
+            JsonRpcVersion::V1,
+            "777",
+            "getblockheader",
+            hash
+        ))
+    }
+
+    fn get_chaintips(&self) -> Result<Result<ChainTips, RpcError>, ClientError> {
+        self.send(&RpcRequest::new0(
+            JsonRpcVersion::V1,
+            "777",
+            "getchaintips"
+        ))
+    }
+
+    fn get_mempool_info(&self) -> Result<Result<MempoolInfo, RpcError>, ClientError> {
+        self.send(&RpcRequest::new0(
+            JsonRpcVersion::V1,
+            "777",
+            "getmempoolinfo"
+        ))
+    }
+
+    fn get_raw_mempool(&self) -> Result<Result<RawMempool, RpcError>, ClientError> {
+        self.send(&RpcRequest::new0(
+            JsonRpcVersion::V1,
+            "777",
+            "getrawmempool"
+        ))
+    }
+
+    fn get_raw_mempool_verbose(&self) -> Result<Result<RawMempoolVerbose, RpcError>, ClientError> {
+        self.send(&RpcRequest::new1(
+            JsonRpcVersion::V1,
+            "777",
+            "getrawmempool",
+            true
+        ))
+    }
 }
