@@ -103,32 +103,36 @@ pub struct ChainTip {
     pub status: ChainTipStatus
 }
 
-#[derive(Debug)]
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "lowercase")]
 pub enum ChainTipStatus {
     Invalid,
+    #[serde(rename="headers-only")]
     HeadersOnly,
+    #[serde(rename="valid-headers")]
     ValidHeaders,
+    #[serde(rename="valid-fork")]
     ValidFork,
     Active
 }
 
-impl<'de> Deserialize<'de> for ChainTipStatus {
-    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-        where
-            D: Deserializer<'de>,
-    {
-        let s = String::deserialize(deserializer)?.to_lowercase();
-        let chaintipstatus = match s.as_str() {
-            "active"                    => ChainTipStatus::Active,
-            "invalid"                   => ChainTipStatus::Invalid,
-            "headers-only"              => ChainTipStatus::HeadersOnly,
-            "valid-headers"             => ChainTipStatus::ValidHeaders,
-            "valid-fork"                => ChainTipStatus::ValidFork,
-            other => { return Err(de::Error::custom(format!("Invalid state '{}'", other))); },
-        };
-        Ok(chaintipstatus)
-    }
-}
+//impl<'de> Deserialize<'de> for ChainTipStatus {
+//    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+//        where
+//            D: Deserializer<'de>,
+//    {
+//        let s = String::deserialize(deserializer)?.to_lowercase();
+//        let chaintipstatus = match s.as_str() {
+//            "active"                    => ChainTipStatus::Active,
+//            "invalid"                   => ChainTipStatus::Invalid,
+//            "headers-only"              => ChainTipStatus::HeadersOnly,
+//            "valid-headers"             => ChainTipStatus::ValidHeaders,
+//            "valid-fork"                => ChainTipStatus::ValidFork,
+//            other => { return Err(de::Error::custom(format!("Invalid state '{}'", other))); },
+//        };
+//        Ok(chaintipstatus)
+//    }
+//}
 
 #[derive(Debug, Deserialize)]
 pub struct Coinsupply {
