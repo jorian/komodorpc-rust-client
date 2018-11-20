@@ -336,6 +336,24 @@ impl KomodoRpcApi for Client {
         ))
     }
 
+    fn minerids(&self, height: String) -> Result<Result<MinerIDs, RpcError>, ClientError> { // why is height a string?
+        self.send(&RpcRequest::new1(
+            JsonRpcVersion::V1,
+            "777",
+            "minerids",
+            height
+        ))
+    }
+
+    fn notaries(&self, height: String) -> Result<Result<Notaries, RpcError>, ClientError> { // why is height a string?
+        self.send(&RpcRequest::new1(
+            JsonRpcVersion::V1,
+            "777",
+            "notaries",
+            height
+        ))
+    }
+
     fn get_info(&self) -> Result<Result<Info, RpcError>, ClientError> {
         self.send(&RpcRequest::new0(
             JsonRpcVersion::V1,

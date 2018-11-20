@@ -39,6 +39,9 @@ pub trait KomodoRpcApi {
     fn get_tx_out(&self, txid: String, index: u8) -> Result<Result<TxOut, RpcError>, ClientError>;
     fn get_tx_out_set_info(&self) -> Result<Result<TxOutSetInfo, RpcError>, ClientError>;
 
+    fn minerids(&self, height: String) -> Result<Result<MinerIDs, RpcError>, ClientError>;
+    fn notaries(&self, height: String) -> Result<Result<Notaries, RpcError>, ClientError>;
+
     fn get_info(&self) -> Result<Result<Info, RpcError>, ClientError>;
 
     fn dump_privkey(&self, address: &str) -> Result<Result<String, RpcError>, ClientError>;

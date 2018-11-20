@@ -193,3 +193,35 @@ pub struct ScriptPubKey {
     script_type: String,
     addresses: Vec<String>
 }
+
+#[derive(Debug, Deserialize)]
+pub struct MinerIDs {
+    mined: Vec<MinerID>,
+    numnotaries: u8
+}
+
+#[derive(Debug, Deserialize)]
+pub struct MinerID {
+    notaryid: Option<u8>,
+    #[serde(rename="KMDaddress")]
+    kmd_address: Option<String>,
+    pubkey: String, // response could contain `external miners` instead of miner pubkey
+    blocks: u32
+}
+
+#[derive(Debug, Deserialize)]
+pub struct Notaries {
+    notaries: Vec<Notary>,
+    numnotaries: u8,
+    height: u32,
+    timestamp: u64
+}
+
+#[derive(Debug, Deserialize)]
+pub struct Notary {
+    pubkey: String,
+    #[serde(rename="BTCaddress")]
+    btc_address: String,
+    #[serde(rename="KMDaddress")]
+    kmd_address: String,
+}

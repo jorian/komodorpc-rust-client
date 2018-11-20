@@ -46,12 +46,12 @@ This wrapper aims to:
 - [x]    getrawmempool ( verbose ) //
 - [ ]    getspentinfo "txid" index
 - [x]    gettxout "txid" n ( includemempool )
-- [ ]    gettxoutproof ["txid",...] ( blockhash ) needs -txindex
+- [x]    gettxoutproof ["txid",...] ( blockhash ) needs -txindex
 - [x]    gettxoutsetinfo
 - [ ]    kvsearch key
 - [ ]    kvupdate key "value" days passphrase
-- [ ]    minerids needs height 
-- [ ]    notaries height timestamp
+- [x]    minerids needs height 
+- [x]    notaries height timestamp
 - [ ]    verifychain ( checklevel numblocks )
 - [ ]    verifytxoutproof "proof"
 
