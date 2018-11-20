@@ -35,7 +35,8 @@ pub trait KomodoRpcApi {
     fn get_raw_mempool(&self) -> Result<Result<RawMempool, RpcError>, ClientError>;
     fn get_raw_mempool_verbose(&self) -> Result<Result<RawMempoolVerbose, RpcError>, ClientError>;
 
-    fn get_tx_out_set_info(&self) -> Result<Result<TXOutSetInfo, RpcError>, ClientError>;
+    fn get_tx_out(&self, txid: String, index: u8) -> Result<Result<TxOut, RpcError>, ClientError>;
+    fn get_tx_out_set_info(&self) -> Result<Result<TxOutSetInfo, RpcError>, ClientError>;
 
     fn get_info(&self) -> Result<Result<Info, RpcError>, ClientError>;
 

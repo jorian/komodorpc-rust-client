@@ -172,3 +172,24 @@ pub struct RawMempoolTransactionInfo {
     pub currentpriority: f64,
     pub depends: Vec<String>, // this either returns an empty array or an array with txids
 }
+
+#[derive(Debug, Deserialize)]
+pub struct TxOut {
+    bestblock: BlockHash,
+    confirmations: u32,
+    rawconfirmations: u32,
+    value: f64,
+    scriptPubKey: ScriptPubKey,
+    version: u32,
+    coinbase: bool,
+}
+
+#[derive(Debug, Deserialize)]
+pub struct ScriptPubKey {
+    asm: String,
+    hex: String,
+    reqSigs: u32,
+    #[serde(rename="type")]
+    script_type: String,
+    addresses: Vec<String>
+}

@@ -317,7 +317,17 @@ impl KomodoRpcApi for Client {
         ))
     }
 
-    fn get_tx_out_set_info(&self) -> Result<Result<TXOutSetInfo, RpcError>, ClientError> {
+    fn get_tx_out(&self, txid: String, index: u8) -> Result<Result<TxOut, RpcError>, ClientError> {
+        self.send(&RpcRequest::new2(
+            JsonRpcVersion::V1,
+            "curltest",
+            "gettxout",
+            txid,
+            index
+        ))
+    }
+
+    fn get_tx_out_set_info(&self) -> Result<Result<TxOutSetInfo, RpcError>, ClientError> {
         self.send(&RpcRequest::new0(
             JsonRpcVersion::V1,
             "curltest",

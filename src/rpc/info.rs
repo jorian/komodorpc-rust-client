@@ -43,7 +43,7 @@ pub struct WalletInfo {
 }
 
 #[derive(Deserialize, Debug, PartialEq)]
-pub struct TXOutSetInfo {
+pub struct TxOutSetInfo {
     pub height: u32,
     pub bestblock: String,
     pub transactions: u32,
