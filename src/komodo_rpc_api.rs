@@ -1,6 +1,8 @@
 use jsonrpc_client::ClientError;
 use jsonrpc_client::RpcError;
 use TransactionId;
+use serde::Serialize;
+use std::fmt::Debug;
 
 use rpc::*;
 
@@ -20,6 +22,8 @@ pub trait KomodoRpcApi {
 
     fn coinsupply(&self, n: u32) -> Result<Result<Coinsupply, RpcError>, ClientError>;
     fn get_best_block_hash(&self) -> Result<Result<BlockHash, RpcError>, ClientError>;
+    fn get_block(&self, hashorheight: String) -> Result<Result<Block, RpcError>, ClientError>;
+
     fn get_blockchain_info(&self) -> Result<Result<BlockchainInfo, RpcError>, ClientError>;
     fn get_block_count(&self) -> Result<Result<Blockcount, RpcError>, ClientError>;
     fn get_wallet_info(&self) -> Result<Result<WalletInfo, RpcError>, ClientError>;

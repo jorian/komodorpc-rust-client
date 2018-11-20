@@ -2,10 +2,36 @@ use std::collections::HashMap;
 use serde::Deserialize;
 use serde::Deserializer;
 use serde::de;
+use BlockHash;
+use TransactionId;
+
+#[derive(Debug, Deserialize)]
+pub struct Block {
+    pub hash: BlockHash,
+    pub confirmations: u32, // 0: not confirmed. 1: confirmed but not notarized. 1+ confirmed and notarized.
+    pub rawconfirmations: u32, // default block confirmations
+    pub size: u32,
+    pub height: u32,
+    pub version: u32,
+    pub merkleroot: String,
+    pub segid: i32,
+    pub tx: Vec<TransactionId>,
+    pub time: u64,
+    pub nonce: String,
+    pub solution: String,
+    pub bits: String,
+    pub difficulty: u64,
+    pub chainwork: String,
+    pub anchor: String,
+    #[serde(rename="valuePools")]
+    pub value_pools: Vec<ValuePool>,
+    pub previousblockhash: Option<BlockHash>,
+    pub nextblockhash: Option<BlockHash>
+}
 
 #[derive(Debug, Deserialize)]
 pub struct BlockHeader {
-    pub hash: String,
+    pub hash: BlockHash,
     pub confirmations: u32,
     pub height: u32,
     pub version: u32,
@@ -17,8 +43,8 @@ pub struct BlockHeader {
     pub difficulty: f64,
     pub chainwork: String,
     pub segid: i32,
-    pub previousblockhash: Option<String>, // oldest block has no previous block
-    pub nextblockhash: Option<String>, // newest block has no next block
+    pub previousblockhash: Option<BlockHash>, // oldest block has no previous block
+    pub nextblockhash: Option<BlockHash>, // newest block has no next block
 }
 
 #[derive(Debug, Deserialize)]
@@ -29,7 +55,7 @@ pub struct BlockchainInfo {
     pub chain: String,
     pub blocks: u32,
     pub headers: u32,
-    pub bestblockhash: String,
+    pub bestblockhash: BlockHash,
     pub difficulty: f64,
     pub verificationprogress: f64,
     pub chainwork: String,
@@ -85,6 +111,8 @@ pub struct ValuePool {
     pub monitored: bool,
     pub chainValue: f32,
     pub chainValueZat: u64,
+    pub valueDelta: Option<f32>, // applies only to `getblock`
+    pub valueDeltaZat: Option<u64>,
 }
 
 #[derive(Debug, Deserialize)]

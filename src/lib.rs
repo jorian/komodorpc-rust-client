@@ -16,6 +16,7 @@ mod komodo_rpc_api;
 mod chains;
 
 pub type TransactionId = bitcoin::util::hash::Sha256dHash;
+pub type BlockHash = bitcoin::util::hash::Sha256dHash;
 
 pub use komodo_rpc_api::KomodoRpcApi;
 //pub use komodocore::*; // this basically eliminates mentioning 'komodocore'

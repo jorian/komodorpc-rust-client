@@ -143,75 +143,6 @@ impl Config {
 }
 
 impl KomodoRpcApi for Client {
-    fn get_transaction(
-        &self,
-        tx: &TransactionId,
-    ) -> Result<Result<Transaction, RpcError>, ClientError> {
-        self.send(&RpcRequest::new1(
-            JsonRpcVersion::V1,
-            "777",
-            "gettransaction",
-            tx,
-        ))
-    }
-
-    fn get_info(&self) -> Result<Result<Info, RpcError>, ClientError> {
-        self.send(&RpcRequest::new0(
-            JsonRpcVersion::V1,
-            "curltest",
-            "getinfo"
-        ))
-    }
-
-    fn get_wallet_info(&self) -> Result<Result<WalletInfo, RpcError>, ClientError> {
-        self.send(&RpcRequest::new0(
-            JsonRpcVersion::V1,
-            "curltest",
-            "getwalletinfo"
-        ))
-    }
-
-    fn get_tx_out_set_info(&self) -> Result<Result<TXOutSetInfo, RpcError>, ClientError> {
-        self.send(&RpcRequest::new0(
-            JsonRpcVersion::V1,
-            "curltest",
-            "gettxoutsetinfo"
-        ))
-    }
-
-    fn get_best_block_hash(&self) -> Result<Result<BlockHash, RpcError>, ClientError> {
-        self.send(&RpcRequest::new0(
-            JsonRpcVersion::V1,
-            "777",
-            "getbestblockhash",
-        ))
-    }
-
-    fn get_new_address(&self) -> Result<Result<String, RpcError>, ClientError> {
-        self.send(&RpcRequest::new0(
-            JsonRpcVersion::V1,
-            "777",
-            "getnewaddress",
-        ))
-    }
-
-    fn get_difficulty(&self) -> Result<Result<f64, RpcError>, ClientError> {
-        self.send(&RpcRequest::new0(
-            JsonRpcVersion::V1,
-            "777",
-            "getdifficulty",
-        ))
-    }
-
-    fn dump_privkey(&self, address: &str) -> Result<Result<String, RpcError>, ClientError> {
-        self.send(&RpcRequest::new1(
-            JsonRpcVersion::V1,
-            "777",
-            "dumpprivkey",
-            address
-        ))
-    }
-
     fn get_address_balance(&self, addresses: &arguments::AddressList) -> Result<Result<AddressBalance, RpcError>, ClientError> {
         self.send(&RpcRequest::new1(
             JsonRpcVersion::V1,
@@ -286,6 +217,23 @@ impl KomodoRpcApi for Client {
         ))
     }
 
+    fn get_best_block_hash(&self) -> Result<Result<BlockHash, RpcError>, ClientError> {
+        self.send(&RpcRequest::new0(
+            JsonRpcVersion::V1,
+            "777",
+            "getbestblockhash",
+        ))
+    }
+
+    fn get_block(&self, hashorheight: String) -> Result<Result<Block, RpcError>, ClientError> {
+        self.send(&RpcRequest::new1(
+            JsonRpcVersion::V1,
+            "777",
+            "getblock",
+            hashorheight
+        ))
+    }
+
     fn get_blockchain_info(&self) -> Result<Result<BlockchainInfo, RpcError>, ClientError> {
         self.send(&RpcRequest::new0(
             JsonRpcVersion::V1,
@@ -299,6 +247,14 @@ impl KomodoRpcApi for Client {
             JsonRpcVersion::V1,
             "777",
             "getblockcount"
+        ))
+    }
+
+    fn get_wallet_info(&self) -> Result<Result<WalletInfo, RpcError>, ClientError> {
+        self.send(&RpcRequest::new0(
+            JsonRpcVersion::V1,
+            "curltest",
+            "getwalletinfo"
         ))
     }
 
@@ -328,6 +284,14 @@ impl KomodoRpcApi for Client {
         ))
     }
 
+    fn get_difficulty(&self) -> Result<Result<f64, RpcError>, ClientError> {
+        self.send(&RpcRequest::new0(
+            JsonRpcVersion::V1,
+            "777",
+            "getdifficulty",
+        ))
+    }
+
     fn get_mempool_info(&self) -> Result<Result<MempoolInfo, RpcError>, ClientError> {
         self.send(&RpcRequest::new0(
             JsonRpcVersion::V1,
@@ -350,6 +314,51 @@ impl KomodoRpcApi for Client {
             "777",
             "getrawmempool",
             true
+        ))
+    }
+
+    fn get_tx_out_set_info(&self) -> Result<Result<TXOutSetInfo, RpcError>, ClientError> {
+        self.send(&RpcRequest::new0(
+            JsonRpcVersion::V1,
+            "curltest",
+            "gettxoutsetinfo"
+        ))
+    }
+
+    fn get_info(&self) -> Result<Result<Info, RpcError>, ClientError> {
+        self.send(&RpcRequest::new0(
+            JsonRpcVersion::V1,
+            "curltest",
+            "getinfo"
+        ))
+    }
+
+    fn dump_privkey(&self, address: &str) -> Result<Result<String, RpcError>, ClientError> {
+        self.send(&RpcRequest::new1(
+            JsonRpcVersion::V1,
+            "777",
+            "dumpprivkey",
+            address
+        ))
+    }
+
+    fn get_new_address(&self) -> Result<Result<String, RpcError>, ClientError> {
+        self.send(&RpcRequest::new0(
+            JsonRpcVersion::V1,
+            "777",
+            "getnewaddress",
+        ))
+    }
+
+    fn get_transaction(
+        &self,
+        tx: &TransactionId,
+    ) -> Result<Result<Transaction, RpcError>, ClientError> {
+        self.send(&RpcRequest::new1(
+            JsonRpcVersion::V1,
+            "777",
+            "gettransaction",
+            tx,
         ))
     }
 }

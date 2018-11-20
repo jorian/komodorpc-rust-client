@@ -33,7 +33,7 @@ This wrapper aims to:
 ##### Blockchain
 - [x]    coinsupply <height>
 - [x]    getbestblockhash
-- [ ]    getblock "hash|height" ( verbose )
+- [x]    getblock "hash|height" ( verbose )
 - [x]    getblockchaininfo
 - [x]    getblockcount
 - [x]    getwalletinfo
