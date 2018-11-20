@@ -1,8 +1,3 @@
-
-
-// getchaintips has weird behaviour: first 2 lines of string, then the actual JSON array.
-// todo: find out how to ignore stuff in serde.
-
 use std::collections::HashMap;
 use serde::Deserialize;
 use serde::Deserializer;
@@ -115,24 +110,6 @@ pub enum ChainTipStatus {
     ValidFork,
     Active
 }
-
-//impl<'de> Deserialize<'de> for ChainTipStatus {
-//    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-//        where
-//            D: Deserializer<'de>,
-//    {
-//        let s = String::deserialize(deserializer)?.to_lowercase();
-//        let chaintipstatus = match s.as_str() {
-//            "active"                    => ChainTipStatus::Active,
-//            "invalid"                   => ChainTipStatus::Invalid,
-//            "headers-only"              => ChainTipStatus::HeadersOnly,
-//            "valid-headers"             => ChainTipStatus::ValidHeaders,
-//            "valid-fork"                => ChainTipStatus::ValidFork,
-//            other => { return Err(de::Error::custom(format!("Invalid state '{}'", other))); },
-//        };
-//        Ok(chaintipstatus)
-//    }
-//}
 
 #[derive(Debug, Deserialize)]
 pub struct Coinsupply {

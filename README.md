@@ -44,13 +44,13 @@ This wrapper aims to:
 - [x]    getdifficulty
 - [x]    getmempoolinfo
 - [x]    getrawmempool ( verbose ) //
-- [ ]    getspentinfo
+- [ ]    getspentinfo "txid" index
 - [ ]    gettxout "txid" n ( includemempool )
 - [ ]    gettxoutproof ["txid",...] ( blockhash )
-- [ ]    gettxoutsetinfo
+- [x]    gettxoutsetinfo
 - [ ]    kvsearch key
 - [ ]    kvupdate key "value" days passphrase
-- [ ]    minerids needs height
+- [ ]    minerids needs height 
 - [ ]    notaries height timestamp
 - [ ]    verifychain ( checklevel numblocks )
 - [ ]    verifytxoutproof "proof"
@@ -206,8 +206,8 @@ This wrapper aims to:
 
 ##### Triggers 
 - [ ]    triggersaddress [pubkey]
-- [ ]
-- [ ]    == Util ==
+
+##### Util
 - [ ]    createmultisig nrequired ["key",...]
 - [ ]    estimatefee nblocks
 - [ ]    estimatepriority nblocks
@@ -224,7 +224,7 @@ This wrapper aims to:
 ##### Wallet 
 - [ ]    addmultisigaddress nrequired ["key",...] ( "account" )
 - [ ]    backupwallet "destination"
-- [ ]    dumpprivkey "komodoaddress"
+- [x]    dumpprivkey "komodoaddress"
 - [ ]    dumpwallet "filename"
 - [ ]    encryptwallet "passphrase"
 - [ ]    getaccount "KMD_address"
@@ -236,7 +236,7 @@ This wrapper aims to:
 - [ ]    getrawchangeaddress
 - [ ]    getreceivedbyaccount "account" ( minconf )
 - [ ]    getreceivedbyaddress "KMD_address" ( minconf )
-- [ ]    gettransaction "txid" ( includeWatchonly )
+- [x]    gettransaction "txid" ( includeWatchonly )
 - [ ]    getunconfirmedbalance
 - [ ]    getwalletinfo
 - [ ]    importaddress "address" ( "label" rescan )

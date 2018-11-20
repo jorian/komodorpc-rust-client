@@ -32,7 +32,7 @@ pub struct Detail {
     pub account: String,
 //    pub address: Option<Address>,
     pub address: String,
-    /// send|receive|immature|generate|orphan TODO: Create enum if needed
+    // send|receive|immature|generate|orphan TODO: Create enum if needed
     pub category: String,
     pub amount: f64,
     pub fee: Option<f64>,
