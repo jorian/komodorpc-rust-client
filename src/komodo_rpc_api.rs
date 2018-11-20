@@ -1,6 +1,7 @@
 use jsonrpc_client::ClientError;
 use jsonrpc_client::RpcError;
 use TransactionId;
+use BlockHash;
 use serde::Serialize;
 use std::fmt::Debug;
 

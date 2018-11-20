@@ -9,6 +9,7 @@ use serde::{de::DeserializeOwned, ser::Serialize};
 use std::fmt::Debug;
 use rpc::*;
 use TransactionId;
+use BlockHash;
 use KomodoRpcApi;
 use chains::Chain;
 use dirs;

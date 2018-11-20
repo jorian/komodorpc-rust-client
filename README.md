@@ -46,7 +46,7 @@ This wrapper aims to:
 - [x]    getrawmempool ( verbose ) //
 - [ ]    getspentinfo "txid" index
 - [x]    gettxout "txid" n ( includemempool )
-- [ ]    gettxoutproof ["txid",...] ( blockhash )
+- [ ]    gettxoutproof ["txid",...] ( blockhash ) needs -txindex
 - [x]    gettxoutsetinfo
 - [ ]    kvsearch key
 - [ ]    kvupdate key "value" days passphrase
