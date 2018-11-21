@@ -1,7 +1,4 @@
 use std::collections::HashMap;
-use serde::Deserialize;
-use serde::Deserializer;
-use serde::de;
 use BlockHash;
 use TransactionId;
 

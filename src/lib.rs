@@ -9,11 +9,13 @@ extern crate serde_derive;
 extern crate serde_json;
 extern crate core;
 extern crate dirs;
+extern crate reqwest;
 
 mod rpc;
 mod komodocore;
 mod komodo_rpc_api;
 mod chains;
+mod rpcconn;
 
 pub type TransactionId = bitcoin::util::hash::Sha256dHash;
 pub type BlockHash = bitcoin::util::hash::Sha256dHash;
