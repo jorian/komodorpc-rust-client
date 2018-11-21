@@ -14,6 +14,7 @@ mod rpc;
 mod komodocore;
 mod komodo_rpc_api;
 mod chains;
+mod error;
 
 pub type TransactionId = bitcoin::util::hash::Sha256dHash;
 pub type BlockHash = bitcoin::util::hash::Sha256dHash;

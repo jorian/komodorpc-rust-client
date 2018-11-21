@@ -18,6 +18,7 @@ use arguments::AddressList;
 use std::collections::HashMap;
 
 use std::io::Error;
+use std::path::Path;
 
 pub struct Client {
     client: RpcClient,
@@ -362,6 +363,15 @@ impl KomodoRpcApi for Client {
         ))
     }
 
+    fn backup_wallet(&self, file_name: &str) -> Result<Result<String, RpcError>, ClientError> {
+        self.send(&RpcRequest::new1(
+            JsonRpcVersion::V1,
+            "777",
+            "backupwallet",
+            file_name
+        ))
+    }
+
     fn dump_privkey(&self, address: &str) -> Result<Result<String, RpcError>, ClientError> {
         self.send(&RpcRequest::new1(
             JsonRpcVersion::V1,
@@ -391,3 +401,5 @@ impl KomodoRpcApi for Client {
         ))
     }
 }
+
+

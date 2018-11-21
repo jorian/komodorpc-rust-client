@@ -3,8 +3,6 @@ mod info;
 mod blockchain;
 mod address;
 mod address_index;
-#[macro_use]
-mod from_str;
 
 pub mod arguments;
 

@@ -6,6 +6,7 @@ use serde::Serialize;
 use std::fmt::Debug;
 
 use rpc::*;
+use std::path::Path;
 
 pub trait KomodoRpcApi {
     /*
@@ -44,6 +45,8 @@ pub trait KomodoRpcApi {
 
     fn get_info(&self) -> Result<Result<Info, RpcError>, ClientError>;
 
+
+    fn backup_wallet(&self, file_name: &str) -> Result<Result<String, RpcError>, ClientError>;
     fn dump_privkey(&self, address: &str) -> Result<Result<String, RpcError>, ClientError>;
 
     fn get_new_address(&self) -> Result<Result<String, RpcError>, ClientError>;
