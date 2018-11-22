@@ -2,7 +2,7 @@
 extern crate base64;
 extern crate bitcoin;
 extern crate hex as std_hex;
-extern crate jsonrpc_client;
+//extern crate jsonrpc_client;
 extern crate serde;
 #[macro_use]
 extern crate serde_derive;
@@ -25,7 +25,9 @@ pub use komodo_rpc_api::KomodoRpcApi;
 pub use komodocore::Client;
 
 pub use rpc::*; // this basically eliminates mentioning 'rpc'
-pub use jsonrpc_client::{ClientError, RpcError};
+pub use rpcconn::*;
+
+//pub use jsonrpc_client::{ClientError, RpcError};
 
 pub use bitcoin::network::constants::Network;
 pub use bitcoin::util::privkey::Privkey;
