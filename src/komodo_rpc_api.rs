@@ -1,5 +1,5 @@
-use jsonrpc_client::ClientError;
-use jsonrpc_client::RpcError;
+use ClientError;
+use RpcError;
 use TransactionId;
 use BlockHash;
 use serde::Serialize;

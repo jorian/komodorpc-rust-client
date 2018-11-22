@@ -1,10 +1,18 @@
 use std::fs;
 
 use base64;
-use jsonrpc_client::{
-    header::{HeaderMap, HeaderValue, AUTHORIZATION},
-    ClientError, HTTPClient, JsonRpcVersion, RpcClient, RpcError, RpcRequest,
-};
+//use jsonrpc_client::{
+//    ClientError, HTTPClient, JsonRpcVersion, RpcClient, RpcError, RpcRequest,
+
+
+use ClientError;
+use HTTPClient;
+use RpcClient;
+use RpcError;
+use RpcRequest;
+use JsonRpcVersion;
+
+use reqwest::header::{HeaderMap, HeaderValue, AUTHORIZATION};
 use serde::{de::DeserializeOwned, ser::Serialize};
 use std::fmt::Debug;
 use rpc::*;
