@@ -2,11 +2,8 @@ use ClientError;
 use RpcError;
 use TransactionId;
 use BlockHash;
-use serde::Serialize;
-use std::fmt::Debug;
 
 use rpc::*;
-use std::path::Path;
 
 pub trait KomodoRpcApi {
     /*

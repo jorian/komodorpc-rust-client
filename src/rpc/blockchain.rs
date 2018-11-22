@@ -58,7 +58,8 @@ pub struct BlockchainInfo {
     pub chainwork: String,
     pub pruned: bool,
     pub commitments: u32,
-    pub valuePools: Vec<ValuePool>,
+    #[serde(rename="valuePools")]
+    pub value_pools: Vec<ValuePool>,
     pub softforks: Vec<Softfork>,
     pub upgrades: Option<HashMap<String, Upgrade>>,
     pub consensus: Consensus,
@@ -106,10 +107,14 @@ pub struct Reject {
 pub struct ValuePool {
     pub id: String,
     pub monitored: bool,
-    pub chainValue: f32,
-    pub chainValueZat: u64,
-    pub valueDelta: Option<f32>, // applies only to `getblock`
-    pub valueDeltaZat: Option<u64>,
+    #[serde(rename="chainValue")]
+    pub chain_value: f32,
+    #[serde(rename="chainValueZat")]
+    pub chain_value_zat: u64,
+    #[serde(rename="valueDelta")]
+    pub value_delta: Option<f32>, // applies only to `getblock`
+    #[serde(rename="valueDeltaZat")]
+    pub value_delta_zat: Option<u64>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -176,7 +181,8 @@ pub struct TxOut {
     confirmations: u32,
     rawconfirmations: u32,
     value: f64,
-    scriptPubKey: ScriptPubKey,
+    #[serde(rename="scriptPubKey")]
+    script_pubkey: ScriptPubKey,
     version: u32,
     coinbase: bool,
 }
@@ -185,7 +191,8 @@ pub struct TxOut {
 pub struct ScriptPubKey {
     asm: String,
     hex: String,
-    reqSigs: u32,
+    #[serde(rename="reqSigs")]
+    req_sigs: u32,
     #[serde(rename="type")]
     script_type: String,
     addresses: Vec<String>

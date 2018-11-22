@@ -14,7 +14,8 @@ impl fmt::Display for ApiError {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
         match *self {
             ApiError::RPC(ref cause) => write!(f, "RPC error: {}", cause.message ),
-            ApiError::Client(ref cause) => write!(f, "Client error" ),
+            ApiError::Client(ref _cause) =>
+                write!(f, "Client error"),
             ApiError::Other => write!(f, "Unknown error")
         }
     }

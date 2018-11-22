@@ -26,7 +26,6 @@ use arguments::AddressList;
 use std::collections::HashMap;
 
 use std::io::Error;
-use std::path::Path;
 
 pub struct Client {
     client: RpcClient,

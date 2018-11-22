@@ -28,8 +28,8 @@ pub enum Error {
 impl StdError for Error {
     fn description(&self) -> &str {
         match *self {
-            Error::Transport(ref err) => "error in reqwest",
-            Error::Json(ref err) =>"error in serde",
+            Error::Transport(_) => "error in reqwest",
+            Error::Json(_) =>"error in serde",
         }
     }
 }
