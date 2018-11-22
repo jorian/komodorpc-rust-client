@@ -1,4 +1,4 @@
-use jsonrpc_client::{RpcError, ClientError};
+use {RpcError, ClientError};
 use core::fmt;
 use std::fmt::Formatter;
 use std::error::Error;
@@ -42,7 +42,7 @@ impl From<RpcError> for ApiError {
         ApiError::RPC(cause)
     }
 }
-impl From<ClientErrorError> for ApiError {
+impl From<ClientError> for ApiError {
     fn from(cause: ClientError) -> ApiError {
         ApiError::Client(cause)
     }

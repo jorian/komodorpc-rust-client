@@ -11,6 +11,9 @@ use rpcconn::RpcRequest;
 use rpcconn::RpcError;
 use rpcconn::RpcResponse;
 
+use std::error::Error as StdError;
+use std::fmt;
+
 pub struct RpcClient {
     client: HttpClient,
     url: String,
@@ -20,6 +23,21 @@ pub struct RpcClient {
 pub enum Error {
     Transport(reqwest::Error),
     Json(serde_json::Error),
+}
+
+impl StdError for Error {
+    fn description(&self) -> &str {
+        match *self {
+            Error::Transport(ref err) => "error in reqwest",
+            Error::Json(ref err) =>"error in serde",
+        }
+    }
+}
+
+impl fmt::Display for Error {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Something bad happened!")
+    }
 }
 
 impl RpcClient {

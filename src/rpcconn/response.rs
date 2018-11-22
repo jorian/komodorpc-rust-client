@@ -1,4 +1,5 @@
 use std::result::Result as StdResult;
+use std::{error::Error as StdError, fmt};
 
 #[derive(Debug, Deserialize, PartialEq)]
 pub struct RpcError {
@@ -41,3 +42,14 @@ impl<R> RpcResponse<R> {
     }
 }
 
+impl StdError for RpcError {
+    fn description(&self) -> &str {
+        "error in rpc"
+    }
+}
+
+impl fmt::Display for RpcError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "code {}\nmessage {}", self.code, self.message)
+    }
+}
