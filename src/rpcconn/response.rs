@@ -44,7 +44,7 @@ impl<R> RpcResponse<R> {
 
 impl StdError for RpcError {
     fn description(&self) -> &str {
-        "error in rpc"
+        &self.message
     }
 }
 

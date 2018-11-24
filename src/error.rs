@@ -4,7 +4,7 @@ use std::fmt::Formatter;
 use std::error::Error;
 
 #[derive(Debug)]
-enum ApiError {
+pub enum ApiError {
     RPC(RpcError),
     Client(ClientError),
     Other
@@ -15,7 +15,10 @@ impl fmt::Display for ApiError {
         match *self {
             ApiError::RPC(ref cause) => write!(f, "RPC error: {}", cause.message ),
             ApiError::Client(ref _cause) =>
-                write!(f, "Client error"),
+                match _cause {
+                    ClientError::Json(json_err) => fmt::Display::fmt(json_err, f),
+                    ClientError::Transport(transport_error) => fmt::Display::fmt(transport_error, f),
+                },
             ApiError::Other => write!(f, "Unknown error")
         }
     }

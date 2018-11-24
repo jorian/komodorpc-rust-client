@@ -11,8 +11,11 @@ use rpcconn::RpcRequest;
 use rpcconn::RpcError;
 use rpcconn::RpcResponse;
 
-use std::error::Error as StdError;
+use std::error;
 use std::fmt;
+use std::error::Error;
+
+use error::ApiError;
 
 pub struct RpcClient {
     client: HttpClient,
@@ -20,21 +23,21 @@ pub struct RpcClient {
 }
 
 #[derive(Debug)]
-pub enum Error {
+pub enum ClientError {
     Transport(reqwest::Error),
     Json(serde_json::Error),
 }
 
-impl StdError for Error {
+impl error::Error for ClientError {
     fn description(&self) -> &str {
-        match *self {
-            Error::Transport(_) => "error in reqwest",
-            Error::Json(_) =>"error in serde",
+        match self {
+            ClientError::Transport(ref e) => e.description(),
+            ClientError::Json(ref e) => e.description(),
         }
     }
 }
 
-impl fmt::Display for Error {
+impl fmt::Display for ClientError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "Something bad happened!")
     }
@@ -51,7 +54,8 @@ impl RpcClient {
     pub fn send<R: Debug, T: Debug>(
         &self,
         request: &RpcRequest<T>,
-    ) -> Result<Result<R, RpcError>, Error>
+//    ) -> Result<Result<R, RpcError>, ClientError>
+    ) -> Result<R, ApiError>
         where
             T: Serialize,
             R: DeserializeOwned,
@@ -63,14 +67,30 @@ impl RpcClient {
             // TODO: Avoid serializing twice
             .json(request)
             .send()
-            .map_err(Error::Transport)
+            .map_err(ClientError::Transport)
             .and_then(|mut res| {
                 let mut buf = String::new();
                 let _ = res.read_to_string(&mut buf);
-                serde_json::from_str(&buf).map_err(Error::Json)
+                serde_json::from_str(&buf).map_err(ClientError::Json)
             });
 
-        res.map(RpcResponse::into_result)
+        let res = res.map(RpcResponse::into_result);
+
+        match res {
+            Ok(result) => {
+                match result {
+                    Err(e) => Err(ApiError::RPC(e)),
+                    Ok(res2) => Ok(res2)
+                }
+            },
+            Err(e) => Err(ApiError::Client(e))
+        }
+        // here is a result from the request with an id,
+        // optionally the result (whatever it is) and
+        // optionally an error. this is now morphed into an actual Result, where if there is an error
+        // coming from komodod, the RpcResponse is an RpcError.
+
+//        res.map(RpcResponse::into_result) // Result<T(he response), RpcError>
 
         // TODO: Maybe check if req.id == res.id. Should always hold since it is a synchronous call.
     }
