@@ -1,9 +1,15 @@
 # Komodo (KMD) RPC client
-A RPC client for [Komodo](https://komodoplatform.com) (KMD), made in Rust.
-
-This is a work in progress!  
+A RPC client for [Komodo](https://komodoplatform.com) (KMD), made in Rust. In the future, you can use this library
+to create Rust apps that communicate with Komodo blockchains. Since Crypto Conditions is supported in all
+Komodo assetchains, dApps can be created through this crate. Or at least, that is my goal for this.
 
 With credits to the coblox team's [Rust BTC RPC client](https://github.com/coblox/bitcoinrpc-rust-client).
+
+This is a work in progress! 
+
+todo:
+- [ ]   implement all API calls
+ 
 
 This wrapper aims to:
 - be stateless. It's up to the app using this library to maintain state.
