@@ -25,6 +25,8 @@ pub use komodo_rpc_api::KomodoRpcApi;
 //pub use komodocore::*; // this basically eliminates mentioning 'komodocore'
 pub use komodocore::Client;
 
+pub use error::ApiError;
+
 pub use rpc::*; // this basically eliminates mentioning 'rpc'
 pub use rpcconn::*;
 

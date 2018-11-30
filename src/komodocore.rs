@@ -35,7 +35,7 @@ pub struct Client {
 impl Client {
     /// Constructs a new `Client` that talks to the Komodo main chain. It assumes Komodo has
     /// been installed, since it fetches the needed RPC authentication parameters from the config file.
-    pub fn new_komodo_client() -> Result<Self, Error> {
+    pub fn new_komodo_client() -> Result<Self, ApiError> {
         let config = Config::get_for(Chain::KMD)?;
         let rpc_client = Client::construct_rpc_client(&config);
 
@@ -45,7 +45,7 @@ impl Client {
         })
     }
 
-    pub fn new_assetchain_client(ac: Chain) -> Result<Self, Error> {
+    pub fn new_assetchain_client(ac: Chain) -> Result<Self, ApiError> {
         let config = Config::get_for(ac)?;
         let rpc_client = Client::construct_rpc_client(&config);
 
@@ -98,7 +98,7 @@ struct Config {
 }
 
 impl Config {
-    pub fn get_for(chain: Chain) -> Result<Self, Error> {
+    pub fn get_for(chain: Chain) -> Result<Self, ApiError> {
         let config_file_path;
 
         if let Some(mut path) = dirs::home_dir() {
@@ -122,6 +122,7 @@ impl Config {
         }
 
         let contents = fs::read_to_string(config_file_path)?;
+//            .map_err(|err| ApiError::FileNotFound(err));
 //        let contents = fs::read_to_string(config_file_path).expect("unable to open config file");
 
         let map: HashMap<String, String> = contents.as_str()
@@ -136,7 +137,11 @@ impl Config {
 
         // todo this shouldn't panic:
 
-        let _rpc_user = map.get("rpcuser").expect("no rpcuser in config file");
+//        let _rpc_user = map.get("rpcuser")
+//            .ok_or(format!("No rpcuser in config for {}", chain.to_string()))
+//            .map_err(|err| ApiError::Config(err.to_owned()));
+
+        let _rpc_user = map.get("rpcuser").ok_or(ApiError::Config(String::from("error")))?;
         let _rpc_password = map.get("rpcpassword").expect("no rpcpassword in config file");
         let _rpc_port =
             match chain {
