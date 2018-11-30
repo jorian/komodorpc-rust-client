@@ -1,8 +1,6 @@
 use std::fs;
 
 use base64;
-//use jsonrpc_client::{
-//    ClientError, HTTPClient, JsonRpcVersion, RpcClient, RpcError, RpcRequest,
 use error::ApiError;
 
 use ClientError;
@@ -122,8 +120,6 @@ impl Config {
         }
 
         let contents = fs::read_to_string(config_file_path)?;
-//            .map_err(|err| ApiError::FileNotFound(err));
-//        let contents = fs::read_to_string(config_file_path).expect("unable to open config file");
 
         let map: HashMap<String, String> = contents.as_str()
             .split('\n')
@@ -135,18 +131,12 @@ impl Config {
             ))
             .collect::<HashMap<String, String>>();
 
-        // todo this shouldn't panic:
-
-//        let _rpc_user = map.get("rpcuser")
-//            .ok_or(format!("No rpcuser in config for {}", chain.to_string()))
-//            .map_err(|err| ApiError::Config(err.to_owned()));
-
-        let _rpc_user = map.get("rpcuser").ok_or(ApiError::Config(String::from("error")))?;
-        let _rpc_password = map.get("rpcpassword").expect("no rpcpassword in config file");
+        let _rpc_user = map.get("rpcuser").ok_or(ApiError::Config(String::from("No rpcuser in config")))?;
+        let _rpc_password = map.get("rpcpassword").ok_or(ApiError::Config(String::from("no rpcpassword in config file")))?;
         let _rpc_port =
             match chain {
                 Chain::KMD => "7771", // todo: KMD doesn't put rpcport in conf file at install
-                _ => map.get("rpcport").expect("no rpcport in config file"),
+                _ => map.get("rpcport").ok_or(ApiError::Config(String::from("no rpcport in config file")))?,
             };
 
         Ok(Config {
@@ -167,252 +157,252 @@ impl KomodoRpcApi for Client {
         ))
     }
 
-//    fn get_address_deltas(&self, addresses: &AddressList) -> Result<Result<AddressDeltas, ApiError> {
-//        self.send(&RpcRequest::new1(
-//            JsonRpcVersion::V1,
-//            "777",
-//            "getaddressdeltas",
-//            addresses
-//        ))
-//    }
-//
-//    fn get_address_mempool(&self, addresses: &AddressList) -> Result<Result<AddressMempool, ApiError> {
-//        self.send(&RpcRequest::new1(
-//            JsonRpcVersion::V1,
-//            "777",
-//            "getaddressmempool",
-//            addresses
-//        ))
-//    }
-//
-//    fn get_address_tx_ids(&self, addresses: &AddressList) -> Result<Result<AddressTxIDs, ApiError> {
-//        self.send(&RpcRequest::new1(
-//            JsonRpcVersion::V1,
-//            "777",
-//            "getaddresstxids",
-//            addresses
-//        ))
-//    }
-//
-//    fn get_address_utxos(&self, addresses: &AddressList) -> Result<Result<AddressUtxos, ApiError> {
-//        self.send(&RpcRequest::new1(
-//            JsonRpcVersion::V1,
-//            "777",
-//            "getaddressutxos",
-//            addresses
-//        ))
-//    }
-//
-//    fn get_snapshot_max(&self, n: u32) -> Result<Result<Snapshot, ApiError> {
-//        // parameter must be string:
-//        let n = n.to_string();
-//        self.send(&RpcRequest::new1(
-//            JsonRpcVersion::V1,
-//            "777",
-//            "getsnapshot",
-//            n
-//        ))
-//    }
-//
-//    fn get_snapshot(&self) -> Result<Result<Snapshot,ApiError> {
-//        self.send(&RpcRequest::new0(
-//            JsonRpcVersion::V1,
-//            "777",
-//            "getsnapshot"
-//        ))
-//    }
-//
-//    fn coinsupply(&self, n: u32) -> Result<Result<Coinsupply, ApiError> {
-//        let n = n.to_string();
-//        self.send(&RpcRequest::new1(
-//            JsonRpcVersion::V1,
-//            "777",
-//            "coinsupply",
-//            n
-//        ))
-//    }
-//
-//    fn get_best_block_hash(&self) -> Result<Result<BlockHash, ApiError> {
-//        self.send(&RpcRequest::new0(
-//            JsonRpcVersion::V1,
-//            "777",
-//            "getbestblockhash",
-//        ))
-//    }
-//
-//    fn get_block(&self, hashorheight: String) -> Result<Result<Block, ApiError> {
-//        self.send(&RpcRequest::new1(
-//            JsonRpcVersion::V1,
-//            "777",
-//            "getblock",
-//            hashorheight
-//        ))
-//    }
-//
-//    fn get_blockchain_info(&self) -> Result<Result<BlockchainInfo, ApiError> {
-//        self.send(&RpcRequest::new0(
-//            JsonRpcVersion::V1,
-//            "777",
-//            "getblockchaininfo"
-//        ))
-//    }
-//
-//    fn get_block_count(&self) -> Result<Result<Blockcount, ApiError> {
-//        self.send(&RpcRequest::new0(
-//            JsonRpcVersion::V1,
-//            "777",
-//            "getblockcount"
-//        ))
-//    }
-//
-//    fn get_wallet_info(&self) -> Result<Result<WalletInfo, ApiError> {
-//        self.send(&RpcRequest::new0(
-//            JsonRpcVersion::V1,
-//            "curltest",
-//            "getwalletinfo"
-//        ))
-//    }
-//
-//    fn get_block_hash(&self, n: u32) -> Result<Result<BlockHash, ApiError> {
-//        self.send(&RpcRequest::new1(
-//            JsonRpcVersion::V1,
-//            "777",
-//            "getblockhash",
-//            n
-//        ))
-//    }
-//
-//    fn get_block_header(&self, hash: String) -> Result<Result<BlockHeader, ApiError> {
-//        self.send(&RpcRequest::new1(
-//            JsonRpcVersion::V1,
-//            "777",
-//            "getblockheader",
-//            hash
-//        ))
-//    }
-//
-//    fn get_chaintips(&self) -> Result<Result<ChainTips, ApiError> {
-//        self.send(&RpcRequest::new0(
-//            JsonRpcVersion::V1,
-//            "777",
-//            "getchaintips"
-//        ))
-//    }
-//
-//    fn get_difficulty(&self) -> Result<Result<f64, ApiError> {
-//        self.send(&RpcRequest::new0(
-//            JsonRpcVersion::V1,
-//            "777",
-//            "getdifficulty",
-//        ))
-//    }
-//
-//    fn get_mempool_info(&self) -> Result<Result<MempoolInfo, ApiError> {
-//        self.send(&RpcRequest::new0(
-//            JsonRpcVersion::V1,
-//            "777",
-//            "getmempoolinfo"
-//        ))
-//    }
-//
-//    fn get_raw_mempool(&self) -> Result<Result<RawMempool, ApiError> {
-//        self.send(&RpcRequest::new0(
-//            JsonRpcVersion::V1,
-//            "777",
-//            "getrawmempool"
-//        ))
-//    }
-//
-//    fn get_raw_mempool_verbose(&self) -> Result<Result<RawMempoolVerbose, ApiError> {
-//        self.send(&RpcRequest::new1(
-//            JsonRpcVersion::V1,
-//            "777",
-//            "getrawmempool",
-//            true
-//        ))
-//    }
-//
-//    fn get_tx_out(&self, txid: String, index: u8) -> Result<Result<TxOut, ApiError> {
-//        self.send(&RpcRequest::new2(
-//            JsonRpcVersion::V1,
-//            "curltest",
-//            "gettxout",
-//            txid,
-//            index
-//        ))
-//    }
-//
-//    fn get_tx_out_set_info(&self) -> Result<Result<TxOutSetInfo, ApiError> {
-//        self.send(&RpcRequest::new0(
-//            JsonRpcVersion::V1,
-//            "curltest",
-//            "gettxoutsetinfo"
-//        ))
-//    }
-//
-//    fn minerids(&self, height: String) -> Result<Result<MinerIDs, ApiError> { // why is height a string?
-//        self.send(&RpcRequest::new1(
-//            JsonRpcVersion::V1,
-//            "777",
-//            "minerids",
-//            height
-//        ))
-//    }
-//
-//    fn notaries(&self, height: String) -> Result<Result<Notaries, ApiError> { // why is height a string?
-//        self.send(&RpcRequest::new1(
-//            JsonRpcVersion::V1,
-//            "777",
-//            "notaries",
-//            height
-//        ))
-//    }
-//
-//    fn get_info(&self) -> Result<Result<Info, ApiError> {
-//        self.send(&RpcRequest::new0(
-//            JsonRpcVersion::V1,
-//            "curltest",
-//            "getinfo"
-//        ))
-//    }
-//
-//    fn backup_wallet(&self, file_name: &str) -> Result<Result<String, ApiError> {
-//        self.send(&RpcRequest::new1(
-//            JsonRpcVersion::V1,
-//            "777",
-//            "backupwallet",
-//            file_name
-//        ))
-//    }
-//
-//    fn dump_privkey(&self, address: &str) -> Result<Result<String, ApiError> {
-//        self.send(&RpcRequest::new1(
-//            JsonRpcVersion::V1,
-//            "777",
-//            "dumpprivkey",
-//            address
-//        ))
-//    }
-//
-//    fn get_new_address(&self) -> Result<Result<String, ApiError> {
-//        self.send(&RpcRequest::new0(
-//            JsonRpcVersion::V1,
-//            "777",
-//            "getnewaddress",
-//        ))
-//    }
-//
-//    fn get_transaction(
-//        &self,
-//        tx: &TransactionId,
-//    ) -> Result<Result<Transaction, ApiError> {
-//        self.send(&RpcRequest::new1(
-//            JsonRpcVersion::V1,
-//            "777",
-//            "gettransaction",
-//            tx,
-//        ))
-//    }
+    fn get_address_deltas(&self, addresses: &AddressList) -> Result<AddressDeltas, ApiError> {
+        self.send(&RpcRequest::new1(
+            JsonRpcVersion::V1,
+            "777",
+            "getaddressdeltas",
+            addresses
+        ))
+    }
+
+    fn get_address_mempool(&self, addresses: &AddressList) -> Result<AddressMempool, ApiError> {
+        self.send(&RpcRequest::new1(
+            JsonRpcVersion::V1,
+            "777",
+            "getaddressmempool",
+            addresses
+        ))
+    }
+
+    fn get_address_tx_ids(&self, addresses: &AddressList) -> Result<AddressTxIDs, ApiError> {
+        self.send(&RpcRequest::new1(
+            JsonRpcVersion::V1,
+            "777",
+            "getaddresstxids",
+            addresses
+        ))
+    }
+
+    fn get_address_utxos(&self, addresses: &AddressList) -> Result<AddressUtxos, ApiError> {
+        self.send(&RpcRequest::new1(
+            JsonRpcVersion::V1,
+            "777",
+            "getaddressutxos",
+            addresses
+        ))
+    }
+
+    fn get_snapshot_max(&self, n: u32) -> Result<Snapshot, ApiError> {
+        // parameter must be string:
+        let n = n.to_string();
+        self.send(&RpcRequest::new1(
+            JsonRpcVersion::V1,
+            "777",
+            "getsnapshot",
+            n
+        ))
+    }
+
+    fn get_snapshot(&self) -> Result<Snapshot,ApiError> {
+        self.send(&RpcRequest::new0(
+            JsonRpcVersion::V1,
+            "777",
+            "getsnapshot"
+        ))
+    }
+
+    fn coinsupply(&self, n: u32) -> Result<Coinsupply, ApiError> {
+        let n = n.to_string();
+        self.send(&RpcRequest::new1(
+            JsonRpcVersion::V1,
+            "777",
+            "coinsupply",
+            n
+        ))
+    }
+
+    fn get_best_block_hash(&self) -> Result<BlockHash, ApiError> {
+        self.send(&RpcRequest::new0(
+            JsonRpcVersion::V1,
+            "777",
+            "getbestblockhash",
+        ))
+    }
+
+    fn get_block(&self, hashorheight: String) -> Result<Block, ApiError> {
+        self.send(&RpcRequest::new1(
+            JsonRpcVersion::V1,
+            "777",
+            "getblock",
+            hashorheight
+        ))
+    }
+
+    fn get_blockchain_info(&self) -> Result<BlockchainInfo, ApiError> {
+        self.send(&RpcRequest::new0(
+            JsonRpcVersion::V1,
+            "777",
+            "getblockchaininfo"
+        ))
+    }
+
+    fn get_block_count(&self) -> Result<Blockcount, ApiError> {
+        self.send(&RpcRequest::new0(
+            JsonRpcVersion::V1,
+            "777",
+            "getblockcount"
+        ))
+    }
+
+    fn get_wallet_info(&self) -> Result<WalletInfo, ApiError> {
+        self.send(&RpcRequest::new0(
+            JsonRpcVersion::V1,
+            "curltest",
+            "getwalletinfo"
+        ))
+    }
+
+    fn get_block_hash(&self, n: u32) -> Result<BlockHash, ApiError> {
+        self.send(&RpcRequest::new1(
+            JsonRpcVersion::V1,
+            "777",
+            "getblockhash",
+            n
+        ))
+    }
+
+    fn get_block_header(&self, hash: String) -> Result<BlockHeader, ApiError> {
+        self.send(&RpcRequest::new1(
+            JsonRpcVersion::V1,
+            "777",
+            "getblockheader",
+            hash
+        ))
+    }
+
+    fn get_chaintips(&self) -> Result<ChainTips, ApiError> {
+        self.send(&RpcRequest::new0(
+            JsonRpcVersion::V1,
+            "777",
+            "getchaintips"
+        ))
+    }
+
+    fn get_difficulty(&self) -> Result<f64, ApiError> {
+        self.send(&RpcRequest::new0(
+            JsonRpcVersion::V1,
+            "777",
+            "getdifficulty",
+        ))
+    }
+
+    fn get_mempool_info(&self) -> Result<MempoolInfo, ApiError> {
+        self.send(&RpcRequest::new0(
+            JsonRpcVersion::V1,
+            "777",
+            "getmempoolinfo"
+        ))
+    }
+
+    fn get_raw_mempool(&self) -> Result<RawMempool, ApiError> {
+        self.send(&RpcRequest::new0(
+            JsonRpcVersion::V1,
+            "777",
+            "getrawmempool"
+        ))
+    }
+
+    fn get_raw_mempool_verbose(&self) -> Result<RawMempoolVerbose, ApiError> {
+        self.send(&RpcRequest::new1(
+            JsonRpcVersion::V1,
+            "777",
+            "getrawmempool",
+            true
+        ))
+    }
+
+    fn get_tx_out(&self, txid: String, index: u8) -> Result<TxOut, ApiError> {
+        self.send(&RpcRequest::new2(
+            JsonRpcVersion::V1,
+            "curltest",
+            "gettxout",
+            txid,
+            index
+        ))
+    }
+
+    fn get_tx_out_set_info(&self) -> Result<TxOutSetInfo, ApiError> {
+        self.send(&RpcRequest::new0(
+            JsonRpcVersion::V1,
+            "curltest",
+            "gettxoutsetinfo"
+        ))
+    }
+
+    fn minerids(&self, height: String) -> Result<MinerIDs, ApiError> { // why is height a string?
+        self.send(&RpcRequest::new1(
+            JsonRpcVersion::V1,
+            "777",
+            "minerids",
+            height
+        ))
+    }
+
+    fn notaries(&self, height: String) -> Result<Notaries, ApiError> { // why is height a string?
+        self.send(&RpcRequest::new1(
+            JsonRpcVersion::V1,
+            "777",
+            "notaries",
+            height
+        ))
+    }
+
+    fn get_info(&self) -> Result<Info, ApiError> {
+        self.send(&RpcRequest::new0(
+            JsonRpcVersion::V1,
+            "curltest",
+            "getinfo"
+        ))
+    }
+
+    fn backup_wallet(&self, file_name: &str) -> Result<String, ApiError> {
+        self.send(&RpcRequest::new1(
+            JsonRpcVersion::V1,
+            "777",
+            "backupwallet",
+            file_name
+        ))
+    }
+
+    fn dump_privkey(&self, address: &str) -> Result<String, ApiError> {
+        self.send(&RpcRequest::new1(
+            JsonRpcVersion::V1,
+            "777",
+            "dumpprivkey",
+            address
+        ))
+    }
+
+    fn get_new_address(&self) -> Result<String, ApiError> {
+        self.send(&RpcRequest::new0(
+            JsonRpcVersion::V1,
+            "777",
+            "getnewaddress",
+        ))
+    }
+
+    fn get_transaction(
+        &self,
+        tx: &TransactionId,
+    ) -> Result<Transaction, ApiError> {
+        self.send(&RpcRequest::new1(
+            JsonRpcVersion::V1,
+            "777",
+            "gettransaction",
+            tx,
+        ))
+    }
 }
 
 
