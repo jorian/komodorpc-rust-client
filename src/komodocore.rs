@@ -19,11 +19,13 @@ use BlockHash;
 use KomodoRpcApi;
 use chains::Chain;
 use dirs;
+use os_info::Type as OSType;
 
 use arguments::AddressList;
 use std::collections::HashMap;
 
 use std::io::Error;
+use std::path::PathBuf;
 
 pub struct Client {
     client: RpcClient,
@@ -97,29 +99,44 @@ struct Config {
 
 impl Config {
     pub fn get_for(chain: Chain) -> Result<Self, ApiError> {
-        let config_file_path;
+        let mut config_path: PathBuf = PathBuf::new();
 
-        if let Some(mut path) = dirs::home_dir() {
-            // todo: location of komodo files differ for each platform
-            path.push(".komodo/");
-
-            match chain {
-                Chain::KMD => {
-                    path.push("komodo.conf");
+        // find location of configuration file:
+        match os_info::get().os_type() {
+            OSType::Linux => {
+                if let Some(mut path) = dirs::home_dir() {
+                    path.push(".komodo");
+                    config_path = path;
+                } else {
+                    return Err(ApiError::Other(String::from("no komodod installation found")))
                 }
-                _ => {
-                    path.push(chain.to_string());
-                    path.push(format!("{}.conf", chain.to_string()));
+            },
+            OSType::Macos | OSType::Windows => {
+                // MacOS: /Users/Alice/Library/Application Support
+                // Windows: C:\Users\Alice\AppData\Roaming
+                if let Some(mut path) = dirs::data_dir() {
+                    path.push("Komodo");
+                    config_path = path;
+                } else {
+                    return Err(ApiError::Other(String::from("no komodod installation found")))
                 }
-            }
-
-            config_file_path = path.to_str().unwrap().to_owned();
-        } else {
-            // todo: what happens when no home dir is found
-            config_file_path = String::new();
+            },
+            _ => return Err(ApiError::Other(String::from("unknown operating system")))
         }
 
-        let contents = fs::read_to_string(config_file_path)?;
+        // push the actual configuration file:
+        match chain {
+            Chain::KMD => {
+                config_path.push("komodo.conf"); // conf name is lowercase
+            },
+            // assetchain configuration files live in their own directory:
+            _ => {
+                config_path.push(chain.to_string());
+                config_path.push(format!("{}.conf", chain.to_string())); // conf name is capitalized
+            }
+        }
+
+        let contents = fs::read_to_string(config_path.to_str().unwrap())?;
 
         let map: HashMap<String, String> = contents.as_str()
             .split('\n')
@@ -146,6 +163,7 @@ impl Config {
         })
     }
 }
+
 
 impl KomodoRpcApi for Client {
     fn get_address_balance(&self, addresses: &arguments::AddressList) -> Result<AddressBalance, ApiError> {

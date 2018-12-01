@@ -10,7 +10,7 @@ pub enum ApiError {
     Client(ClientError),
     Config(String),
     IO(io::Error),
-    Other
+    Other(String)
 }
 
 impl fmt::Display for ApiError {
@@ -24,7 +24,7 @@ impl fmt::Display for ApiError {
                 },
             ApiError::Config(ref err) => write!(f, "{}", err),
             ApiError::IO(ref cause) => write!(f, "IO error: {:?}", cause.kind()),
-            ApiError::Other => write!(f, "Unknown error")
+            ApiError::Other(ref err) => write!(f, "{}", err)
         }
     }
 }
@@ -36,7 +36,7 @@ impl Error for ApiError {
             ApiError::Client(ref cause) => cause.description(),
             ApiError::Config(ref err) => err,
             ApiError::IO(ref cause) => cause.description(),
-            ApiError::Other => "Unknown error!",
+            ApiError::Other(ref err) => err,
         }
     }
 
@@ -46,7 +46,7 @@ impl Error for ApiError {
             ApiError::Client(ref cause) => Some(cause),
             ApiError::Config(ref err) => None,
             ApiError::IO(ref cause) => Some(cause),
-            ApiError::Other => None,
+            ApiError::Other(ref err) => None,
         }
     }
 }
