@@ -25,7 +25,6 @@ pub trait KomodoRpcApi {
 
     fn get_blockchain_info(&self) -> Result<BlockchainInfo, ApiError>;
     fn get_block_count(&self) -> Result<Blockcount, ApiError>;
-    fn get_wallet_info(&self) -> Result<WalletInfo, ApiError>;
     fn get_block_hash(&self, n: u32) -> Result<BlockHash, ApiError>;
     fn get_block_header(&self, hash: String) -> Result<BlockHeader, ApiError>;
     fn get_chaintips(&self) -> Result<ChainTips, ApiError>;
@@ -33,20 +32,23 @@ pub trait KomodoRpcApi {
     fn get_mempool_info(&self) -> Result<MempoolInfo, ApiError>;
     fn get_raw_mempool(&self) -> Result<RawMempool, ApiError>;
     fn get_raw_mempool_verbose(&self) -> Result<RawMempoolVerbose, ApiError>;
-
     fn get_tx_out(&self, txid: String, index: u8) -> Result<TxOut, ApiError>;
+
     fn get_tx_out_set_info(&self) -> Result<TxOutSetInfo, ApiError>;
-
     fn minerids(&self, height: String) -> Result<MinerIDs, ApiError>;
-    fn notaries(&self, height: String) -> Result<Notaries, ApiError>;
 
+    fn notaries(&self, height: String) -> Result<Notaries, ApiError>;
     fn get_info(&self) -> Result<Info, ApiError>;
 
-
     fn backup_wallet(&self, file_name: &str) -> Result<String, ApiError>;
-    fn dump_privkey(&self, address: &str) -> Result<String, ApiError>;
 
+
+    fn dump_privkey(&self, address: &str) -> Result<String, ApiError>;
+    fn dump_wallet(&self, filename: &str) -> Result<String, ApiError>;
     fn get_new_address(&self) -> Result<String, ApiError>;
 
+
     fn get_transaction(&self, tx: &TransactionId) -> Result<Transaction, ApiError>;
+
+    fn get_wallet_info(&self) -> Result<WalletInfo, ApiError>;
 }

@@ -1,8 +1,6 @@
-// bring all libraries used into scope:
 extern crate base64;
 extern crate bitcoin;
 extern crate hex as std_hex;
-//extern crate jsonrpc_client;
 extern crate serde;
 #[macro_use]
 extern crate serde_derive;

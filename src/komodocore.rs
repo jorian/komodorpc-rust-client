@@ -402,6 +402,15 @@ impl KomodoRpcApi for Client {
         ))
     }
 
+    fn dump_wallet(&self, filename: &str) -> Result<String, ApiError> {
+        self.send(&RpcRequest::new1(
+            JsonRpcVersion::V1,
+            "777",
+            "dumpwallet",
+            filename
+        ))
+    }
+
     fn get_new_address(&self) -> Result<String, ApiError> {
         self.send(&RpcRequest::new0(
             JsonRpcVersion::V1,

@@ -9,6 +9,7 @@ This is a work in progress!
 
 todo:
 - [ ]   implement all API calls
+- [ ]   argument Address into type
  
 
 This wrapper aims to:
@@ -229,9 +230,9 @@ This wrapper aims to:
 
 ##### Wallet 
 - [ ]    addmultisigaddress nrequired ["key",...] ( "account" )
-- [ ]    backupwallet "destination"
-- [x]    dumpprivkey "komodoaddress"
-- [ ]    dumpwallet "filename"
+- [x]    backupwallet "destination" (*requires `-exportdir` to be set*)
+- [x]    dumpprivkey "komodoaddress" 
+- [x]    dumpwallet "filename" (*requires `-exportdir` to be set*)
 - [ ]    encryptwallet "passphrase"
 - [ ]    getaccount "KMD_address"
 - [ ]    getaccountaddress "account"
@@ -244,7 +245,7 @@ This wrapper aims to:
 - [ ]    getreceivedbyaddress "KMD_address" ( minconf )
 - [x]    gettransaction "txid" ( includeWatchonly )
 - [ ]    getunconfirmedbalance
-- [ ]    getwalletinfo
+- [x]    getwalletinfo
 - [ ]    importaddress "address" ( "label" rescan )
 - [ ]    importprivkey "komodoprivkey" ( "label" rescan )
 - [ ]    importwallet "filename"
