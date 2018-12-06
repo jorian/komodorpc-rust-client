@@ -42,6 +42,8 @@ pub trait KomodoRpcApi {
     fn notaries(&self, height: String) -> Result<Notaries, ApiError>;
     fn get_info(&self) -> Result<Info, ApiError>;
 
+    fn decode_raw_transaction(&self, hex_string: &str) -> Result<RawTransaction, ApiError>;
+
     fn backup_wallet(&self, file_name: &str) -> Result<String, ApiError>;
 
 

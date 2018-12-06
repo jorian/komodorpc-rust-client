@@ -1,5 +1,6 @@
 use BlockHash;
 use TransactionId;
+use ScriptPubKey;
 
 #[derive(Deserialize, Serialize, Debug)]
 pub struct Transaction {
@@ -17,7 +18,7 @@ pub struct Transaction {
     pub time: u64,
     /// Unix Timestamp
     pub timereceived: u64,
-    pub vjoinsplit: Vec<String>,
+    pub vjoinsplit: Vec<VJoinsplit>,
     //    pub comment: Option<String>,
 //    pub to: Option<String>,
 //    #[serde(rename = "bip125-replaceable")]
@@ -41,4 +42,61 @@ pub struct Detail {
     pub involves_watchonly: Option<bool>,
     pub abandoned: Option<bool>,
     pub size: u32,
+}
+
+#[derive(Deserialize, Serialize, Debug)]
+pub struct RawTransaction {
+    pub hex: Option<String>,
+    pub overwintered: Option<bool>,
+    pub txid: String,
+    pub size: u32,
+    pub versiongroupid: Option<String>,
+    pub version: u32,
+    pub locktime: u64,
+    pub expiryheight: Option<u32>,
+    pub vin: Vec<Vin>,
+    pub vout: Vec<Vout>,
+    pub vjoinsplit: Vec<VJoinsplit>,
+    pub blockhash: Option<BlockHash>,
+    pub confirmations: Option<u32>,
+    pub time: Option<u64>,
+    pub blocktime: Option<u64>
+}
+
+#[derive(Deserialize, Serialize, Debug)]
+pub struct Vin {
+    pub txid: TransactionId,
+    pub vout: u32,
+    pub scriptSig: ScriptSig,
+    pub sequence: u64,
+}
+
+#[derive(Deserialize, Serialize, Debug)]
+pub struct ScriptSig {
+    pub asm: String,
+    pub hex: String
+}
+
+#[derive(Deserialize, Serialize, Debug)]
+pub struct Vout {
+    pub value: f64,
+    #[serde(rename = "valueSat")]
+    pub value_sat: u64,
+    pub n: u32,
+    #[serde(rename = "scriptPubKey")]
+    pub script_pubkey: ScriptPubKey,
+}
+
+#[derive(Deserialize, Serialize, Debug)]
+pub struct VJoinsplit {
+    pub vpub_old: f64,
+    pub vpub_new: f64,
+    pub anchor: String,
+    pub nullifiers: Vec<String>,
+    pub commitments: Vec<String>,
+    pub onetimePubKey: String,
+    pub randomSeed: String,
+    pub macs: Vec<String>,
+    pub proof: String,
+    pub ciphertexts: Vec<String>,
 }

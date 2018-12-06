@@ -3,6 +3,7 @@ extern crate komodo_rpc_client;
 use komodo_rpc_client::Client;
 use komodo_rpc_client::KomodoRpcApi;
 use komodo_rpc_client::arguments::AddressList;
+use std::error::Error;
 
 pub fn main() {
     let komodo_client = Client::new_komodo_client().expect("Failed to start KMD client");
@@ -13,12 +14,7 @@ pub fn main() {
     let address_txids = komodo_client.get_address_tx_ids(&list_of_addresses);
 
     match address_txids {
-        Err(e) => println!("{:?}", e),
-        Ok(ok) => {
-            match ok {
-                Err(rpcerror) => println!("{:?}", rpcerror.message),
-                Ok(txids) => println!("{:?}", txids),
-            }
-        }
+        Err(e) => println!("{:?}", e.description()),
+        Ok(ok) => println!("{:?}", ok),
     }
 }

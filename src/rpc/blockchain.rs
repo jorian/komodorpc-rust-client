@@ -187,7 +187,7 @@ pub struct TxOut {
     coinbase: bool,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct ScriptPubKey {
     asm: String,
     hex: String,

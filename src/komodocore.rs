@@ -103,7 +103,7 @@ impl Config {
 
         // find location of configuration file:
         match os_info::get().os_type() {
-            OSType::Linux => {
+            OSType::Ubuntu | OSType::Linux => {
                 if let Some(mut path) = dirs::home_dir() {
                     path.push(".komodo");
                     config_path = path;
@@ -372,6 +372,15 @@ impl KomodoRpcApi for Client {
             JsonRpcVersion::V1,
             "curltest",
             "getinfo"
+        ))
+    }
+
+    fn decode_raw_transaction(&self, hex_string: &str) -> Result<RawTransaction, ApiError> {
+        self.send(&RpcRequest::new1(
+            JsonRpcVersion::V1,
+            "777",
+            "decoderawtransaction",
+            hex_string
         ))
     }
 

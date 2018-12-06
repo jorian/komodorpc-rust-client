@@ -180,7 +180,7 @@ This wrapper aims to:
 
 ##### Rawtransactions 
 - [ ]    createrawtransaction [{"txid":"id","vout":n},...] {"address":amount,...}
-- [ ]    decoderawtransaction "hexstring"
+- [x]    decoderawtransaction "hexstring"
 - [ ]    decodescript "hex"
 - [ ]    fundrawtransaction "hexstring"
 - [ ]    getrawtransaction "txid" ( verbose )
