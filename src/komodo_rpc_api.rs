@@ -5,10 +5,12 @@ use BlockHash;
 use error::ApiError;
 use rpc::*;
 
+
 pub trait KomodoRpcApi {
     /*
     Addressindex
 */
+
     fn get_address_balance(&self, addresses: &arguments::AddressList) -> Result<AddressBalance, ApiError>;
     fn get_address_deltas(&self, addresses: &arguments::AddressList)  -> Result<AddressDeltas,  ApiError>;
     fn get_address_mempool(&self, addresses: &arguments::AddressList) -> Result<AddressMempool, ApiError>;
@@ -45,8 +47,11 @@ pub trait KomodoRpcApi {
 
     fn dump_privkey(&self, address: &str) -> Result<String, ApiError>;
     fn dump_wallet(&self, filename: &str) -> Result<String, ApiError>;
-    fn get_new_address(&self) -> Result<String, ApiError>;
 
+
+    fn get_balance(&self, minconf: Option<u32>, include_watchonly: Option<bool>) -> Result<f64, ApiError>;
+    fn get_new_address(&self) -> Result<String, ApiError>;
+    fn get_raw_change_address(&self) -> Result<String, ApiError>;
 
     fn get_transaction(&self, tx: &TransactionId) -> Result<Transaction, ApiError>;
 

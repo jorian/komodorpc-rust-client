@@ -164,7 +164,6 @@ impl Config {
     }
 }
 
-
 impl KomodoRpcApi for Client {
     fn get_address_balance(&self, addresses: &arguments::AddressList) -> Result<AddressBalance, ApiError> {
         self.send(&RpcRequest::new1(
@@ -270,14 +269,6 @@ impl KomodoRpcApi for Client {
             JsonRpcVersion::V1,
             "777",
             "getblockcount"
-        ))
-    }
-
-    fn get_wallet_info(&self) -> Result<WalletInfo, ApiError> {
-        self.send(&RpcRequest::new0(
-            JsonRpcVersion::V1,
-            "curltest",
-            "getwalletinfo"
         ))
     }
 
@@ -411,11 +402,51 @@ impl KomodoRpcApi for Client {
         ))
     }
 
+    fn get_balance(&self, minconf: Option<u32>, include_watchonly: Option<bool>) -> Result<f64, ApiError> {
+        let mut second;
+        let mut third;
+
+        match (minconf, include_watchonly) {
+            (Some(minconf), Some(wo)) => {
+                second = minconf;
+                third = wo;
+            },
+            (Some(minconf), _) => {
+                second = minconf;
+                third = false;
+            },
+            (_, Some(wo)) => {
+                second = 1;
+                third = wo;
+            },
+            _ => {
+                second = 1;
+                third = false;
+            }
+        }
+        self.send(&RpcRequest::new3(
+            JsonRpcVersion::V1,
+            "777",
+            "getbalance",
+            "*",
+            second,
+            third
+        ))
+    }
+
     fn get_new_address(&self) -> Result<String, ApiError> {
         self.send(&RpcRequest::new0(
             JsonRpcVersion::V1,
             "777",
             "getnewaddress",
+        ))
+    }
+
+    fn get_raw_change_address(&self) -> Result<String, ApiError> {
+        self.send(&RpcRequest::new0(
+            JsonRpcVersion::V1,
+            "777",
+            "getrawchangeaddress",
         ))
     }
 
@@ -430,6 +461,12 @@ impl KomodoRpcApi for Client {
             tx,
         ))
     }
+
+    fn get_wallet_info(&self) -> Result<WalletInfo, ApiError> {
+        self.send(&RpcRequest::new0(
+            JsonRpcVersion::V1,
+            "curltest",
+            "getwalletinfo"
+        ))
+    }
 }
-
-

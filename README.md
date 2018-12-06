@@ -10,6 +10,7 @@ This is a work in progress!
 todo:
 - [ ]   implement all API calls
 - [ ]   argument Address into type
+- [ ]   handle empty responses (setaccount)
  
 
 This wrapper aims to:
@@ -234,14 +235,14 @@ This wrapper aims to:
 - [x]    dumpprivkey "komodoaddress" 
 - [x]    dumpwallet "filename" (*requires `-exportdir` to be set*)
 - [ ]    encryptwallet "passphrase"
-- [ ]    getaccount "KMD_address"
-- [ ]    getaccountaddress "account"
-- [ ]    getaddressesbyaccount "account"
-- [ ]    getbalance ( "account" minconf includeWatchonly )
+- [ ]    getaccount "KMD_address" (*deprecated*)
+- [ ]    getaccountaddress "account" (*deprecated*)
+- [ ]    getaddressesbyaccount "account" (*deprecated*)
+- [x]    getbalance ( "account" minconf includeWatchonly ) (*account deprecated*)
 - [ ]    getbalance64
-- [x]    getnewaddress ( "account" ) //todo: are accounts officially supported?
+- [x]    getnewaddress ( "account" ) (*account deprecated*)
 - [ ]    getrawchangeaddress
-- [ ]    getreceivedbyaccount "account" ( minconf )
+- [ ]    getreceivedbyaccount "account" ( minconf ) (*account deprecated*)
 - [ ]    getreceivedbyaddress "KMD_address" ( minconf )
 - [x]    gettransaction "txid" ( includeWatchonly )
 - [ ]    getunconfirmedbalance
@@ -264,7 +265,7 @@ This wrapper aims to:
 - [ ]    sendfrom "fromaccount" "toKMDaddress" amount ( minconf "comment" "comment-to" )
 - [ ]    sendmany "fromaccount" {"address":amount,...} ( minconf "comment" ["address",...] )
 - [ ]    sendtoaddress "KMD_address" amount ( "comment" "comment-to" subtractfeefromamount )
-- [ ]    setaccount "KMD_address" "account"
+- [ ]    setaccount "KMD_address" "account" (*deprecated*)
 - [ ]    settxfee amount
 - [ ]    signmessage "KMD address" "message"
 - [ ]    z_exportkey "zaddr"
