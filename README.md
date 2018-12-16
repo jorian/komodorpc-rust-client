@@ -183,7 +183,7 @@ This wrapper aims to:
 - [x]    decoderawtransaction "hexstring"
 - [ ]    decodescript "hex"
 - [ ]    fundrawtransaction "hexstring"
-- [ ]    getrawtransaction "txid" ( verbose )
+- [x]    getrawtransaction "txid" ( verbose )
 - [ ]    sendrawtransaction "hexstring" ( allowhighfees )
 - [ ]    signrawtransaction "hexstring" ( [{"txid":"id","vout":n,"scriptPubKey":"hex","redeemScript":"hex"},...] ["privatekey1",...] sighashtype )
 

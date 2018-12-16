@@ -49,7 +49,7 @@ pub struct RawTransaction {
     pub hex: Option<String>,
     pub overwintered: Option<bool>,
     pub txid: String,
-    pub size: u32,
+    pub size: Option<u32>,
     pub versiongroupid: Option<String>,
     pub version: u32,
     pub locktime: u64,

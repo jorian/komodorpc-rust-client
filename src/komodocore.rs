@@ -167,8 +167,6 @@ impl Config {
 impl KomodoRpcApi for Client {
     fn get_address_balance(&self, addresses: &arguments::AddressList) -> Result<AddressBalance, ApiError> {
         self.send(&RpcRequest::new1(
-            JsonRpcVersion::V1,
-            "777",
             "getaddressbalance",
             addresses
         ))
@@ -176,8 +174,6 @@ impl KomodoRpcApi for Client {
 
     fn get_address_deltas(&self, addresses: &AddressList) -> Result<AddressDeltas, ApiError> {
         self.send(&RpcRequest::new1(
-            JsonRpcVersion::V1,
-            "777",
             "getaddressdeltas",
             addresses
         ))
@@ -185,8 +181,6 @@ impl KomodoRpcApi for Client {
 
     fn get_address_mempool(&self, addresses: &AddressList) -> Result<AddressMempool, ApiError> {
         self.send(&RpcRequest::new1(
-            JsonRpcVersion::V1,
-            "777",
             "getaddressmempool",
             addresses
         ))
@@ -194,8 +188,6 @@ impl KomodoRpcApi for Client {
 
     fn get_address_tx_ids(&self, addresses: &AddressList) -> Result<AddressTxIDs, ApiError> {
         self.send(&RpcRequest::new1(
-            JsonRpcVersion::V1,
-            "777",
             "getaddresstxids",
             addresses
         ))
@@ -203,8 +195,6 @@ impl KomodoRpcApi for Client {
 
     fn get_address_utxos(&self, addresses: &AddressList) -> Result<AddressUtxos, ApiError> {
         self.send(&RpcRequest::new1(
-            JsonRpcVersion::V1,
-            "777",
             "getaddressutxos",
             addresses
         ))
@@ -214,8 +204,6 @@ impl KomodoRpcApi for Client {
         // parameter must be string:
         let n = n.to_string();
         self.send(&RpcRequest::new1(
-            JsonRpcVersion::V1,
-            "777",
             "getsnapshot",
             n
         ))
@@ -223,8 +211,6 @@ impl KomodoRpcApi for Client {
 
     fn get_snapshot(&self) -> Result<Snapshot,ApiError> {
         self.send(&RpcRequest::new0(
-            JsonRpcVersion::V1,
-            "777",
             "getsnapshot"
         ))
     }
@@ -232,8 +218,6 @@ impl KomodoRpcApi for Client {
     fn coinsupply(&self, n: u32) -> Result<Coinsupply, ApiError> {
         let n = n.to_string();
         self.send(&RpcRequest::new1(
-            JsonRpcVersion::V1,
-            "777",
             "coinsupply",
             n
         ))
@@ -241,16 +225,12 @@ impl KomodoRpcApi for Client {
 
     fn get_best_block_hash(&self) -> Result<BlockHash, ApiError> {
         self.send(&RpcRequest::new0(
-            JsonRpcVersion::V1,
-            "777",
             "getbestblockhash",
         ))
     }
 
     fn get_block(&self, hashorheight: String) -> Result<Block, ApiError> {
         self.send(&RpcRequest::new1(
-            JsonRpcVersion::V1,
-            "777",
             "getblock",
             hashorheight
         ))
@@ -258,24 +238,18 @@ impl KomodoRpcApi for Client {
 
     fn get_blockchain_info(&self) -> Result<BlockchainInfo, ApiError> {
         self.send(&RpcRequest::new0(
-            JsonRpcVersion::V1,
-            "777",
             "getblockchaininfo"
         ))
     }
 
     fn get_block_count(&self) -> Result<Blockcount, ApiError> {
         self.send(&RpcRequest::new0(
-            JsonRpcVersion::V1,
-            "777",
             "getblockcount"
         ))
     }
 
     fn get_block_hash(&self, n: u32) -> Result<BlockHash, ApiError> {
         self.send(&RpcRequest::new1(
-            JsonRpcVersion::V1,
-            "777",
             "getblockhash",
             n
         ))
@@ -283,8 +257,6 @@ impl KomodoRpcApi for Client {
 
     fn get_block_header(&self, hash: String) -> Result<BlockHeader, ApiError> {
         self.send(&RpcRequest::new1(
-            JsonRpcVersion::V1,
-            "777",
             "getblockheader",
             hash
         ))
@@ -292,40 +264,30 @@ impl KomodoRpcApi for Client {
 
     fn get_chaintips(&self) -> Result<ChainTips, ApiError> {
         self.send(&RpcRequest::new0(
-            JsonRpcVersion::V1,
-            "777",
             "getchaintips"
         ))
     }
 
     fn get_difficulty(&self) -> Result<f64, ApiError> {
         self.send(&RpcRequest::new0(
-            JsonRpcVersion::V1,
-            "777",
             "getdifficulty",
         ))
     }
 
     fn get_mempool_info(&self) -> Result<MempoolInfo, ApiError> {
         self.send(&RpcRequest::new0(
-            JsonRpcVersion::V1,
-            "777",
             "getmempoolinfo"
         ))
     }
 
     fn get_raw_mempool(&self) -> Result<RawMempool, ApiError> {
         self.send(&RpcRequest::new0(
-            JsonRpcVersion::V1,
-            "777",
             "getrawmempool"
         ))
     }
 
     fn get_raw_mempool_verbose(&self) -> Result<RawMempoolVerbose, ApiError> {
         self.send(&RpcRequest::new1(
-            JsonRpcVersion::V1,
-            "777",
             "getrawmempool",
             true
         ))
@@ -333,8 +295,6 @@ impl KomodoRpcApi for Client {
 
     fn get_tx_out(&self, txid: String, index: u8) -> Result<TxOut, ApiError> {
         self.send(&RpcRequest::new2(
-            JsonRpcVersion::V1,
-            "curltest",
             "gettxout",
             txid,
             index
@@ -343,16 +303,12 @@ impl KomodoRpcApi for Client {
 
     fn get_tx_out_set_info(&self) -> Result<TxOutSetInfo, ApiError> {
         self.send(&RpcRequest::new0(
-            JsonRpcVersion::V1,
-            "curltest",
             "gettxoutsetinfo"
         ))
     }
 
     fn minerids(&self, height: String) -> Result<MinerIDs, ApiError> { // why is height a string?
         self.send(&RpcRequest::new1(
-            JsonRpcVersion::V1,
-            "777",
             "minerids",
             height
         ))
@@ -360,8 +316,6 @@ impl KomodoRpcApi for Client {
 
     fn notaries(&self, height: String) -> Result<Notaries, ApiError> { // why is height a string?
         self.send(&RpcRequest::new1(
-            JsonRpcVersion::V1,
-            "777",
             "notaries",
             height
         ))
@@ -369,25 +323,34 @@ impl KomodoRpcApi for Client {
 
     fn get_info(&self) -> Result<Info, ApiError> {
         self.send(&RpcRequest::new0(
-            JsonRpcVersion::V1,
-            "curltest",
             "getinfo"
         ))
     }
 
     fn decode_raw_transaction(&self, hex_string: &str) -> Result<RawTransaction, ApiError> {
         self.send(&RpcRequest::new1(
-            JsonRpcVersion::V1,
-            "777",
             "decoderawtransaction",
             hex_string
         ))
     }
 
+    fn get_raw_transaction(&self, txid: arguments::TransactionId) -> Result<String, ApiError> {
+        self.send(&RpcRequest::new1(
+            "getrawtransaction",
+            txid
+        ))
+    }
+
+    fn get_raw_transaction_verbose(&self, txid: arguments::TransactionId) -> Result<RawTransaction, ApiError> {
+        self.send(&RpcRequest::new2(
+            "getrawtransaction",
+            txid,
+            1
+        ))
+    }
+
     fn backup_wallet(&self, file_name: &str) -> Result<String, ApiError> {
         self.send(&RpcRequest::new1(
-            JsonRpcVersion::V1,
-            "777",
             "backupwallet",
             file_name
         ))
@@ -395,8 +358,6 @@ impl KomodoRpcApi for Client {
 
     fn dump_privkey(&self, address: &str) -> Result<String, ApiError> {
         self.send(&RpcRequest::new1(
-            JsonRpcVersion::V1,
-            "777",
             "dumpprivkey",
             address
         ))
@@ -404,8 +365,6 @@ impl KomodoRpcApi for Client {
 
     fn dump_wallet(&self, filename: &str) -> Result<String, ApiError> {
         self.send(&RpcRequest::new1(
-            JsonRpcVersion::V1,
-            "777",
             "dumpwallet",
             filename
         ))
@@ -434,8 +393,6 @@ impl KomodoRpcApi for Client {
             }
         }
         self.send(&RpcRequest::new3(
-            JsonRpcVersion::V1,
-            "777",
             "getbalance",
             "*",
             second,
@@ -445,16 +402,12 @@ impl KomodoRpcApi for Client {
 
     fn get_new_address(&self) -> Result<String, ApiError> {
         self.send(&RpcRequest::new0(
-            JsonRpcVersion::V1,
-            "777",
             "getnewaddress",
         ))
     }
 
     fn get_raw_change_address(&self) -> Result<String, ApiError> {
         self.send(&RpcRequest::new0(
-            JsonRpcVersion::V1,
-            "777",
             "getrawchangeaddress",
         ))
     }
@@ -464,8 +417,6 @@ impl KomodoRpcApi for Client {
         tx: &TransactionId,
     ) -> Result<Transaction, ApiError> {
         self.send(&RpcRequest::new1(
-            JsonRpcVersion::V1,
-            "777",
             "gettransaction",
             tx,
         ))
@@ -473,8 +424,6 @@ impl KomodoRpcApi for Client {
 
     fn get_wallet_info(&self) -> Result<WalletInfo, ApiError> {
         self.send(&RpcRequest::new0(
-            JsonRpcVersion::V1,
-            "curltest",
             "getwalletinfo"
         ))
     }

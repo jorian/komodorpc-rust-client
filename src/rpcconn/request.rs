@@ -20,20 +20,18 @@ pub struct RpcRequest<P>
 }
 
 impl RpcRequest<()> {
-    pub fn new0(version: JsonRpcVersion, id: &str, method: &str) -> RpcRequest<()> {
-        RpcRequest::new(version, id, method, ())
+    pub fn new0(method: &str) -> RpcRequest<()> {
+        RpcRequest::new(JsonRpcVersion::V1, "777", method, ())
     }
 
-    pub fn new1<A>(version: JsonRpcVersion, id: &str, method: &str, first: A) -> RpcRequest<Vec<A>>
+    pub fn new1<A>(method: &str, first: A) -> RpcRequest<Vec<A>>
         where
             A: Serialize,
     {
-        RpcRequest::new(version, id, method, vec![first]) // Handles the special case of one parameter. A tuple would be serialized as a single value.
+        RpcRequest::new(JsonRpcVersion::V1, "777", method, vec![first]) // Handles the special case of one parameter. A tuple would be serialized as a single value.
     }
 
     pub fn new2<A, B>(
-        version: JsonRpcVersion,
-        id: &str,
         method: &str,
         first: A,
         second: B,
@@ -42,12 +40,10 @@ impl RpcRequest<()> {
             A: Serialize,
             B: Serialize,
     {
-        RpcRequest::new(version, id, method, (first, second))
+        RpcRequest::new(JsonRpcVersion::V1, "777", method, (first, second))
     }
 
     pub fn new3<A, B, C>(
-        version: JsonRpcVersion,
-        id: &str,
         method: &str,
         first: A,
         second: B,
@@ -58,7 +54,7 @@ impl RpcRequest<()> {
             B: Serialize,
             C: Serialize,
     {
-        RpcRequest::new(version, id, method, (first, second, third))
+        RpcRequest::new(JsonRpcVersion::V1, "777", method, (first, second, third))
     }
 
     pub fn new4<A, B, C, D>(

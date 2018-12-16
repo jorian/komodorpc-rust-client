@@ -7,10 +7,6 @@ use rpc::*;
 
 
 pub trait KomodoRpcApi {
-    /*
-    Addressindex
-*/
-
     fn get_address_balance(&self, addresses: &arguments::AddressList) -> Result<AddressBalance, ApiError>;
     fn get_address_deltas(&self, addresses: &arguments::AddressList)  -> Result<AddressDeltas,  ApiError>;
     fn get_address_mempool(&self, addresses: &arguments::AddressList) -> Result<AddressMempool, ApiError>;
@@ -43,6 +39,9 @@ pub trait KomodoRpcApi {
     fn get_info(&self) -> Result<Info, ApiError>;
 
     fn decode_raw_transaction(&self, hex_string: &str) -> Result<RawTransaction, ApiError>;
+    fn get_raw_transaction(&self, txid: arguments::TransactionId) -> Result<String, ApiError>; // todo returns serialized transaction
+    fn get_raw_transaction_verbose(&self, txid: arguments::TransactionId) -> Result<RawTransaction, ApiError>;
+
 
     fn backup_wallet(&self, file_name: &str) -> Result<String, ApiError>;
 
