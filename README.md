@@ -16,7 +16,15 @@ todo:
 This wrapper aims to:
 - be stateless. It's up to the app using this library to maintain state.
 
-### Currently supported calls:
+### Currently supported calls
+
+Below is a list containing the current support status of RPC calls in this Rust client.
+
+#### Notes
+
+- `valueSat` and `valueZat` are omitted from `getrawtransaction` and `decoderawtransaction`, respectively
+
+#### RPCs
 
 ##### FSM 
 - [ ]    FSMaddress [pubkey]

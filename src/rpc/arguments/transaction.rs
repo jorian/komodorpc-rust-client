@@ -37,5 +37,3 @@ impl CreateRawTransactionOutputs {
         self.0.insert(address.to_owned(), amount);
     }
 }
-
-

@@ -83,8 +83,11 @@ pub struct ScriptSig {
 #[derive(Deserialize, Serialize, Debug)]
 pub struct Vout {
     pub value: f64,
-    #[serde(rename = "valueSat")]
-    pub value_sat: u64,
+//    #[serde(rename = "valueSat")]
+//    pub value_sat: Option<u64>,
+//    // because of weirdness, valueZat is a possibility we need to account for too:
+//    #[serde(rename = "valueZat")]
+//    pub value_zat: Option<u64>,
     pub n: u32,
     #[serde(rename = "scriptPubKey")]
     pub script_pubkey: ScriptPubKey,
