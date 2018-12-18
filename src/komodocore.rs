@@ -22,6 +22,8 @@ use dirs;
 use os_info::Type as OSType;
 
 use arguments::AddressList;
+use arguments::CreateRawTransactionOutputs;
+
 use std::collections::HashMap;
 
 use std::io::Error;
@@ -334,7 +336,7 @@ impl KomodoRpcApi for Client {
         ))
     }
 
-    fn get_raw_transaction(&self, txid: arguments::TransactionId) -> Result<String, ApiError> {
+    fn get_raw_transaction(&self, txid: arguments::TransactionId) -> Result<SerializedRawTransaction, ApiError> {
         self.send(&RpcRequest::new1(
             "getrawtransaction",
             txid
@@ -346,6 +348,14 @@ impl KomodoRpcApi for Client {
             "getrawtransaction",
             txid,
             1
+        ))
+    }
+
+    fn create_raw_transaction(&self, inputs: serde_json::Value, outputs: CreateRawTransactionOutputs) -> Result<SerializedRawTransaction, ApiError> {
+        self.send(&RpcRequest::new2(
+            "createrawtransaction",
+            inputs,
+            outputs
         ))
     }
 

@@ -39,16 +39,15 @@ pub trait KomodoRpcApi {
     fn get_info(&self) -> Result<Info, ApiError>;
 
     fn decode_raw_transaction(&self, hex_string: &str) -> Result<RawTransaction, ApiError>;
-    fn get_raw_transaction(&self, txid: arguments::TransactionId) -> Result<String, ApiError>; // todo returns serialized transaction
+    fn get_raw_transaction(&self, txid: arguments::TransactionId) -> Result<SerializedRawTransaction, ApiError>; // todo returns serialized transaction
     fn get_raw_transaction_verbose(&self, txid: arguments::TransactionId) -> Result<RawTransaction, ApiError>;
 
+    fn create_raw_transaction(&self, inputs: serde_json::Value, outputs: arguments::CreateRawTransactionOutputs) -> Result<SerializedRawTransaction, ApiError>;
 
     fn backup_wallet(&self, file_name: &str) -> Result<String, ApiError>;
 
-
     fn dump_privkey(&self, address: &str) -> Result<String, ApiError>;
     fn dump_wallet(&self, filename: &str) -> Result<String, ApiError>;
-
 
     fn get_balance(&self, minconf: Option<u32>, include_watchonly: Option<bool>) -> Result<f64, ApiError>;
     fn get_new_address(&self) -> Result<String, ApiError>;

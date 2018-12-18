@@ -179,7 +179,7 @@ This wrapper aims to:
 - [ ]    pricesstatus fundingtxid bettoken bettxid
 
 ##### Rawtransactions 
-- [ ]    createrawtransaction [{"txid":"id","vout":n},...] {"address":amount,...}
+- [x]    createrawtransaction [{"txid":"id","vout":n},...] {"address":amount,...}
 - [x]    decoderawtransaction "hexstring"
 - [ ]    decodescript "hex"
 - [ ]    fundrawtransaction "hexstring"

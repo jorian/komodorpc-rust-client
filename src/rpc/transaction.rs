@@ -3,6 +3,9 @@ use TransactionId;
 use ScriptPubKey;
 
 #[derive(Deserialize, Serialize, Debug)]
+pub struct SerializedRawTransaction(pub String);
+
+#[derive(Deserialize, Serialize, Debug)]
 pub struct Transaction {
     pub amount: f64,
     pub confirmations: u32,
