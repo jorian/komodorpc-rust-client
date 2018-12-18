@@ -42,7 +42,7 @@ pub trait KomodoRpcApi {
     fn get_raw_transaction(&self, txid: arguments::TransactionId) -> Result<SerializedRawTransaction, ApiError>; // todo returns serialized transaction
     fn get_raw_transaction_verbose(&self, txid: arguments::TransactionId) -> Result<RawTransaction, ApiError>;
 
-    fn create_raw_transaction(&self, inputs: serde_json::Value, outputs: arguments::CreateRawTransactionOutputs) -> Result<SerializedRawTransaction, ApiError>;
+    fn create_raw_transaction(&self, inputs: arguments::CreateRawTransactionInputs, outputs: arguments::CreateRawTransactionOutputs) -> Result<SerializedRawTransaction, ApiError>;
 
     fn backup_wallet(&self, file_name: &str) -> Result<String, ApiError>;
 

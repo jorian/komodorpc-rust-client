@@ -1,17 +1,29 @@
 use serde_json;
 use std::collections::HashMap;
 
-//#[derive(Debug, Deserialize, Serialize)]
-//pub struct CreateRawTransactionInputs {
-//    txid: String,
-//    vout: u32,
-//}
-//
-//impl CreateRawTransactionInputs {
-//    pub fn new() -> Self {
-//        CreateRawTransactionInputs { }
-//    }
-//}
+#[derive(Debug, Deserialize, Serialize)]
+pub struct CreateRawTransactionInputs(Vec<Input>);
+
+impl CreateRawTransactionInputs {
+    pub fn new() -> Self {
+        CreateRawTransactionInputs(Vec::new())
+    }
+
+    pub fn add(&mut self, txid: &str, vout: u32) {
+        let input = Input {
+            txid: txid.to_owned(),
+            vout
+        };
+
+        self.0.push(input);
+    }
+}
+
+#[derive(Debug, Deserialize, Serialize)]
+struct Input {
+    txid: String,
+    vout: u32
+}
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct CreateRawTransactionOutputs(HashMap<String, f64>);
