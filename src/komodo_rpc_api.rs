@@ -43,6 +43,7 @@ pub trait KomodoRpcApi {
     fn get_raw_transaction_verbose(&self, txid: arguments::TransactionId) -> Result<RawTransaction, ApiError>;
 
     fn create_raw_transaction(&self, inputs: arguments::CreateRawTransactionInputs, outputs: arguments::CreateRawTransactionOutputs) -> Result<SerializedRawTransaction, ApiError>;
+//    fn sign_raw_transaction(&self, hexstring: SerializedRawTransaction) -> Result<>
 
     fn backup_wallet(&self, file_name: &str) -> Result<String, ApiError>;
 

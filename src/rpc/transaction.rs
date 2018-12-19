@@ -2,8 +2,36 @@ use BlockHash;
 use TransactionId;
 use ScriptPubKey;
 
+use std::time::{SystemTime, UNIX_EPOCH};
+
 #[derive(Deserialize, Serialize, Debug)]
 pub struct SerializedRawTransaction(pub String);
+
+impl SerializedRawTransaction {
+    // A SerializedRawTransaction upon creation does not have a set locktime.
+    // To earn KMD rewards, it must be set to the current time - 777 seconds in little endian hex.
+    // The first 8 chars of the last 38 chars of the hex string is the place to set the locktime.
+
+    pub fn set_locktime(&mut self) {
+        let current_time = SystemTime::now().duration_since(SystemTime::UNIX_EPOCH).unwrap();
+        let hexified_time = format!("{:x}", current_time.as_secs() - 777);
+
+        let mut rev_hexified_time = String::new();
+        for i in (0..8).rev().step_by(2) {
+            rev_hexified_time.push_str(hexified_time.get(i-1..i+1).unwrap());
+        }
+
+        let hex = self.0.clone();
+        let (first, second) = hex.split_at(hex.len() - 38);
+
+        let mut result = String::new();
+        result.push_str(first);
+        result.push_str(rev_hexified_time.as_str());
+        result.push_str("000000000000000000000000000000");
+
+        self.0 = result;
+    }
+}
 
 #[derive(Deserialize, Serialize, Debug)]
 pub struct Transaction {
@@ -105,4 +133,13 @@ pub struct VJoinsplit {
     pub macs: Vec<String>,
     pub proof: String,
     pub ciphertexts: Vec<String>,
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn test_locktime() {
+        let before_hex = "deadbeefdeadbeefdeadbeef123400000000000000000000000000000000000000";
+        let after_hex =  "deadbeefdeadbeefdeadbeef123488888888000000000000000000000000000000";
+    }
 }
