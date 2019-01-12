@@ -11,6 +11,7 @@ impl SerializedRawTransaction {
     // A SerializedRawTransaction upon creation does not have a set locktime.
     // To earn KMD rewards, it must be set to the current time - 777 seconds in little endian hex.
     // The first 8 chars of the last 38 chars of the hex string is the place to set the locktime.
+    // NOTE: this only applies to KMD, not its assetchains.
 
     pub fn set_locktime(&mut self) {
         let current_time = SystemTime::now().duration_since(SystemTime::UNIX_EPOCH).unwrap();
@@ -116,6 +117,7 @@ pub struct Vout {
 //    // because of weirdness, valueZat is a possibility we need to account for too:
 //    #[serde(rename = "valueZat")]
 //    pub value_zat: Option<u64>,
+    pub interest: f64,
     pub n: u32,
     #[serde(rename = "scriptPubKey")]
     pub script_pubkey: ScriptPubKey,
@@ -133,13 +135,4 @@ pub struct VJoinsplit {
     pub macs: Vec<String>,
     pub proof: String,
     pub ciphertexts: Vec<String>,
-}
-
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn test_locktime() {
-        let before_hex = "deadbeefdeadbeefdeadbeef123400000000000000000000000000000000000000";
-        let after_hex =  "deadbeefdeadbeefdeadbeef123488888888000000000000000000000000000000";
-    }
 }

@@ -189,13 +189,13 @@ pub struct TxOut {
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct ScriptPubKey {
-    asm: String,
-    hex: String,
+    pub asm: String,
+    pub hex: String,
     #[serde(rename="reqSigs")]
-    req_sigs: u32,
+    pub req_sigs: u32,
     #[serde(rename="type")]
-    script_type: String,
-    addresses: Vec<String>
+    pub script_type: String,
+    pub addresses: Vec<String>
 }
 
 #[derive(Debug, Deserialize)]
