@@ -31,7 +31,7 @@ impl SerializedRawTransaction {
         let expiry = &hex[hex.len() - 30..hex.len() - 24];
 
         let mut result = String::new();
-        result.push_str(first);
+        result.push_str(payload);
         result.push_str(rev_hexified_time.as_str());
         result.push_str(expiry);
         result.push_str("000000000000000000000000");
@@ -141,4 +141,20 @@ pub struct VJoinsplit {
     pub macs: Vec<String>,
     pub proof: String,
     pub ciphertexts: Vec<String>,
+}
+
+#[derive(Deserialize, Serialize, Debug)]
+pub struct SignedRawTransaction {
+    pub hex: String,
+    pub complete: bool,
+    pub errors: Vec<Option<SignRawTransactionError>>,
+}
+
+#[derive(Deserialize, Serialize, Debug)]
+pub struct SignRawTransactionError {
+    pub txid: String,
+    pub vout: u16,
+    pub scriptSig: String,
+    pub sequence: u64,
+    pub error: String,
 }
