@@ -18,7 +18,7 @@ This wrapper aims to:
 
 ### Currently supported calls
 
-Below is a list containing the current support status of RPC calls in this Rust client.
+Below is a list of RPC calls in this Rust client as of KMDversion 0.3.3b
 
 #### Notes
 
@@ -31,9 +31,6 @@ Below is a list containing the current support status of RPC calls in this Rust 
 - [ ]    FSMcreate name states
 - [ ]    FSMinfo fundingtxid
 - [ ]    FSMlist
-
-##### MofN 
-- [ ]    mofnaddress [pubkey]
 
 ##### Addressindex
 - [x]    getaddressbalance
@@ -58,6 +55,7 @@ Below is a list containing the current support status of RPC calls in this Rust 
 - [x]    getblockheader "hash" ( verbose )
 - [x]    getchaintips
 - [x]    getdifficulty
+- [ ]    getlastsegidstakes depth
 - [x]    getmempoolinfo
 - [x]    getrawmempool ( verbose ) //
 - [ ]    getspentinfo "txid" index
@@ -73,12 +71,12 @@ Below is a list containing the current support status of RPC calls in this Rust 
 
 ##### Channels
 - [ ]    channelsaddress destpubkey
-- [ ]    channelscollect paytxid origtxid n amount
-- [ ]    channelsinfo
+- [ ]    channelsclose opentxid
+- [ ]    channelsinfo [opentxid]
+- [ ]    channelsinfo [opentxid]
 - [ ]    channelsopen destpubkey numpayments payment
 - [ ]    channelspayment prevtxid origtxid n amount
 - [ ]    channelsrefund stoptxid origtxid
-- [ ]    channelsstop destpubkey origtxid
 
 ##### Control
 - [x]    getinfo
@@ -120,12 +118,15 @@ Below is a list containing the current support status of RPC calls in this Rust 
 - [ ]    gatewaysaddress [pubkey]
 - [ ]    gatewaysbind tokenid oracletxid coin tokensupply M N pubkey(s)
 - [ ]    gatewaysclaim bindtxid coin deposittxid destpub amount
+- [ ]    gatewayscompletesigning withdrawtxid coin hex
 - [ ]    gatewaysdeposit bindtxid height coin cointxid claimvout deposithex proof destpub amount
 - [ ]    gatewaysinfo bindtxid
 - [ ]    gatewayslist
-- [ ]    gatewaysmarkdone withdrawtxid coin cointxid
-- [ ]    gatewaysmultisig bindtxid coin withtxid txidaddr
+- [ ]    gatewaysmarkdone completesigningtx cointxid
+- [ ]    gatewaysmultisig txidaddr
+- [ ]    gatewayspartialsign txidaddr refcoin hex
 - [ ]    gatewayspending bindtxid coin
+- [ ]    gatewaysprocessed bindtxid coin
 - [ ]    gatewayswithdraw bindtxid coin withdrawpub amount
 
 ##### Generating
@@ -133,8 +134,14 @@ Below is a list containing the current support status of RPC calls in this Rust 
 - [ ]    getgenerate
 - [ ]    setgenerate generate ( genproclimit )
 
+##### Heir
+- [ ]    heiraddress func txid amount [destpubkey]
+
 ##### Lotto 
 - [ ]    lottoaddress [pubkey]
+
+##### Marmara
+- [ ]    marmaraadress [pubkey]
 
 ##### Mining 
 - [ ]    getblocksubsidy height
@@ -220,11 +227,9 @@ Below is a list containing the current support status of RPC calls in this Rust 
 - [ ]    tokenorders [tokenid]
 - [ ]    tokentransfer tokenid destpubkey amount
 
-##### Triggers 
-- [ ]    triggersaddress [pubkey]
-
 ##### Util
 - [ ]    createmultisig nrequired ["key",...]
+- [ ]    decodeccopret hex
 - [ ]    estimatefee nblocks
 - [ ]    estimatepriority nblocks
 - [ ]    invalidateblock "hash"
@@ -233,6 +238,7 @@ Below is a list containing the current support status of RPC calls in this Rust 
 - [ ]    jumblr_resume
 - [ ]    jumblr_secret "secretaddress"
 - [ ]    reconsiderblock "hash"
+- [ ]    txnotarizedconfirmed txid
 - [ ]    validateaddress "komodoaddress"
 - [ ]    verifymessage "komodoaddress" "signature" "message"
 - [ ]    z_validateaddress "zaddr"
@@ -247,7 +253,6 @@ Below is a list containing the current support status of RPC calls in this Rust 
 - [ ]    getaccountaddress "account" (*deprecated*)
 - [ ]    getaddressesbyaccount "account" (*deprecated*)
 - [x]    getbalance ( "account" minconf includeWatchonly ) (*account deprecated*)
-- [ ]    getbalance64
 - [x]    getnewaddress ( "account" ) (*account deprecated*)
 - [ ]    getrawchangeaddress
 - [ ]    getreceivedbyaccount "account" ( minconf ) (*account deprecated*)
@@ -274,13 +279,14 @@ Below is a list containing the current support status of RPC calls in this Rust 
 - [ ]    sendmany "fromaccount" {"address":amount,...} ( minconf "comment" ["address",...] )
 - [ ]    sendtoaddress "KMD_address" amount ( "comment" "comment-to" subtractfeefromamount )
 - [ ]    setaccount "KMD_address" "account" (*deprecated*)
+- [ ]    setpubkey pubkey
 - [ ]    settxfee amount
-- [ ]    signmessage "KMD address" "message"
+- [ ]    signmessage "t-addr" "message"
 - [ ]    z_exportkey "zaddr"
 - [ ]    z_exportviewingkey "zaddr"
 - [ ]    z_exportwallet "filename"
 - [ ]    z_getbalance "address" ( minconf )
-- [ ]    z_getnewaddress
+- [ ]    z_getnewaddress ( type )
 - [ ]    z_getoperationresult (["operationid", ... ])
 - [ ]    z_getoperationstatus (["operationid", ... ])
 - [ ]    z_gettotalbalance ( minconf includeWatchonly )
