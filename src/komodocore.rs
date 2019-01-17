@@ -360,6 +360,13 @@ impl KomodoRpcApi for Client {
         ))
     }
 
+    fn sign_raw_transaction_with_wallet(&self, hexstring: SerializedRawTransaction) -> Result<SignedRawTransaction, ApiError> {
+        self.send(&RpcRequest::new1(
+            "signrawtransaction",
+            hexstring
+        ))
+    }
+
     fn backup_wallet(&self, file_name: &str) -> Result<String, ApiError> {
         self.send(&RpcRequest::new1(
             "backupwallet",

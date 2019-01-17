@@ -147,7 +147,7 @@ pub struct VJoinsplit {
 pub struct SignedRawTransaction {
     pub hex: String,
     pub complete: bool,
-    pub errors: Vec<Option<SignRawTransactionError>>,
+    pub errors: Option<Vec<SignRawTransactionError>>,
 }
 
 #[derive(Deserialize, Serialize, Debug)]

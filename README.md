@@ -200,7 +200,7 @@ Below is a list of RPC calls in this Rust client as of KMDversion 0.3.3b
 - [ ]    fundrawtransaction "hexstring"
 - [x]    getrawtransaction "txid" ( verbose )
 - [ ]    sendrawtransaction "hexstring" ( allowhighfees )
-- [ ]    signrawtransaction "hexstring" ( [{"txid":"id","vout":n,"scriptPubKey":"hex","redeemScript":"hex"},...] ["privatekey1",...] sighashtype )
+- [x]    signrawtransaction "hexstring" ( [{"txid":"id","vout":n,"scriptPubKey":"hex","redeemScript":"hex"},...] ["privatekey1",...] sighashtype )
 
 ##### Rewards 
 - [ ]    rewardsaddfunding name fundingtxid amount
