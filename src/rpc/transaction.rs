@@ -8,27 +8,33 @@ use std::time::{SystemTime, UNIX_EPOCH};
 pub struct SerializedRawTransaction(pub String);
 
 impl SerializedRawTransaction {
+
+    // This method sets the locktime of a transaction.
     // A SerializedRawTransaction upon creation does not have a set locktime.
     // To earn KMD rewards, it must be set to the current time - 777 seconds in little endian hex.
     // The first 8 chars of the last 38 chars of the hex string is the place to set the locktime.
     // NOTE: this only applies to KMD, not its assetchains.
-
     pub fn set_locktime(&mut self) {
-        let current_time = SystemTime::now().duration_since(SystemTime::UNIX_EPOCH).unwrap();
-        let hexified_time = format!("{:x}", current_time.as_secs() - 777);
+        let current_time = SystemTime::now().duration_since(SystemTime::UNIX_EPOCH).unwrap(); // todo return result
+        let hex_time = format!("{:x}", current_time.as_secs() - 777);
 
         let mut rev_hexified_time = String::new();
+
+        // hex_time must be little endian
         for i in (0..8).rev().step_by(2) {
-            rev_hexified_time.push_str(hexified_time.get(i-1..i+1).unwrap());
+            rev_hexified_time.push_str(hex_time.get(i-1..i+1).unwrap());
         }
 
         let hex = self.0.clone();
-        let (first, second) = hex.split_at(hex.len() - 38);
+
+        let payload = &hex[0..hex.len() - 38];
+        let expiry = &hex[hex.len() - 30..hex.len() - 24];
 
         let mut result = String::new();
         result.push_str(first);
         result.push_str(rev_hexified_time.as_str());
-        result.push_str("000000000000000000000000000000");
+        result.push_str(expiry);
+        result.push_str("000000000000000000000000");
 
         self.0 = result;
     }
