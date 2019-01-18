@@ -51,6 +51,7 @@ pub trait KomodoRpcApi {
         private_keys: Option<Vec<&PrivateKey>>,
         signature_hash_type: Option<SigHashType>,
     ) -> Result<SignedRawTransaction, ApiError>;
+    fn send_raw_transaction(&self, signed_tx: &SignedRawTransaction) -> Result<TransactionId, ApiError>;
 
     fn backup_wallet(&self, file_name: &str) -> Result<String, ApiError>;
 
