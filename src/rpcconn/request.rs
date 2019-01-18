@@ -58,8 +58,6 @@ impl RpcRequest<()> {
     }
 
     pub fn new4<A, B, C, D>(
-        version: JsonRpcVersion,
-        id: &str,
         method: &str,
         first: A,
         second: B,
@@ -72,7 +70,7 @@ impl RpcRequest<()> {
             C: Serialize,
             D: Serialize,
     {
-        RpcRequest::new(version, id, method, (first, second, third, fourth))
+        RpcRequest::new(JsonRpcVersion::V1, "777", method, (first, second, third, fourth))
     }
 
     pub fn new5<A, B, C, D, E>(

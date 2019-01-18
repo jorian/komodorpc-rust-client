@@ -158,3 +158,30 @@ pub struct SignRawTransactionError {
     pub sequence: u64,
     pub error: String,
 }
+
+#[derive(Deserialize, Serialize, Debug)]
+pub struct TransactionOutputDetail {
+    pub txid: TransactionId,
+    pub vout: u32,
+    #[serde(rename = "scriptPubKey")]
+    pub script_pub_key: String,
+    #[serde(rename = "redeemScript")]
+    pub redeem_script: Option<String>, // is hex hash
+    pub amount: f64,
+}
+
+#[derive(Deserialize, Serialize, Debug)]
+pub enum SigHashType {
+    #[serde(rename = "ALL")]
+    All,
+    #[serde(rename = "NONE")]
+    None,
+    #[serde(rename = "SINGLE")]
+    Single,
+    #[serde(rename = "ALL|ANYONECANPAY")]
+    All_AnyoneCanPay,
+    #[serde(rename = "NONE|ANYONECANPAY")]
+    None_AnyoneCanPay,
+    #[serde(rename = "SINGLE|ANYONECANPAY")]
+    Single_AnyoneCanPay,
+}

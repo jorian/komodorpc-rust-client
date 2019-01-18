@@ -367,6 +367,22 @@ impl KomodoRpcApi for Client {
         ))
     }
 
+    fn sign_raw_transaction_with_key(
+        &self,
+        hexstring: &SerializedRawTransaction,
+        txoutput_detail: Option<Vec<&TransactionOutputDetail>>,
+        private_keys: Option<Vec<&PrivateKey>>,
+        signature_hash_type: Option<SigHashType>
+    ) -> Result<SignedRawTransaction, ApiError> {
+        self.send(&RpcRequest::new4(
+            "signrawtransaction",
+            hexstring,
+            txoutput_detail,
+            private_keys,
+            signature_hash_type
+        ))
+    }
+
     fn backup_wallet(&self, file_name: &str) -> Result<String, ApiError> {
         self.send(&RpcRequest::new1(
             "backupwallet",

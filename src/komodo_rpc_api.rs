@@ -44,13 +44,13 @@ pub trait KomodoRpcApi {
 
     fn create_raw_transaction(&self, inputs: arguments::CreateRawTransactionInputs, outputs: arguments::CreateRawTransactionOutputs) -> Result<SerializedRawTransaction, ApiError>;
     fn sign_raw_transaction_with_wallet(&self, hexstring: SerializedRawTransaction) -> Result<SignedRawTransaction, ApiError>;
-//    fn sign_raw_transaction_with_key(
-//        &self,
-//        hexstring: SerializedRawTransaction,
-//        txoutput_detail: Transaction,
-//        private_keys: PrivateKey,
-//        signature_hash_type: Option<Sighash>
-//    ) -> Result<SignedRawTransaction, ApiError>;
+    fn sign_raw_transaction_with_key(
+        &self,
+        hexstring: &SerializedRawTransaction,
+        txoutput_detail: Option<Vec<&TransactionOutputDetail>>,
+        private_keys: Option<Vec<&PrivateKey>>,
+        signature_hash_type: Option<SigHashType>,
+    ) -> Result<SignedRawTransaction, ApiError>;
 
     fn backup_wallet(&self, file_name: &str) -> Result<String, ApiError>;
 
