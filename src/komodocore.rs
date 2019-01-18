@@ -330,10 +330,17 @@ impl KomodoRpcApi for Client {
         ))
     }
 
-    fn decode_raw_transaction(&self, hex_string: &str) -> Result<RawTransaction, ApiError> {
+    fn decode_raw_transaction(&self, hexstring: &str) -> Result<RawTransaction, ApiError> {
         self.send(&RpcRequest::new1(
             "decoderawtransaction",
-            hex_string
+            hexstring
+        ))
+    }
+
+    fn decode_script(&self, hexstring: &str) -> Result<DecodedScript, ApiError> {
+        self.send(&RpcRequest::new1(
+            "decodescript",
+            hexstring
         ))
     }
 

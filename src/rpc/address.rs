@@ -34,6 +34,9 @@
 //    }
 //}
 
+#[derive(Deserialize, Serialize, Debug)]
+pub struct Address(String);
+
 pub enum KomodoAddress {
     Transparent (TAddress),
     Shielded (ZAddress)

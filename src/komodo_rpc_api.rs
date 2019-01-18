@@ -38,7 +38,8 @@ pub trait KomodoRpcApi {
     fn notaries(&self, height: String) -> Result<Notaries, ApiError>;
     fn get_info(&self) -> Result<Info, ApiError>;
 
-    fn decode_raw_transaction(&self, hex_string: &str) -> Result<RawTransaction, ApiError>;
+    fn decode_raw_transaction(&self, hexstring: &str) -> Result<RawTransaction, ApiError>;
+    fn decode_script(&self, hexstring: &str) -> Result<DecodedScript, ApiError>;
     fn get_raw_transaction(&self, txid: arguments::TransactionId) -> Result<SerializedRawTransaction, ApiError>; // todo returns serialized transaction
     fn get_raw_transaction_verbose(&self, txid: arguments::TransactionId) -> Result<RawTransaction, ApiError>;
 
