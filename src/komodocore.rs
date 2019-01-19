@@ -475,4 +475,35 @@ impl KomodoRpcApi for Client {
             "getwalletinfo"
         ))
     }
+
+    fn get_block_subsidy(&self, height: Option<u64>) -> Result<BlockSubsidy, ApiError> {
+        match height {
+            Some(n) => {
+                self.send(&RpcRequest::new1(
+                    "getblocksubsidy",
+                    height
+                ))
+            },
+            None => {
+                self.send(&RpcRequest::new0(
+                    "getblocksubsidy",
+                ))
+            }
+        }
+    }
+
+    fn get_block_template(&self, jsonrequestobject: Option<&RequestObject>) -> Result<BlockTemplate, ApiError> {
+        match jsonrequestobject {
+            Some(request) => {
+                self.send(&RpcRequest::new1(
+                    "getblocktemplate",
+                    request
+                ))
+            },
+            None => {
+                self.send(&RpcRequest::new0(
+                    "getblocktemplate",
+                ))
+            }
+        }    }
 }

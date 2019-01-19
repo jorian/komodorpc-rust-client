@@ -5,6 +5,7 @@ mod address;
 mod address_index;
 mod keys;
 mod script;
+mod mining;
 
 pub mod arguments;
 
@@ -15,5 +16,6 @@ pub use self::{
     address::*,
     address_index::*,
     keys::*,
-    script::*
+    script::*,
+    mining::*,
 };

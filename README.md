@@ -144,8 +144,8 @@ Below is a list of RPC calls in this Rust client as of KMDversion 0.3.3b
 - [ ]    marmaraadress [pubkey]
 
 ##### Mining 
-- [ ]    getblocksubsidy height
-- [ ]    getblocktemplate ( "jsonrequestobject" )
+- [x]    getblocksubsidy height
+- [x]    getblocktemplate ( "jsonrequestobject" )
 - [ ]    getlocalsolps
 - [ ]    getmininginfo
 - [ ]    getnetworkhashps ( blocks height )
@@ -196,7 +196,7 @@ Below is a list of RPC calls in this Rust client as of KMDversion 0.3.3b
 ##### Rawtransactions 
 - [x]    createrawtransaction [{"txid":"id","vout":n},...] {"address":amount,...}
 - [x]    decoderawtransaction "hexstring"
-- [ ]    decodescript "hex"
+- [x]    decodescript "hex"
 - [ ]    fundrawtransaction "hexstring"
 - [x]    getrawtransaction "txid" ( verbose )
 - [x]    sendrawtransaction "hexstring" ( allowhighfees )

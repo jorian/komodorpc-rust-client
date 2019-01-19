@@ -38,12 +38,23 @@ pub trait KomodoRpcApi {
     fn notaries(&self, height: String) -> Result<Notaries, ApiError>;
     fn get_info(&self) -> Result<Info, ApiError>;
 
-    fn decode_raw_transaction(&self, hexstring: &str) -> Result<RawTransaction, ApiError>;
-    fn decode_script(&self, hexstring: &str) -> Result<DecodedScript, ApiError>;
-    fn get_raw_transaction(&self, txid: arguments::TransactionId) -> Result<SerializedRawTransaction, ApiError>; // todo returns serialized transaction
-    fn get_raw_transaction_verbose(&self, txid: arguments::TransactionId) -> Result<RawTransaction, ApiError>;
+    // mining
+    fn get_block_subsidy(&self, height: Option<u64>) -> Result<BlockSubsidy , ApiError>;
+    fn get_block_template(&self, jsonrequestobject: Option<&RequestObject>) -> Result<BlockTemplate , ApiError>;
+//    fn get_local_sol_ps(&self, height: u64) -> Result< , ApiError>;
+//    fn get_mining_info(&self, height: u64) -> Result< , ApiError>;
+//    fn get_network_hash_ps(&self, height: u64) -> Result< , ApiError>;
+//    fn get_network_sol_ps(&self, height: u64) -> Result< , ApiError>;
+//    fn prioritise_transaction(&self, height: u64) -> Result< , ApiError>;
+//    fn submit_block(&self, height: u64) -> Result< , ApiError>;
+
 
     fn create_raw_transaction(&self, inputs: arguments::CreateRawTransactionInputs, outputs: arguments::CreateRawTransactionOutputs) -> Result<SerializedRawTransaction, ApiError>;
+    fn decode_raw_transaction(&self, hexstring: &str) -> Result<RawTransaction, ApiError>;
+    fn decode_script(&self, hexstring: &str) -> Result<DecodedScript, ApiError>;
+
+    fn get_raw_transaction(&self, txid: arguments::TransactionId) -> Result<SerializedRawTransaction, ApiError>; // todo returns serialized transaction
+    fn get_raw_transaction_verbose(&self, txid: arguments::TransactionId) -> Result<RawTransaction, ApiError>;
     fn sign_raw_transaction_with_wallet(&self, hexstring: SerializedRawTransaction) -> Result<SignedRawTransaction, ApiError>;
     fn sign_raw_transaction_with_key(
         &self,
