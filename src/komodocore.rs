@@ -373,6 +373,18 @@ impl KomodoRpcApi for Client {
         ))
     }
 
+    fn get_network_hash_ps(&self) -> Result<u64, ApiError> {
+        self.send(&RpcRequest::new0(
+            "getnetworkhashps"
+        ))
+    }
+
+    fn get_network_sol_ps(&self) -> Result<u64, ApiError> {
+        self.send(&RpcRequest::new0(
+            "getnetworksolps"
+        ))
+    }
+
     fn create_raw_transaction(&self, inputs: CreateRawTransactionInputs, outputs: CreateRawTransactionOutputs) -> Result<SerializedRawTransaction, ApiError> {
         self.send(&RpcRequest::new2(
             "createrawtransaction",

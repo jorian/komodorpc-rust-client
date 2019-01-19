@@ -43,8 +43,8 @@ pub trait KomodoRpcApi {
     fn get_block_template(&self, jsonrequestobject: Option<&RequestObject>) -> Result<BlockTemplate , ApiError>;
     fn get_local_sol_ps(&self) -> Result<f64 , ApiError>;
     fn get_mining_info(&self) -> Result<MiningInfo , ApiError>;
-//    fn get_network_hash_ps(&self, height: u64) -> Result< , ApiError>;
-//    fn get_network_sol_ps(&self, height: u64) -> Result< , ApiError>;
+    fn get_network_hash_ps(&self) -> Result<u64 , ApiError>;
+    fn get_network_sol_ps(&self) -> Result<u64 , ApiError>;
 //    fn prioritise_transaction(&self, height: u64) -> Result< , ApiError>;
 //    fn submit_block(&self, height: u64) -> Result< , ApiError>;
 
