@@ -48,3 +48,22 @@ pub struct RequestObject {
     pub mode: String,
     pub capabilities: Vec<String>
 }
+
+#[derive(Deserialize, Serialize, Debug)]
+pub struct MiningInfo {
+    blocks: u32,
+    currentblocksize: u32,
+    currentblocktx: u32,
+    difficulty: f64,
+    errors:  String,
+    genproclimit: i8,
+    localsolps: f64,
+    networksolps: u64,
+    networkhashps: u64,
+    pooledtx: u32,
+    testnet: bool,
+    chain: String,
+    staking: bool,
+    generate: bool,
+    numthreads: u8
+}

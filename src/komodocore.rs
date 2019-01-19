@@ -367,6 +367,12 @@ impl KomodoRpcApi for Client {
         ))
     }
 
+    fn get_mining_info(&self) -> Result<MiningInfo, ApiError> {
+        self.send(&RpcRequest::new0(
+            "getmininginfo"
+        ))
+    }
+
     fn create_raw_transaction(&self, inputs: CreateRawTransactionInputs, outputs: CreateRawTransactionOutputs) -> Result<SerializedRawTransaction, ApiError> {
         self.send(&RpcRequest::new2(
             "createrawtransaction",
