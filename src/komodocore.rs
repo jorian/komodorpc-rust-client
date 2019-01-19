@@ -385,6 +385,35 @@ impl KomodoRpcApi for Client {
         ))
     }
 
+    // todo untested
+    fn prioritise_transaction(&self, txid: TransactionId, prio_delta: f64, fee_delta: u32) -> Result<bool, ApiError> {
+        self.send(&RpcRequest::new3(
+            "prioritisetransaction",
+            txid,
+            prio_delta,
+            fee_delta
+        ))
+    }
+
+    // todo untested
+    fn submit_block(&self, hexdata: String, jsonparametersobject: Option<ParametersObject>) -> Result<SubmitBlockResult, ApiError> {
+        match jsonparametersobject {
+            Some(object) => {
+                self.send(&RpcRequest::new2(
+                    "submitblock",
+                    hexdata,
+                    object
+                ))
+            },
+            None => {
+                self.send(&RpcRequest::new1(
+                    "submitblock",
+                    hexdata
+                ))
+            }
+        }
+    }
+
     fn create_raw_transaction(&self, inputs: CreateRawTransactionInputs, outputs: CreateRawTransactionOutputs) -> Result<SerializedRawTransaction, ApiError> {
         self.send(&RpcRequest::new2(
             "createrawtransaction",

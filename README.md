@@ -150,8 +150,8 @@ Below is a list of RPC calls in this Rust client as of KMDversion 0.3.3b
 - [x]    getmininginfo
 - [x]    getnetworkhashps ( blocks height )
 - [x]    getnetworksolps ( blocks height )
-- [ ]    prioritisetransaction <txid> <priority delta> <fee delta>
-- [ ]    submitblock "hexdata" ( "jsonparametersobject" )
+- [x]    prioritisetransaction <txid> <priority delta> <fee delta>
+- [x]    submitblock "hexdata" ( "jsonparametersobject" )
 
 ##### Network
 - [ ]    addnode "node" "add|remove|onetry"

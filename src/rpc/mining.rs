@@ -67,3 +67,22 @@ pub struct MiningInfo {
     generate: bool,
     numthreads: u8
 }
+
+#[derive(Deserialize, Serialize, Debug)]
+pub struct ParametersObject {
+    pub workid: String
+}
+
+#[derive(Deserialize, Serialize, Debug)]
+pub enum SubmitBlockResult {
+    #[serde(rename = "duplicate")]
+    Duplicate,
+    #[serde(rename = "duplicate-invalid")]
+    Duplicate_Invalid,
+    #[serde(rename = "duplicate-inconclusive")]
+    Duplicate_Inconclusive,
+    #[serde(rename = "inconclusive")]
+    Inconclusive,
+    #[serde(rename = "rejected")]
+    Rejected
+}

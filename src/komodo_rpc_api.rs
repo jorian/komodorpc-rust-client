@@ -45,8 +45,8 @@ pub trait KomodoRpcApi {
     fn get_mining_info(&self) -> Result<MiningInfo , ApiError>;
     fn get_network_hash_ps(&self) -> Result<u64 , ApiError>;
     fn get_network_sol_ps(&self) -> Result<u64 , ApiError>;
-//    fn prioritise_transaction(&self, height: u64) -> Result< , ApiError>;
-//    fn submit_block(&self, height: u64) -> Result< , ApiError>;
+    fn prioritise_transaction(&self, txid: TransactionId, prio_delta: f64, fee_delta: u32) -> Result<bool, ApiError>;
+    fn submit_block(&self, hexdata: String, jsonparametersobject: Option<ParametersObject>) -> Result<SubmitBlockResult, ApiError>;
 
 
     fn create_raw_transaction(&self, inputs: arguments::CreateRawTransactionInputs, outputs: arguments::CreateRawTransactionOutputs) -> Result<SerializedRawTransaction, ApiError>;
