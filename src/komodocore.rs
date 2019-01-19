@@ -330,6 +330,51 @@ impl KomodoRpcApi for Client {
         ))
     }
 
+    fn get_block_subsidy(&self, height: Option<u64>) -> Result<BlockSubsidy, ApiError> {
+        match height {
+            Some(n) => {
+                self.send(&RpcRequest::new1(
+                    "getblocksubsidy",
+                    height
+                ))
+            },
+            None => {
+                self.send(&RpcRequest::new0(
+                    "getblocksubsidy",
+                ))
+            }
+        }
+    }
+
+    fn get_block_template(&self, jsonrequestobject: Option<&RequestObject>) -> Result<BlockTemplate, ApiError> {
+        match jsonrequestobject {
+            Some(request) => {
+                self.send(&RpcRequest::new1(
+                    "getblocktemplate",
+                    request
+                ))
+            },
+            None => {
+                self.send(&RpcRequest::new0(
+                    "getblocktemplate",
+                ))
+            }
+        }    }
+
+    fn get_local_sol_ps(&self) -> Result<f64, ApiError> {
+        self.send(&RpcRequest::new0(
+            "getlocalsolps"
+        ))
+    }
+
+    fn create_raw_transaction(&self, inputs: CreateRawTransactionInputs, outputs: CreateRawTransactionOutputs) -> Result<SerializedRawTransaction, ApiError> {
+        self.send(&RpcRequest::new2(
+            "createrawtransaction",
+            inputs,
+            outputs
+        ))
+    }
+
     fn decode_raw_transaction(&self, hexstring: &str) -> Result<RawTransaction, ApiError> {
         self.send(&RpcRequest::new1(
             "decoderawtransaction",
@@ -356,14 +401,6 @@ impl KomodoRpcApi for Client {
             "getrawtransaction",
             txid,
             1
-        ))
-    }
-
-    fn create_raw_transaction(&self, inputs: CreateRawTransactionInputs, outputs: CreateRawTransactionOutputs) -> Result<SerializedRawTransaction, ApiError> {
-        self.send(&RpcRequest::new2(
-            "createrawtransaction",
-            inputs,
-            outputs
         ))
     }
 
@@ -475,35 +512,4 @@ impl KomodoRpcApi for Client {
             "getwalletinfo"
         ))
     }
-
-    fn get_block_subsidy(&self, height: Option<u64>) -> Result<BlockSubsidy, ApiError> {
-        match height {
-            Some(n) => {
-                self.send(&RpcRequest::new1(
-                    "getblocksubsidy",
-                    height
-                ))
-            },
-            None => {
-                self.send(&RpcRequest::new0(
-                    "getblocksubsidy",
-                ))
-            }
-        }
-    }
-
-    fn get_block_template(&self, jsonrequestobject: Option<&RequestObject>) -> Result<BlockTemplate, ApiError> {
-        match jsonrequestobject {
-            Some(request) => {
-                self.send(&RpcRequest::new1(
-                    "getblocktemplate",
-                    request
-                ))
-            },
-            None => {
-                self.send(&RpcRequest::new0(
-                    "getblocktemplate",
-                ))
-            }
-        }    }
 }

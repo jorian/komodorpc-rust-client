@@ -41,7 +41,7 @@ pub trait KomodoRpcApi {
     // mining
     fn get_block_subsidy(&self, height: Option<u64>) -> Result<BlockSubsidy , ApiError>;
     fn get_block_template(&self, jsonrequestobject: Option<&RequestObject>) -> Result<BlockTemplate , ApiError>;
-//    fn get_local_sol_ps(&self, height: u64) -> Result< , ApiError>;
+    fn get_local_sol_ps(&self) -> Result<f64 , ApiError>;
 //    fn get_mining_info(&self, height: u64) -> Result< , ApiError>;
 //    fn get_network_hash_ps(&self, height: u64) -> Result< , ApiError>;
 //    fn get_network_sol_ps(&self, height: u64) -> Result< , ApiError>;
