@@ -60,7 +60,6 @@ impl RpcClient {
             T: Serialize,
             R: DeserializeOwned,
     {
-
         let res = self
             .client
             .post(self.url.as_str())
@@ -71,10 +70,15 @@ impl RpcClient {
             .and_then(|mut res| {
                 let mut buf = String::new();
                 let _ = res.read_to_string(&mut buf);
-                serde_json::from_str(&buf).map_err(|err| ClientError::Json(err))
+//                println!("{}", &buf);
+                let a = serde_json::from_str(&buf).map_err(|err| ClientError::Json(err));
+                println!("{:#?}", a);
+                a
             });
 
         let res = res.map(RpcResponse::into_result);
+
+        println!("{:#?}", res);
 
         match res {
             Ok(result) => {

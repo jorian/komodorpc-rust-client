@@ -48,6 +48,19 @@ pub trait KomodoRpcApi {
     fn prioritise_transaction(&self, txid: TransactionId, prio_delta: f64, fee_delta: u32) -> Result<bool, ApiError>;
     fn submit_block(&self, hexdata: String, jsonparametersobject: Option<ParametersObject>) -> Result<SubmitBlockResult, ApiError>;
 
+    // network
+    fn addnode(&self, node: String, action: AddNodeCommand) -> Result<String, ApiError>; // node is an ip address
+//    fn clear_banned(&self)
+//    fn disconnect_node(&self) "node"
+//    fn get_added_node_info(&self) dns ( "node" )
+//    fn get_connection_count(&self)
+//    fn get_deprecation_info(&self)
+//    fn get_net_totals(&self)
+//    fn get_network_info(&self)
+//    fn get_peer_info(&self)
+//    fn list_banned(&self)
+//    fn ping(&self)
+//    fn set_ban(&self) "ip(/netmask)" "add|remove" (bantime) (absolute)
 
     fn create_raw_transaction(&self, inputs: arguments::CreateRawTransactionInputs, outputs: arguments::CreateRawTransactionOutputs) -> Result<SerializedRawTransaction, ApiError>;
     fn decode_raw_transaction(&self, hexstring: &str) -> Result<RawTransaction, ApiError>;

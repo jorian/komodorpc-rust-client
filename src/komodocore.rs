@@ -414,6 +414,14 @@ impl KomodoRpcApi for Client {
         }
     }
 
+    fn addnode(&self, node: String, action: AddNodeCommand) -> Result<String, ApiError> {
+        self.send(&RpcRequest::new2(
+            "addnode",
+            node,
+            action
+        ))
+    }
+
     fn create_raw_transaction(&self, inputs: CreateRawTransactionInputs, outputs: CreateRawTransactionOutputs) -> Result<SerializedRawTransaction, ApiError> {
         self.send(&RpcRequest::new2(
             "createrawtransaction",

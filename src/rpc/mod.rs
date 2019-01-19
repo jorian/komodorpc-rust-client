@@ -6,6 +6,7 @@ mod address_index;
 mod keys;
 mod script;
 mod mining;
+mod network;
 
 pub mod arguments;
 
@@ -18,4 +19,5 @@ pub use self::{
     keys::*,
     script::*,
     mining::*,
+    network::*,
 };

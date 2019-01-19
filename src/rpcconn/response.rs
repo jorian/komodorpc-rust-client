@@ -1,5 +1,9 @@
 use std::result::Result as StdResult;
 use std::{error::Error as StdError, fmt};
+use std::fmt::Debug;
+
+#[derive(Debug, Deserialize, PartialEq)]
+pub struct EmptyResponse();
 
 #[derive(Debug, Deserialize, PartialEq)]
 pub struct RpcError {
@@ -21,12 +25,20 @@ impl<R> Into<StdResult<R, RpcError>> for RpcResponse<R> {
                 result: Some(result),
                 error: None,
                 ..
-            } => Ok(result),
+            } => {
+                Ok(result)
+            },
             RpcResponse {
                 result: None,
                 error: Some(rpc_error),
                 ..
             } => Err(rpc_error),
+//            RpcResponse {
+//                result: None,
+//                error: None,
+//                ..
+//            } => Ok(
+//                Ok(EmptyResponse{ })),
             _ => panic!("Response must contain either result or error."),
         }
     }
