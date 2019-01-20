@@ -8,12 +8,10 @@ use serde::Serialize;
 use serde::de::DeserializeOwned;
 use std::io::Read;
 use rpcconn::RpcRequest;
-use rpcconn::RpcError;
 use rpcconn::RpcResponse;
 
 use std::error;
 use std::fmt;
-use std::error::Error;
 
 use error::ApiError;
 
@@ -29,6 +27,7 @@ pub enum ClientError {
 }
 
 impl error::Error for ClientError {
+    //noinspection RsUnresolvedReference
     fn description(&self) -> &str {
         match self {
             ClientError::Transport(ref e) => e.description(),

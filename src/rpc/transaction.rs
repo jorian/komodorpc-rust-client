@@ -2,7 +2,7 @@ use BlockHash;
 use TransactionId;
 use ScriptPubKey;
 
-use std::time::{SystemTime, UNIX_EPOCH};
+use std::time::SystemTime;
 
 #[derive(Deserialize, Serialize, Debug)]
 pub struct SerializedRawTransaction(pub String);
@@ -105,7 +105,8 @@ pub struct RawTransaction {
 pub struct Vin {
     pub txid: TransactionId,
     pub vout: u32,
-    pub scriptSig: ScriptSig,
+    #[serde(rename = "scriptSig")]
+    pub script_sig: ScriptSig,
     pub sequence: u64,
 }
 
@@ -118,11 +119,6 @@ pub struct ScriptSig {
 #[derive(Deserialize, Serialize, Debug)]
 pub struct Vout {
     pub value: f64,
-//    #[serde(rename = "valueSat")]
-//    pub value_sat: Option<u64>,
-//    // because of weirdness, valueZat is a possibility we need to account for too:
-//    #[serde(rename = "valueZat")]
-//    pub value_zat: Option<u64>,
     pub interest: f64,
     pub n: u32,
     #[serde(rename = "scriptPubKey")]
@@ -136,8 +132,10 @@ pub struct VJoinsplit {
     pub anchor: String,
     pub nullifiers: Vec<String>,
     pub commitments: Vec<String>,
-    pub onetimePubKey: String,
-    pub randomSeed: String,
+    #[serde(rename = "onetimePubKey")]
+    pub onetime_pubkey: String,
+    #[serde(rename = "randomSeed")]
+    pub random_seed: String,
     pub macs: Vec<String>,
     pub proof: String,
     pub ciphertexts: Vec<String>,
@@ -154,7 +152,8 @@ pub struct SignedRawTransaction {
 pub struct SignRawTransactionError {
     pub txid: String,
     pub vout: u16,
-    pub scriptSig: String,
+    #[serde(rename = "scriptSig")]
+    pub script_sig: String,
     pub sequence: u64,
     pub error: String,
 }
@@ -179,9 +178,9 @@ pub enum SigHashType {
     #[serde(rename = "SINGLE")]
     Single,
     #[serde(rename = "ALL|ANYONECANPAY")]
-    All_AnyoneCanPay,
+    AllAnyoneCanPay,
     #[serde(rename = "NONE|ANYONECANPAY")]
-    None_AnyoneCanPay,
+    NoneAnyoneCanPay,
     #[serde(rename = "SINGLE|ANYONECANPAY")]
-    Single_AnyoneCanPay,
+    SingleAnyoneCanPay,
 }

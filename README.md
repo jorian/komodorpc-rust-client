@@ -23,6 +23,7 @@ Below is a list of RPC calls in this Rust client as of KMDversion 0.3.3b
 #### Notes
 
 - `valueSat` and `valueZat` are omitted from `getrawtransaction` and `decoderawtransaction`, respectively
+- Several network RPCs return no response from komodod. Tempfix: An RpcError with code 0 is returned.
 
 #### RPCs
 

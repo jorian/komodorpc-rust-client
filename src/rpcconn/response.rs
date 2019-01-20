@@ -1,6 +1,5 @@
 use std::result::Result as StdResult;
 use std::{error::Error as StdError, fmt};
-use std::fmt::Debug;
 
 #[derive(Debug, Deserialize, PartialEq)]
 pub struct RpcError {

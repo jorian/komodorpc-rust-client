@@ -44,9 +44,9 @@ impl Error for ApiError {
         match *self {
             ApiError::RPC(ref cause) => Some(cause),
             ApiError::Client(ref cause) => Some(cause),
-            ApiError::Config(ref err) => None,
+            ApiError::Config(_) => None,
             ApiError::IO(ref cause) => Some(cause),
-            ApiError::Other(ref err) => None,
+            ApiError::Other(_) => None,
         }
     }
 }

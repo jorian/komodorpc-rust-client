@@ -3,7 +3,8 @@ use Address;
 #[derive(Deserialize, Serialize, Debug)]
 pub struct DecodedScript {
     pub asm: String,
-    pub reqSigs: Option<u16>,
+    #[serde(rename = "reqSigs")]
+    pub req_sigs: Option<u16>,
     #[serde(rename = "type")]
     pub script_type: ScriptType,
     pub addresses: Vec<Option<Address>>,

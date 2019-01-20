@@ -78,9 +78,9 @@ pub enum SubmitBlockResult {
     #[serde(rename = "duplicate")]
     Duplicate,
     #[serde(rename = "duplicate-invalid")]
-    Duplicate_Invalid,
+    DuplicateInvalid,
     #[serde(rename = "duplicate-inconclusive")]
-    Duplicate_Inconclusive,
+    DuplicateInconclusive,
     #[serde(rename = "inconclusive")]
     Inconclusive,
     #[serde(rename = "rejected")]

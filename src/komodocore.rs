@@ -3,12 +3,9 @@ use std::fs;
 use base64;
 use error::ApiError;
 
-use ClientError;
 use HTTPClient;
 use RpcClient;
-use RpcError;
 use RpcRequest;
-use JsonRpcVersion;
 
 use reqwest::header::{HeaderMap, HeaderValue, AUTHORIZATION};
 use serde::{de::DeserializeOwned, ser::Serialize};
@@ -27,12 +24,10 @@ use arguments::CreateRawTransactionInputs;
 
 use std::collections::HashMap;
 
-use std::io::Error;
 use std::path::PathBuf;
 
 pub struct Client {
     client: RpcClient,
-    config: Config,
 }
 
 impl Client {
@@ -43,8 +38,7 @@ impl Client {
         let rpc_client = Client::construct_rpc_client(&config);
 
         Ok(Client {
-            client: rpc_client,
-            config,
+            client: rpc_client
         })
     }
 
@@ -54,7 +48,6 @@ impl Client {
 
         Ok(Client {
             client: rpc_client,
-            config,
         })
     }
 
@@ -102,7 +95,7 @@ struct Config {
 
 impl Config {
     pub fn get_for(chain: Chain) -> Result<Self, ApiError> {
-        let mut config_path: PathBuf = PathBuf::new();
+        let mut config_path: PathBuf;
 
         // find location of configuration file:
         match os_info::get().os_type() {
@@ -115,6 +108,7 @@ impl Config {
                 }
             },
             OSType::Macos | OSType::Windows => {
+
                 // MacOS: /Users/Alice/Library/Application Support
                 // Windows: C:\Users\Alice\AppData\Roaming
                 if let Some(mut path) = dirs::data_dir() {
@@ -335,7 +329,7 @@ impl KomodoRpcApi for Client {
             Some(n) => {
                 self.send(&RpcRequest::new1(
                     "getblocksubsidy",
-                    height
+                    n
                 ))
             },
             None => {
@@ -625,8 +619,8 @@ impl KomodoRpcApi for Client {
     }
 
     fn get_balance(&self, minconf: Option<u32>, include_watchonly: Option<bool>) -> Result<f64, ApiError> {
-        let mut second;
-        let mut third;
+        let second;
+        let third;
 
         match (minconf, include_watchonly) {
             (Some(minconf), Some(wo)) => {

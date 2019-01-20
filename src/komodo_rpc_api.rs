@@ -1,5 +1,3 @@
-use ClientError;
-use RpcError;
 use TransactionId;
 use BlockHash;
 use error::ApiError;
