@@ -453,6 +453,89 @@ impl KomodoRpcApi for Client {
         }
     }
 
+    fn get_connection_count(&self) -> Result<u32, ApiError> {
+        self.send(&RpcRequest::new0(
+            "getconnectioncount"
+        ))
+    }
+
+    fn get_deprecation_info(&self) -> Result<DeprecationInfo, ApiError> {
+        self.send(&RpcRequest::new0(
+            "getdeprecationinfo"
+        ))
+    }
+
+    fn get_net_totals(&self) -> Result<NetTotals, ApiError> {
+        self.send(&RpcRequest::new0(
+            "getnettotals"
+        ))
+    }
+
+    fn get_network_info(&self) -> Result<NetworkInfo, ApiError> {
+        self.send(&RpcRequest::new0(
+            "getnetworkinfo"
+        ))
+    }
+
+    fn get_peer_info(&self) -> Result<Vec<Peer>, ApiError> {
+        self.send(&RpcRequest::new0(
+            "getpeerinfo"
+        ))
+    }
+
+    fn list_banned(&self) -> Result<Vec<Option<BannedNode>>, ApiError> {
+        self.send(&RpcRequest::new0(
+            "listbanned"
+        ))
+    }
+
+    fn ping(&self) -> Result<(), ApiError> {
+        self.send(&RpcRequest::new0(
+            "ping"
+        ))
+    }
+
+    fn set_ban(
+        &self,
+        ip: String,
+        command: String,
+        bantime: Option<u32>,
+        absolute: Option<bool>
+    ) -> Result<(), ApiError> {
+        match bantime {
+            Some(time) => {
+                match absolute {
+                    Some(true) => {
+                        self.send(&RpcRequest::new4(
+                            "setban",
+                            ip,
+                            command,
+                            time,
+                            true
+                        ))
+                    },
+                    Some(false) => {
+                        self.send(&RpcRequest::new4(
+                            "setban",
+                            ip,
+                            command,
+                            time,
+                            false
+                        ))
+                    },
+                    None => unreachable!()
+                }
+            },
+            None => {
+                self.send(&RpcRequest::new2(
+                    "setban",
+                    ip,
+                    command,
+                ))
+            }
+        }
+    }
+
     fn create_raw_transaction(&self, inputs: CreateRawTransactionInputs, outputs: CreateRawTransactionOutputs) -> Result<SerializedRawTransaction, ApiError> {
         self.send(&RpcRequest::new2(
             "createrawtransaction",

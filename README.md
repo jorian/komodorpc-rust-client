@@ -158,14 +158,14 @@ Below is a list of RPC calls in this Rust client as of KMDversion 0.3.3b
 - [x]    clearbanned (*empty response*)
 - [x]    disconnectnode "node" 
 - [x]    getaddednodeinfo dns ( "node" )
-- [ ]    getconnectioncount
-- [ ]    getdeprecationinfo
-- [ ]    getnettotals
-- [ ]    getnetworkinfo
-- [ ]    getpeerinfo
-- [ ]    listbanned
-- [ ]    ping
-- [ ]    setban "ip(/netmask)" "add|remove" (bantime) (absolute)
+- [x]    getconnectioncount
+- [x]    getdeprecationinfo
+- [x]    getnettotals
+- [x]    getnetworkinfo
+- [x]    getpeerinfo
+- [x]    listbanned
+- [x]    ping
+- [x]    setban "ip(/netmask)" "add|remove" (bantime) (absolute)
 
 ##### Oracles 
 - [ ]    oraclesaddress [pubkey]
