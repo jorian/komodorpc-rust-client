@@ -54,7 +54,6 @@ impl RpcClient {
     pub fn send<R: Debug, T: Debug>(
         &self,
         request: &RpcRequest<T>,
-//    ) -> Result<Result<R, RpcError>, ClientError>
     ) -> Result<R, ApiError>
         where
             T: Serialize,
@@ -66,16 +65,19 @@ impl RpcClient {
             // TODO: Avoid serializing twice
             .json(request)
             .send()
-            .map_err(ClientError::Transport)
+            .map_err(|err| ClientError::Transport(err))
             .and_then(|mut res| {
                 let mut buf = String::new();
+
+                // this basically reads the response of the request into the String `buf`
                 let _ = res.read_to_string(&mut buf);
-//                println!("{}", &buf);
-                let a = serde_json::from_str(&buf).map_err(|err| ClientError::Json(err));
-                println!("{:#?}", a);
-                a
+
+                // then, the String buf is read into serde to be made a JSON:
+                serde_json::from_str(&buf).map_err(|err| ClientError::Json(err))
             });
 
+        // give the response meaning: return an Err when the Komodod response is an error,
+        // and return an Ok if the response contains a result
         let res = res.map(RpcResponse::into_result);
 
         println!("{:#?}", res);
@@ -84,7 +86,10 @@ impl RpcClient {
             Ok(result) => {
                 match result {
                     Err(e) => Err(ApiError::RPC(e)),
-                    Ok(res2) => Ok(res2)
+                    Ok(res2) => {
+//                        println!("{:?}", res2);
+                        Ok(res2)
+                    }
                 }
             },
             Err(e) => Err(ApiError::Client(e))

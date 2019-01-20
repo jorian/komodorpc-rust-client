@@ -49,7 +49,7 @@ pub trait KomodoRpcApi {
     fn submit_block(&self, hexdata: String, jsonparametersobject: Option<ParametersObject>) -> Result<SubmitBlockResult, ApiError>;
 
     // network
-    fn addnode(&self, node: String, action: AddNodeCommand) -> Result<String, ApiError>; // node is an ip address
+    fn addnode(&self, node: String, action: AddNodeCommand) -> Result<(), ApiError>; // node is an ip address
 //    fn clear_banned(&self)
 //    fn disconnect_node(&self) "node"
 //    fn get_added_node_info(&self) dns ( "node" )

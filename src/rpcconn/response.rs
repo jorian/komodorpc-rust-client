@@ -3,9 +3,6 @@ use std::{error::Error as StdError, fmt};
 use std::fmt::Debug;
 
 #[derive(Debug, Deserialize, PartialEq)]
-pub struct EmptyResponse();
-
-#[derive(Debug, Deserialize, PartialEq)]
 pub struct RpcError {
     pub code: i32,
     pub message: String,
@@ -33,13 +30,10 @@ impl<R> Into<StdResult<R, RpcError>> for RpcResponse<R> {
                 error: Some(rpc_error),
                 ..
             } => Err(rpc_error),
-//            RpcResponse {
-//                result: None,
-//                error: None,
-//                ..
-//            } => Ok(
-//                Ok(EmptyResponse{ })),
-            _ => panic!("Response must contain either result or error."),
+            _ => {
+                Err(RpcError { code: 0, message: "Empty response".to_string()})
+//                panic!("Response must contain either result or error.")
+            }
         }
     }
 }
@@ -64,4 +58,9 @@ impl fmt::Display for RpcError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "code {}\nmessage {}", self.code, self.message)
     }
+}
+
+#[derive(Deserialize, Serialize, Debug, PartialEq)]
+pub struct EmptyResponse {
+
 }

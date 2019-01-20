@@ -154,9 +154,9 @@ Below is a list of RPC calls in this Rust client as of KMDversion 0.3.3b
 - [x]    submitblock "hexdata" ( "jsonparametersobject" )
 
 ##### Network
-- [ ]    addnode "node" "add|remove|onetry"
-- [ ]    clearbanned
-- [ ]    disconnectnode "node"
+- [x]    addnode "node" "add|remove|onetry" (*empty response*)
+- [ ]    clearbanned (*empty response*)
+- [ ]    disconnectnode "node" 
 - [ ]    getaddednodeinfo dns ( "node" )
 - [ ]    getconnectioncount
 - [ ]    getdeprecationinfo

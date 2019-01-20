@@ -414,7 +414,7 @@ impl KomodoRpcApi for Client {
         }
     }
 
-    fn addnode(&self, node: String, action: AddNodeCommand) -> Result<String, ApiError> {
+    fn addnode(&self, node: String, action: AddNodeCommand) -> Result<(), ApiError> {
         self.send(&RpcRequest::new2(
             "addnode",
             node,
