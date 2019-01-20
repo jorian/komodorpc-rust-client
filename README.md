@@ -155,9 +155,9 @@ Below is a list of RPC calls in this Rust client as of KMDversion 0.3.3b
 
 ##### Network
 - [x]    addnode "node" "add|remove|onetry" (*empty response*)
-- [ ]    clearbanned (*empty response*)
-- [ ]    disconnectnode "node" 
-- [ ]    getaddednodeinfo dns ( "node" )
+- [x]    clearbanned (*empty response*)
+- [x]    disconnectnode "node" 
+- [x]    getaddednodeinfo dns ( "node" )
 - [ ]    getconnectioncount
 - [ ]    getdeprecationinfo
 - [ ]    getnettotals

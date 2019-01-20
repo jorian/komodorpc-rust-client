@@ -422,6 +422,37 @@ impl KomodoRpcApi for Client {
         ))
     }
 
+    fn clear_banned(&self) -> Result<(), ApiError> {
+        self.send(&RpcRequest::new0(
+            "clearbanned",
+        ))
+    }
+
+    fn disconnect_node(&self, node: String) -> Result<(), ApiError> {
+        self.send(&RpcRequest::new1(
+            "addnode",
+            node
+        ))
+    }
+
+    fn get_added_node_info(&self, dns: bool, node: Option<&str>) -> Result<Vec<AddedNodeInfo>, ApiError> {
+        match node {
+            Some(address) => {
+                self.send(&RpcRequest::new2(
+                    "getaddednodeinfo",
+                    dns,
+                    address
+                ))
+            },
+            None => {
+                self.send(&RpcRequest::new1(
+                    "getaddednodeinfo",
+                    dns
+                ))
+            }
+        }
+    }
+
     fn create_raw_transaction(&self, inputs: CreateRawTransactionInputs, outputs: CreateRawTransactionOutputs) -> Result<SerializedRawTransaction, ApiError> {
         self.send(&RpcRequest::new2(
             "createrawtransaction",
