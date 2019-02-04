@@ -50,13 +50,13 @@ impl RpcClient {
         }
     }
 
-    pub fn send<R: Debug, T: Debug>(
+    pub fn send<R, T>(
         &self,
         request: &RpcRequest<T>,
-    ) -> Result<R, ApiError>
+    ) -> Result<Option<R>, ApiError>
         where
-            T: Serialize,
-            R: DeserializeOwned,
+            T: Serialize + Debug,
+            R: DeserializeOwned + Debug,
     {
         let res = self
             .client
@@ -79,20 +79,31 @@ impl RpcClient {
         // and return an Ok if the response contains a result
         let res = res.map(RpcResponse::into_result);
 
-        println!("{:#?}", res);
+        return match res {
+            Ok(Ok(RpcResponse {
+                result: Some(result),
+                error: None,
+                ..
+            })) => Ok(Some(result)),
+            Ok(Ok(RpcResponse {
+                result: None,
+                error: Some(rpc_error),
+                ..
+            })) => Err(ApiError::RPC(rpc_error)),
+            _ => Ok(None)
+        };
 
-        match res {
-            Ok(result) => {
-                match result {
-                    Err(e) => Err(ApiError::RPC(e)),
-                    Ok(res2) => {
-//                        println!("{:?}", res2);
-                        Ok(res2)
-                    }
-                }
-            },
-            Err(e) => Err(ApiError::Client(e))
-        }
+//            Ok(result) => {
+//                match result {
+//                    Err(e) => Err(ApiError::RPC(e)),
+//                    Ok(res2) => {
+////                        println!("{:?}", res2);
+//                        Ok(res2)
+//                    }
+//                }
+//            },
+//            Err(e) => Err(ApiError::Client(e))
+//        }
         // here is a result from the request with an id,
         // optionally the result (whatever it is) and
         // optionally an error. this is now morphed into an actual Result, where if there is an error
