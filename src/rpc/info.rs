@@ -28,6 +28,9 @@ pub struct Info {
     pub relayfee: f32,
     pub errors: String,
     pub name: String,
+    pub sapling: u64,
+    pub p2pport: u32,
+    pub rpcport: u32,
 }
 
 #[derive(Deserialize, Serialize, Debug, PartialEq)]

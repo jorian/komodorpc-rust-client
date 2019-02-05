@@ -36,3 +36,11 @@ impl CreateRawTransactionOutputs {
         self.0.insert(address.to_owned(), amount);
     }
 }
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct P2SHInputs(pub Vec<P2SHInput>);
+
+#[derive(Debug, Deserialize, Serialize)]
+pub struct P2SHInput {
+
+}

@@ -36,17 +36,17 @@ pub struct AddressMempoolDelta {
 pub struct AddressTxIDs(pub Vec<String>); // todo: a vec with txids, needs work.
 
 #[derive(Debug, Deserialize)]
-pub struct AddressUtxos(pub Vec<AddressUtxo>);
+pub struct AddressUtxos(Vec<AddressUtxo>);
 
 #[derive(Debug, Deserialize)]
 pub struct AddressUtxo {
     pub address: String,
     pub txid: String,
-    pub height: u64,
     #[serde(rename = "outputIndex")]
     pub output_index: u32,
     pub script: String,
-    pub satoshis: u64 // output always positive, no signing needed
+    pub satoshis: u64, // output always positive, no signing needed
+    pub height: u64,
 }
 
 #[derive(Debug, Deserialize)]

@@ -29,10 +29,7 @@ impl<R> Into<StdResult<R, RpcError>> for RpcResponse<R> {
                 error: Some(rpc_error),
                 ..
             } => Err(rpc_error),
-            _ => {
-                Err(RpcError { code: 0, message: "Empty response".to_string()})
-//                panic!("Response must contain either result or error.")
-            }
+            _ => Err(RpcError { code: 777, message: "Empty response".to_string()})
         }
     }
 }

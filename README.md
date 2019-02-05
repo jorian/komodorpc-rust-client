@@ -10,7 +10,8 @@ This is a work in progress!
 todo:
 - [ ]   implement all API calls
 - [ ]   argument Address into type
-- [ ]   handle empty responses (setaccount)
+- [x]   handle empty responses (setaccount)
+- [ ]   improve error handling Client
  
 
 This wrapper aims to:
