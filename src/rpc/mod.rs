@@ -20,4 +20,5 @@ pub use self::{
     script::*,
     mining::*,
     network::*,
+    arguments::*,
 };

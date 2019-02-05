@@ -5,7 +5,7 @@ pub struct AddressBalance {
 }
 
 #[derive(Debug, Deserialize)]
-pub struct AddressDeltas(Vec<AddressDelta>);
+pub struct AddressDeltas(pub Vec<AddressDelta>);
 
 
 #[derive(Debug, Deserialize)]
@@ -19,7 +19,7 @@ pub struct AddressDelta {
 }
 
 #[derive(Debug, Deserialize)]
-pub struct AddressMempool(Vec<AddressMempoolDelta>);
+pub struct AddressMempool(pub Vec<AddressMempoolDelta>);
 
 #[derive(Debug, Deserialize)]
 pub struct AddressMempoolDelta {
@@ -33,10 +33,10 @@ pub struct AddressMempoolDelta {
 }
 
 #[derive(Debug, Deserialize)]
-pub struct AddressTxIDs(Vec<String>); // todo: a vec with txids, needs work.
+pub struct AddressTxIDs(pub Vec<String>); // todo: a vec with txids, needs work.
 
 #[derive(Debug, Deserialize)]
-pub struct AddressUtxos(Vec<AddressUtxo>);
+pub struct AddressUtxos(pub Vec<AddressUtxo>);
 
 #[derive(Debug, Deserialize)]
 pub struct AddressUtxo {
