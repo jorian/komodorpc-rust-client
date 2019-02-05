@@ -64,62 +64,35 @@ impl RpcClient {
             // TODO: Avoid serializing twice
             .json(request)
             .send()
-            .map_err(|err| {
-                ClientError::Transport(err)
-            })
+            .map_err(|err| ClientError::Transport(err))
             .and_then(|mut res| {
-                dbg!(&res);
                 let mut buf = String::new();
 
                 // this basically reads the response of the request into the String `buf`
                 let _ = res.read_to_string(&mut buf);
-                dbg!(&buf);
 
                 // then, the String buf is read into serde to be made a JSON:
-                serde_json::from_str(&buf).map_err(|err| {
-                    dbg!(&err);
-                    ClientError::Json(err)
-                })
+                serde_json::from_str(&buf).map_err(|err| ClientError::Json(err))
             });
 
         // give the response meaning: return an Err when the Komodod response is an error,
         // and return an Ok if the response contains a result
         let res = res.map(RpcResponse::into_result);
 
-        return match res {
-            Ok(Ok(RpcResponse {
-                result: Some(result),
-                error: None,
-                ..
-            })) => Ok(Some(result)),
-            Ok(Ok(RpcResponse {
-                result: None,
-                error: Some(rpc_error),
-                ..
-            })) => Err(ApiError::RPC(rpc_error)),
-            Ok(Err(ref rpc_error)) if rpc_error.code == 777 => Ok(None),
-            Ok(Err(rpc_error)) => Err(ApiError::RPC(rpc_error)),
-            Err(cli_error) => Err(ApiError::Client(cli_error)),
-            _ => Err(ApiError::Other(String::from("Something went wrong while parsing request")))
-        };
+        match res {
+            Ok(one) => {
+                match one {
+                    Ok(two) => Ok(two),
+                    Err(rpc_error) => Err(ApiError::RPC(rpc_error))
+                }
+            },
+            Err(client_error) => Err(ApiError::Client(client_error)),
+        }
 
-//            Ok(result) => {
-//                match result {
-//                    Err(e) => Err(ApiError::RPC(e)),
-//                    Ok(res2) => {
-////                        println!("{:?}", res2);
-//                        Ok(res2)
-//                    }
-//                }
-//            },
-//            Err(e) => Err(ApiError::Client(e))
-//        }
         // here is a result from the request with an id,
         // optionally the result (whatever it is) and
         // optionally an error. this is now morphed into an actual Result, where if there is an error
         // coming from komodod, the RpcResponse is an RpcError.
-
-//        res.map(RpcResponse::into_result) // Result<T(he response), RpcError>
 
         // TODO: Maybe check if req.id == res.id. Should always hold since it is a synchronous call.
     }

@@ -11,7 +11,7 @@ todo:
 - [ ]   implement all API calls
 - [ ]   argument Address into type
 - [x]   handle empty responses (setaccount)
-- [ ]   improve error handling Client
+- [x]   improve error handling Client
  
 
 This wrapper aims to:

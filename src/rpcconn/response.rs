@@ -14,16 +14,14 @@ pub struct RpcResponse<R> {
     pub error: Option<RpcError>,
 }
 
-impl<R> Into<StdResult<R, RpcError>> for RpcResponse<R> {
-    fn into(self) -> Result<R, RpcError> {
+impl<R> RpcResponse<R> {
+    pub fn into_result(self) -> StdResult<Option<R>, RpcError> {
         match self {
             RpcResponse {
                 result: Some(result),
                 error: None,
                 ..
-            } => {
-                Ok(result)
-            },
+            } => Ok(Some(result)),
             RpcResponse {
                 result: None,
                 error: Some(rpc_error),
@@ -31,12 +29,6 @@ impl<R> Into<StdResult<R, RpcError>> for RpcResponse<R> {
             } => Err(rpc_error),
             _ => Err(RpcError { code: 777, message: "Empty response".to_string()})
         }
-    }
-}
-
-impl<R> RpcResponse<R> {
-    pub fn into_result(self) -> StdResult<R, RpcError> {
-        self.into()
     }
 
     pub fn id(&self) -> &str {
@@ -54,9 +46,4 @@ impl fmt::Display for RpcError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "code {}\nmessage {}", self.code, self.message)
     }
-}
-
-#[derive(Deserialize, Serialize, Debug, PartialEq)]
-pub struct EmptyResponse {
-
 }
