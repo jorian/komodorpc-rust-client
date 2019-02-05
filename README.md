@@ -12,6 +12,8 @@ todo:
 - [ ]   argument Address into type
 - [x]   handle empty responses (setaccount)
 - [x]   improve error handling Client
+- [ ]   find redeemScript in previous transactions (if any)
+- [ ]   make more use of references in arguments
  
 
 This wrapper aims to:
