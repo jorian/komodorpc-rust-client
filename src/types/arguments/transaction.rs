@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use TransactionId;
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct CreateRawTransactionInputs(Vec<Input>);
@@ -37,10 +38,13 @@ impl CreateRawTransactionOutputs {
     }
 }
 
-#[derive(Debug, Deserialize, Serialize)]
-pub struct P2SHInputs(pub Vec<P2SHInput>);
-
-#[derive(Debug, Deserialize, Serialize)]
-pub struct P2SHInput {
-
+#[derive(Deserialize, Serialize, Debug)]
+pub struct TransactionOutputDetail {
+    pub txid: TransactionId,
+    pub vout: u32,
+    #[serde(rename = "scriptPubKey")]
+    pub script_pub_key: String,
+    #[serde(rename = "redeemScript")]
+    pub redeem_script: Option<String>, // is hex hash
+    pub amount: f64,
 }

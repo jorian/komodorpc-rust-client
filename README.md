@@ -14,6 +14,7 @@ todo:
 - [x]   improve error handling Client
 - [ ]   find redeemScript in previous transactions (if any)
 - [ ]   make sensible use of references in arguments
+- [ ]   use `Into<String>` as argument for String types
  
 
 This wrapper aims to:
