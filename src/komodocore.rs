@@ -10,7 +10,7 @@ use RpcRequest;
 use reqwest::header::{HeaderMap, HeaderValue, AUTHORIZATION};
 use serde::{de::DeserializeOwned, ser::Serialize};
 use std::fmt::Debug;
-use rpc::*;
+use types::*;
 use TransactionId;
 use BlockHash;
 use KomodoRpcApi;

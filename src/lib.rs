@@ -10,7 +10,7 @@ extern crate dirs;
 extern crate reqwest;
 extern crate os_info;
 
-mod rpc;
+mod types;
 mod komodocore;
 mod komodo_rpc_api;
 mod chains;
@@ -25,7 +25,7 @@ pub use komodocore::Client;
 
 pub use error::ApiError;
 
-pub use rpc::*; // this basically eliminates mentioning 'rpc'
+pub use types::*; // this basically eliminates mentioning 'types'
 pub use rpcconn::*;
 
 pub use bitcoin::network::constants::Network;

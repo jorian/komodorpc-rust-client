@@ -1,7 +1,7 @@
 use TransactionId;
 use BlockHash;
 use error::ApiError;
-use rpc::*;
+use types::*;
 
 
 pub trait KomodoRpcApi {
