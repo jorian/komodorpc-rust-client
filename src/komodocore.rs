@@ -34,7 +34,7 @@ impl Client {
     /// Constructs a new `Client` that talks to the Komodo main chain. It assumes Komodo has
     /// been installed, since it fetches the needed RPC authentication parameters from the config file.
     pub fn new_komodo_client() -> Result<Self, ApiError> {
-        let config = Config::get_for(Chain::KMD)?;
+        let config = Config::get_for(&Chain::KMD)?;
         let rpc_client = Client::construct_rpc_client(&config);
 
         Ok(Client {
@@ -42,8 +42,8 @@ impl Client {
         })
     }
 
-    pub fn new_assetchain_client(ac: Chain) -> Result<Self, ApiError> {
-        let config = Config::get_for(ac)?;
+    pub fn new_assetchain_client(ac: &Chain) -> Result<Self, ApiError> {
+        let config = Config::get_for(&ac)?;
         let rpc_client = Client::construct_rpc_client(&config);
 
         Ok(Client {
@@ -85,7 +85,7 @@ struct Config {
 }
 
 impl Config {
-    pub fn get_for(chain: Chain) -> Result<Self, ApiError> {
+    pub fn get_for(chain: &Chain) -> Result<Self, ApiError> {
         let mut config_path: PathBuf;
 
         // find location of configuration file:
