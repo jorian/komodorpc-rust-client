@@ -14,6 +14,7 @@ use std::error;
 use std::fmt;
 
 use error::ApiError;
+use std::error::Error;
 
 pub struct RpcClient {
     client: HttpClient,
@@ -38,7 +39,7 @@ impl error::Error for ClientError {
 
 impl fmt::Display for ClientError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Something bad happened!")
+        write!(f, "Something bad happened: {}", self.description())
     }
 }
 
@@ -67,16 +68,11 @@ impl RpcClient {
             .map_err(|err| ClientError::Transport(err))
             .and_then(|mut res| {
                 let mut buf = String::new();
-
-                // this basically reads the response of the request into the String `buf`
                 let _ = res.read_to_string(&mut buf);
 
-                // then, the String buf is read into serde to be made a JSON:
                 serde_json::from_str(&buf).map_err(|err| ClientError::Json(err))
             });
 
-        // give the response meaning: return an Err when the Komodod response is an error,
-        // and return an Ok if the response contains a result
         let res = res.map(RpcResponse::into_result);
 
         match res {
@@ -88,11 +84,6 @@ impl RpcClient {
             },
             Err(client_error) => Err(ApiError::Client(client_error)),
         }
-
-        // here is a result from the request with an id,
-        // optionally the result (whatever it is) and
-        // optionally an error. this is now morphed into an actual Result, where if there is an error
-        // coming from komodod, the RpcResponse is an RpcError.
 
         // TODO: Maybe check if req.id == res.id. Should always hold since it is a synchronous call.
     }

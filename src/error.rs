@@ -62,6 +62,7 @@ impl From<RpcError> for ApiError {
         ApiError::RPC(cause)
     }
 }
+
 impl From<ClientError> for ApiError {
     fn from(cause: ClientError) -> ApiError {
         ApiError::Client(cause)

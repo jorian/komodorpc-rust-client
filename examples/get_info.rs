@@ -9,12 +9,11 @@ pub fn main() {
     let info = komodo_client.get_info();
 
     match info {
-        Err(rpc_error) => println!("{:?}", rpc_error),
+        Err(api_error) => println!("{:?}", api_error),
         Ok(client_response) => {
             match client_response {
-                Err(error) => println!("{}", error.message),
-                Ok(info) => println!("{:?}", info)
-      // or use Ok(info) => println!("{:?}", info.balance) to get balance, etc.
+                Some(res) => println!("{:?}", res),
+                None => println!("empty response"),
             }
         }
     }
