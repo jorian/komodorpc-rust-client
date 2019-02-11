@@ -1,3 +1,8 @@
+use serde::de::{self, Deserialize, Deserializer};
+use std::fmt;
+use std::str::FromStr;
+use std::fmt::Display;
+
 #[derive(Debug, Deserialize)]
 pub struct AddressBalance {
     pub balance: u64,
@@ -65,5 +70,15 @@ pub struct Snapshot {
 #[derive(Debug, Deserialize)]
 pub struct SnapshotAddress {
     pub addr: String,
-    pub amount: String
+    #[serde(deserialize_with = "from_str")]
+    pub amount: f64
+}
+
+fn from_str<'de, T, D>(deserializer: D) -> Result<T, D::Error>
+    where T: FromStr,
+          T::Err: Display,
+          D: Deserializer<'de>
+{
+    let s = String::deserialize(deserializer)?;
+    T::from_str(&s).map_err(de::Error::custom)
 }
