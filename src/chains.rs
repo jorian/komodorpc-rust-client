@@ -2,7 +2,7 @@
 // also it should be able to add your own, manually.
 use core::fmt;
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub enum Chain {
     KMD     ,
     REVS    ,
