@@ -54,7 +54,7 @@ impl RpcClient {
     pub fn send<R, T>(
         &self,
         request: &RpcRequest<T>,
-    ) -> Result<Option<R>, ApiError>
+    ) -> Result<R, ApiError>
         where
             T: Serialize + Debug,
             R: DeserializeOwned + Debug,

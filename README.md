@@ -15,7 +15,7 @@ todo:
 - [ ]   find redeemScript in previous transactions (if any)
 - [ ]   make sensible use of references in arguments
 - [ ]   use `Into<String>` as argument for String types
- 
+- [ ]   get rid of needing AddressList for single address in parameter
 
 This wrapper aims to:
 - be stateless. It's up to the app using this library to maintain state.

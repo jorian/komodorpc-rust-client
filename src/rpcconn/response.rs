@@ -15,13 +15,13 @@ pub struct RpcResponse<R> {
 }
 
 impl<R> RpcResponse<R> {
-    pub fn into_result(self) -> StdResult<Option<R>, RpcError> {
+    pub fn into_result(self) -> StdResult<R, RpcError> {
         match self {
             RpcResponse {
                 result: Some(result),
                 error: None,
                 ..
-            } => Ok(Some(result)),
+            } => Ok(result),
             RpcResponse {
                 result: None,
                 error: Some(rpc_error),
