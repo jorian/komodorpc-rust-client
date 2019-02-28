@@ -5,6 +5,7 @@ use types::address_index::AddressUtxos;
 use std::ops::Add;
 use bitcoin::util::hash::Sha256dHash;
 use ApiError;
+use std::iter::FromIterator;
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct CreateRawTransactionInputs(Vec<Input>);
@@ -43,7 +44,7 @@ impl CreateRawTransactionOutputs {
     }
 }
 
-#[derive(Deserialize, Serialize, Debug)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct P2SHInput {
     pub txid: TransactionId,
     pub vout: u32,
@@ -54,6 +55,7 @@ pub struct P2SHInput {
     pub amount: f64,
 }
 
+#[derive(Debug, Clone)]
 pub struct P2SHInputSet(Vec<P2SHInput>);
 
 impl P2SHInputSet {
@@ -62,6 +64,17 @@ impl P2SHInputSet {
             redeem_script: None,
             p2sh_input_set: None,
         }
+    }
+}
+
+impl FromIterator<P2SHInput> for P2SHInputSet {
+    fn from_iter<T: IntoIterator<Item=P2SHInput>>(iter: T) -> Self {
+        let mut result = Vec::new();
+        for i in iter {
+            result.push(i);
+        }
+
+        P2SHInputSet { 0: result}
     }
 }
 
@@ -77,29 +90,27 @@ impl P2SHInputSetBuilder {
         self
     }
 
-    pub fn build(self) -> Result<P2SHInputSet, ApiError> {
+    pub fn build(&self) -> Result<P2SHInputSet, ApiError> {
         match self.redeem_script.clone() {
             Some(script) => {
-                let updated_set = self.p2sh_input_set.map(|mut set| {
-                    set.0
-                        .into_iter()
-                        .map(|mut input| input.redeem_script = Some(script.clone()))
-                        .collect::<P2SHInputSet>()
-                });
+                let mut v = self.p2sh_input_set.clone().unwrap();
+                for i in &mut v.0 {
+                    i.redeem_script = Some(script.clone())
+                }
 
-                Ok(self.p2sh_input_set.unwrap())
+                Ok(v)
             },
             None => Err(ApiError::Other(String::from("Failed to build P2SH Inputs, redeem_script not set")))
         }
     }
 }
 
-impl From<&AddressUtxos> for P2SHInputSetBuilder {
-    fn from(utxo_set: &AddressUtxos) -> Self {
+impl From<AddressUtxos> for P2SHInputSetBuilder {
+    fn from(utxo_set: AddressUtxos) -> Self {
         let mut set = vec![];
         for utxo in &utxo_set.0 {
             set.push(P2SHInput {
-                // todo the unwrap here is ugly:
+                // todo the unwrap here is ugly, but needed:
                 txid: TransactionId::from(Sha256dHash::from_hex(&utxo.txid).unwrap()),
                 vout: utxo.output_index,
                 script_pub_key: utxo.script.clone(),
