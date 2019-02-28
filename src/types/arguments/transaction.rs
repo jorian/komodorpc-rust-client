@@ -25,6 +25,20 @@ impl CreateRawTransactionInputs {
     }
 }
 
+impl From<AddressUtxos> for CreateRawTransactionInputs {
+    fn from(utxo_set: AddressUtxos) -> Self {
+        let mut set = vec![];
+        for utxo in &utxo_set.0 {
+            set.push(Input {
+                txid: utxo.txid.clone(),
+                vout: utxo.output_index
+            })
+        }
+
+        CreateRawTransactionInputs { 0: set }
+    }
+}
+
 #[derive(Debug, Deserialize, Serialize)]
 struct Input {
     txid: String,
@@ -105,8 +119,8 @@ impl P2SHInputSetBuilder {
     }
 }
 
-impl From<AddressUtxos> for P2SHInputSetBuilder {
-    fn from(utxo_set: AddressUtxos) -> Self {
+impl From<&AddressUtxos> for P2SHInputSetBuilder {
+    fn from(utxo_set: &AddressUtxos) -> Self {
         let mut set = vec![];
         for utxo in &utxo_set.0 {
             set.push(P2SHInput {
