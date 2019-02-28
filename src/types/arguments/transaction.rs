@@ -1,5 +1,10 @@
 use std::collections::HashMap;
 use TransactionId;
+use std::io::SeekFrom::Start;
+use types::address_index::AddressUtxos;
+use std::ops::Add;
+use bitcoin::util::hash::Sha256dHash;
+use ApiError;
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct CreateRawTransactionInputs(Vec<Input>);
@@ -39,7 +44,7 @@ impl CreateRawTransactionOutputs {
 }
 
 #[derive(Deserialize, Serialize, Debug)]
-pub struct TransactionOutputDetail {
+pub struct P2SHInput {
     pub txid: TransactionId,
     pub vout: u32,
     #[serde(rename = "scriptPubKey")]
@@ -47,4 +52,67 @@ pub struct TransactionOutputDetail {
     #[serde(rename = "redeemScript")]
     pub redeem_script: Option<String>, // is hex hash
     pub amount: f64,
+}
+
+pub struct P2SHInputSet(Vec<P2SHInput>);
+
+impl P2SHInputSet {
+    pub fn builder<'a>() -> P2SHInputSetBuilder {
+        P2SHInputSetBuilder {
+            redeem_script: None,
+            p2sh_input_set: None,
+        }
+    }
+}
+
+pub struct P2SHInputSetBuilder {
+    redeem_script: Option<String>,
+    p2sh_input_set: Option<P2SHInputSet>,
+}
+
+impl P2SHInputSetBuilder {
+    pub fn set_redeem_script(&mut self, redeem_script: String) -> &mut Self {
+        self.redeem_script = Some(redeem_script.clone());
+
+        self
+    }
+
+    pub fn build(self) -> Result<P2SHInputSet, ApiError> {
+        match self.redeem_script.clone() {
+            Some(script) => {
+                let updated_set = self.p2sh_input_set.map(|mut set| {
+                    set.0
+                        .into_iter()
+                        .map(|mut input| input.redeem_script = Some(script.clone()))
+                        .collect::<P2SHInputSet>()
+                });
+
+                Ok(self.p2sh_input_set.unwrap())
+            },
+            None => Err(ApiError::Other(String::from("Failed to build P2SH Inputs, redeem_script not set")))
+        }
+    }
+}
+
+impl From<&AddressUtxos> for P2SHInputSetBuilder {
+    fn from(utxo_set: &AddressUtxos) -> Self {
+        let mut set = vec![];
+        for utxo in &utxo_set.0 {
+            set.push(P2SHInput {
+                // todo the unwrap here is ugly:
+                txid: TransactionId::from(Sha256dHash::from_hex(&utxo.txid).unwrap()),
+                vout: utxo.output_index,
+                script_pub_key: utxo.script.clone(),
+                amount: (utxo.satoshis as f64 / 100_000_000.0),
+                redeem_script: None,
+            })
+        }
+
+        P2SHInputSetBuilder {
+            redeem_script: None,
+            p2sh_input_set: Some(P2SHInputSet {
+                0: set
+            })
+        }
+    }
 }

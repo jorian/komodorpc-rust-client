@@ -10,11 +10,6 @@ pub fn main() {
 
     match info {
         Err(api_error) => println!("{:?}", api_error),
-        Ok(client_response) => {
-            match client_response {
-                Some(res) => println!("{:?}", res),
-                None => println!("empty response"),
-            }
-        }
+        Ok(client_response) => println!("{:?}", client_response),
     }
 }

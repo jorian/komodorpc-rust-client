@@ -15,10 +15,6 @@ pub fn main() {
 
     match address_txids {
         Err(e) => println!("{:?}", e.description()),
-        Ok(option) =>
-            match option {
-                Some(res) => println!("{:?}", res),
-                None => println!("Empty response")
-            }
+        Ok(res) => println!("{:?}", res),
     }
 }
