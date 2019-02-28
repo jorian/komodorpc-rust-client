@@ -55,8 +55,8 @@ pub struct P2SHInput {
     pub amount: f64,
 }
 
-#[derive(Debug, Clone)]
-pub struct P2SHInputSet(Vec<P2SHInput>);
+#[derive(Serialize, Debug, Clone)]
+pub struct P2SHInputSet(pub Vec<P2SHInput>);
 
 impl P2SHInputSet {
     pub fn builder<'a>() -> P2SHInputSetBuilder {
