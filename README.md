@@ -18,7 +18,10 @@ todo:
 - [ ]   get rid of needing AddressList for single address in parameter
 
 This wrapper aims to:
-- be stateless. It's up to the app using this library to maintain state.
+- be stateless, aka be a thin layer. It's up to the app using this library to maintain state.
+
+### Features
+- Convert an utxolist retrieved through `getaddressutxos` to inputs in `createrawtransaction`
 
 ### Currently supported calls
 
@@ -27,7 +30,9 @@ Below is a list of RPC calls in this Rust client as of KMDversion 0.3.3b
 #### Notes
 
 - `valueSat` and `valueZat` are omitted from `getrawtransaction` and `decoderawtransaction`, respectively
-- Several network RPCs return no response from komodod. Tempfix: An RpcError with code 0 is returned.
+- Several network RPCs return no response from komodod. These RPCs are unsupported until further notice, being:
+    - addnode
+    - clearbanned
 
 #### RPCs
 

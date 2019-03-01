@@ -25,8 +25,8 @@ impl CreateRawTransactionInputs {
     }
 }
 
-impl From<AddressUtxos> for CreateRawTransactionInputs {
-    fn from(utxo_set: AddressUtxos) -> Self {
+impl From<&AddressUtxos> for CreateRawTransactionInputs {
+    fn from(utxo_set: &AddressUtxos) -> Self {
         let mut set = vec![];
         for utxo in &utxo_set.0 {
             set.push(Input {
