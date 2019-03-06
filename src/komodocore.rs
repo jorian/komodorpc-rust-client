@@ -109,7 +109,7 @@ impl Config {
                     return Err(ApiError::Other(String::from("no komodod installation found")))
                 }
             },
-            _ => return Err(ApiError::Other(String::from("unknown operating system")))
+            _ => return Err(ApiError::Other(String::from("unknown or unsupported operating system")))
         }
 
         // push the actual configuration file:
@@ -399,26 +399,26 @@ impl KomodoRpcApi for Client {
         }
     }
 
-    fn addnode(&self, node: String, action: AddNodeCommand) -> Result<(), ApiError> {
-        self.send(&RpcRequest::new2(
-            "addnode",
-            node,
-            action
-        ))
-    }
+//    fn addnode(&self, node: String, action: AddNodeCommand) -> Result<(), ApiError> {
+//        self.send(&RpcRequest::new2(
+//            "addnode",
+//            node,
+//            action
+//        ))
+//    }
 
-    fn clear_banned(&self) -> Result<(), ApiError> {
-        self.send(&RpcRequest::new0(
-            "clearbanned",
-        ))
-    }
+//    fn clear_banned(&self) -> Result<(), ApiError> {
+//        self.send(&RpcRequest::new0(
+//            "clearbanned",
+//        ))
+//    }
 
-    fn disconnect_node(&self, node: String) -> Result<(), ApiError> {
-        self.send(&RpcRequest::new1(
-            "addnode",
-            node
-        ))
-    }
+//    fn disconnect_node(&self, node: String) -> Result<(), ApiError> {
+//        self.send(&RpcRequest::new1(
+//            "addnode",
+//            node
+//        ))
+//    }
 
     fn get_added_node_info(&self, dns: bool, node: Option<&str>) -> Result<Vec<AddedNodeInfo>, ApiError> {
         match node {
@@ -474,11 +474,11 @@ impl KomodoRpcApi for Client {
         ))
     }
 
-    fn ping(&self) -> Result<(), ApiError> {
-        self.send(&RpcRequest::new0(
-            "ping"
-        ))
-    }
+//    fn ping(&self) -> Result<(), ApiError> {
+//        self.send(&RpcRequest::new0(
+//            "ping"
+//        ))
+//    }
 
     fn set_ban(
         &self,

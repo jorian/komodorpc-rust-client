@@ -84,7 +84,5 @@ impl RpcClient {
             },
             Err(client_error) => Err(ApiError::Client(client_error)),
         }
-
-        // TODO: Maybe check if req.id == res.id. Should always hold since it is a synchronous call.
     }
 }

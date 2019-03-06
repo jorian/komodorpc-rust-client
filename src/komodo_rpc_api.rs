@@ -47,9 +47,9 @@ pub trait KomodoRpcApi {
     fn submit_block(&self, hexdata: String, jsonparametersobject: Option<ParametersObject>) -> Result<SubmitBlockResult, ApiError>;
 
     // network
-    fn addnode(&self, node: String, action: AddNodeCommand) -> Result<(), ApiError>; // node is an ip address | komodod returns an empty response
-    fn clear_banned(&self) -> Result<(), ApiError>; // komodod returns an empty response
-    fn disconnect_node(&self, node: String) -> Result<(), ApiError>; // node is an ip address | komodod returns an empty response
+//    fn addnode(&self, node: String, action: AddNodeCommand) -> Result<(), ApiError>; // node is an ip address | komodod returns an empty response
+//    fn clear_banned(&self) -> Result<(), ApiError>; // komodod returns an empty response
+//    fn disconnect_node(&self, node: String) -> Result<(), ApiError>; // node is an ip address | komodod returns an empty response
     fn get_added_node_info(&self, dns: bool, node: Option<&str>) -> Result<Vec<AddedNodeInfo>, ApiError>;
     fn get_connection_count(&self) -> Result<u32, ApiError>;
     fn get_deprecation_info(&self) -> Result<DeprecationInfo, ApiError>;
@@ -57,7 +57,7 @@ pub trait KomodoRpcApi {
     fn get_network_info(&self) -> Result<NetworkInfo, ApiError>;
     fn get_peer_info(&self) -> Result<Vec<Peer>, ApiError>;
     fn list_banned(&self) -> Result<Vec<Option<BannedNode>>, ApiError>;
-    fn ping(&self) -> Result<(), ApiError>;
+//    fn ping(&self) -> Result<(), ApiError>;
     fn set_ban(&self, ip: String, command: String, bantime: Option<u32>, absolute: Option<bool>) -> Result<(), ApiError>; //"ip(/netmask)" "add|remove" (bantime) (absolute)
 
     fn create_raw_transaction(&self, inputs: arguments::CreateRawTransactionInputs, outputs: arguments::CreateRawTransactionOutputs) -> Result<SerializedRawTransaction, ApiError>;

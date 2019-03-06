@@ -22,6 +22,7 @@ This wrapper aims to:
 
 ### Features
 - Convert an utxolist retrieved through `getaddressutxos` to inputs in `createrawtransaction`
+- Automatically fetches KMD / Assetchain parameters from config file on Win, MacOS and Ubuntu/Debian
 
 ### Currently supported calls
 
