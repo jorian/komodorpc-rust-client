@@ -44,6 +44,7 @@ pub enum Chain {
     PGT     ,
     KMDICE  ,
     DION    ,
+    DOPE    ,
 }
 
 impl fmt::Display for Chain {
