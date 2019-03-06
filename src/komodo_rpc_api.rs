@@ -88,4 +88,6 @@ pub trait KomodoRpcApi {
     fn get_transaction(&self, tx: &TransactionId) -> Result<Transaction, ApiError>;
 
     fn get_wallet_info(&self) -> Result<WalletInfo, ApiError>;
+
+    fn z_listreceivedbyaddress(&self) -> Result<(), ApiError>; // todo check beforehand if addy is shielded!
 }

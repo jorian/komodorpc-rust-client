@@ -17,7 +17,8 @@ todo:
 - [ ]   use `Into<String>` as argument for String types
 - [ ]   get rid of needing AddressList for single address in parameter
 - [ ]   define own `Chain` if needed assetchain isn't in enum
-- [ ]   properly expose arguments / types 
+- [ ]   properly expose arguments / types
+- [x]   handle special case: wildcard `"*"` in `fromaddresses`, `z_mergetoaddress`
 
 This wrapper aims to:
 - be stateless, aka be a thin layer. It's up to the app using this library to maintain state.
@@ -303,9 +304,9 @@ Below is a list of RPC calls in this Rust client as of KMDversion 0.3.3b
 - [ ]    z_getoperationresult (["operationid", ... ])
 - [ ]    z_getoperationstatus (["operationid", ... ])
 - [ ]    z_gettotalbalance ( minconf includeWatchonly )
-- [ ]    z_importkey "zkey" ( rescan startHeight )
-- [ ]    z_importviewingkey "vkey" ( rescan startHeight )
-- [ ]    z_importwallet "filename"
+- [ ]    z_importkey "zkey" ( rescan startHeight ) (*no output*)
+- [ ]    z_importviewingkey "vkey" ( rescan startHeight ) (*no output*)
+- [ ]    z_importwallet "filename" (*no output*)
 - [ ]    z_listaddresses ( includeWatchonly )
 - [ ]    z_listoperationids
 - [ ]    z_listreceivedbyaddress "address" ( minconf )

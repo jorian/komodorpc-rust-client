@@ -1,6 +1,9 @@
+pub mod address;
 mod address_list;
-mod transaction;
+mod keys;
+pub mod shielded;
 mod tokencc;
+mod transaction;
 
 pub use self::{address_list::*};
 pub use self::{transaction::*};
