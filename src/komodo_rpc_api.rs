@@ -2,6 +2,8 @@ use TransactionId;
 use BlockHash;
 use error::ApiError;
 use types::*;
+use types::arguments::address::{Address, AddrType, FromAddresses};
+use arguments::address::Amounts;
 
 
 pub trait KomodoRpcApi {
@@ -89,5 +91,30 @@ pub trait KomodoRpcApi {
 
     fn get_wallet_info(&self) -> Result<WalletInfo, ApiError>;
 
-    fn z_listreceivedbyaddress(&self) -> Result<(), ApiError>; // todo check beforehand if addy is shielded!
+    fn z_exportkey(&self, a: &Address) -> Result<PrivateKey, ApiError>;
+    fn z_exportviewingkey(&self, a: &Address) -> Result<ViewingKey, ApiError>; //todo unsupported https://github.com/zcash/zcash/issues/3060
+    fn z_exportwallet(&self, filename: &str) -> Result<String, ApiError>;
+    fn z_getbalance(&self, a: &Address, minconf: Option<u32>) -> Result<f64, ApiError>;
+    fn z_getnewaddress(&self) -> Result<Address, ApiError>; // type parameter unsupported
+    fn z_getoperationresult(&self, v: Vec<&str>) -> Result<Operations, ApiError>;
+    fn z_getoperationstatus(&self, v: Vec<&str>) -> Result<Operations, ApiError>;
+    fn z_gettotalbalance(&self) -> Result<TotalBalance, ApiError>;
+    fn z_importkey(&self) -> Result<(), ApiError>;
+    fn z_importviewingkey(&self) -> Result<(), ApiError>;
+    fn z_importwallet(&self) -> Result<(), ApiError>;
+    fn z_listaddresses(&self, include_watch_only: Option<bool>) -> Result<Vec<Address>, ApiError>;
+    fn z_listoperationids(&self) -> Result<Vec<String>, ApiError>;
+    fn z_listreceivedbyaddress(&self, a: &Address, minconf: Option<u32>) -> Result<ReceivedByAddress, ApiError>; // todo check beforehand if addy is shielded!
+    fn z_mergetoaddress(
+        &self,
+        from_addresses: &FromAddresses,
+        to_address: &Address,
+        fee: Option<f64>,
+        transparent_limit: Option<u32>,
+        shielded_limit: Option<u32>,
+        maximum_utxo_size: Option<u64>,
+        memo: Option<String>
+    ) -> Result<MergeResult, ApiError>;
+    fn z_sendmany(&self, from_address: &Address, amounts: &Amounts, minconf: Option<u32>, fee: Option<f64>,) -> Result<String, ApiError>;
+    fn z_shieldcoinbase(&self, from_address: &Address, to_address: &Address, fee: Option<f64>, limit: Option<u32>) -> Result<ShieldResult, ApiError>;
 }

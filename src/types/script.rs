@@ -1,4 +1,4 @@
-use Address;
+use arguments::address::Address;
 
 #[derive(Deserialize, Serialize, Debug)]
 pub struct DecodedScript {

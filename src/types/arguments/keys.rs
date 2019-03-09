@@ -6,7 +6,7 @@ pub struct ZKey(String);
 impl ZKey {
     pub fn from(key: &str) -> Result<ZKey, ApiError> {
         // todo validate zkey
-        Ok(Zkey { 0: key.to_string() })
+        Ok(ZKey { 0: key.to_string() })
     }
 }
 

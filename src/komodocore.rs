@@ -25,6 +25,9 @@ use arguments::CreateRawTransactionInputs;
 use std::collections::HashMap;
 
 use std::path::PathBuf;
+use error::ApiError::Other;
+use types::arguments::address::{Address, Amounts};
+use arguments::address::{AddrType, FromAddresses};
 
 pub struct Client {
     client: RpcClient,
@@ -74,6 +77,7 @@ impl Client {
         &self,
         request: &RpcRequest<P>
     ) -> Result<R, ApiError> {
+        dbg!(&request);
         self.client.send(request)
     }
 }
@@ -664,6 +668,226 @@ impl KomodoRpcApi for Client {
     fn get_wallet_info(&self) -> Result<WalletInfo, ApiError> {
         self.send(&RpcRequest::new0(
             "getwalletinfo"
+        ))
+    }
+
+    fn z_exportkey(&self, a: &Address) -> Result<PrivateKey, ApiError> {
+        match a.addr_type {
+            AddrType::Shielded => self.send(&RpcRequest::new1(
+                "z_exportkey",
+                &a.addr
+            )),
+            AddrType::Transparent => Err(ApiError::Other("transparent key not supported in z_exportkey".to_string()))
+        }
+    }
+
+    fn z_exportviewingkey(&self, a: &Address) -> Result<ViewingKey, ApiError> {
+//        match a.addr_type {
+//            AddrType::Shielded => self.send(&RpcRequest::new1(
+//                "z_exportviewingkey",
+//                &a.addr
+//            )),
+//            AddrType::Transparent => Err(ApiError::Other("transparent key not supported in z_exportviewingkey".to_string()))
+//        }
+        unimplemented!()
+    }
+
+    fn z_exportwallet(&self, s: &str) -> Result<String, ApiError> {
+        self.send(&RpcRequest::new1(
+            "z_exportwallet",
+            s
+        ))
+    }
+
+    fn z_getbalance(&self, addr: &Address, minconf: Option<u32>) -> Result<f64, ApiError> {
+        match minconf {
+            Some(conf) => self.send(&RpcRequest::new2(
+                "z_getbalance",
+                &addr.addr,
+                conf
+            )),
+            None => self.send(&RpcRequest::new1(
+                "z_getbalance",
+                &addr.addr
+            ))
+        }
+    }
+
+    fn z_getnewaddress(&self) -> Result<Address, ApiError> {
+        self.send(&RpcRequest::new0(
+            "z_getnewaddress"
+        ))
+    }
+
+    fn z_getoperationresult(&self, v: Vec<&str>) -> Result<Operations, ApiError> {
+        self.send(&RpcRequest::new1(
+            "z_getoperationresult",
+            v
+        ))
+    }
+
+    fn z_getoperationstatus(&self, v: Vec<&str>) -> Result<Operations, ApiError> {
+        self.send(&RpcRequest::new1(
+            "z_getoperationstatus",
+            v
+        ))
+    }
+
+    fn z_gettotalbalance(&self) -> Result<TotalBalance, ApiError> {
+        self.send(&RpcRequest::new0(
+            "z_gettotalbalance"
+        ))
+    }
+
+    fn z_importkey(&self) -> Result<(), ApiError> {
+        unimplemented!()
+    }
+
+    fn z_importviewingkey(&self) -> Result<(), ApiError> {
+        unimplemented!()
+    }
+
+    fn z_importwallet(&self) -> Result<(), ApiError> {
+        unimplemented!()
+    }
+
+    fn z_listaddresses(&self, include_watch_only: Option<bool>) -> Result<Vec<Address>, ApiError> {
+        match include_watch_only {
+            Some(b) => self.send(&RpcRequest::new1(
+                "z_listaddresses",
+                b
+            )),
+            None => self.send(&RpcRequest::new0(
+                "z_listaddresses"
+            ))
+        }
+    }
+
+    fn z_listoperationids(&self) -> Result<Vec<String>, ApiError> {
+        self.send(&RpcRequest::new0(
+            "z_listoperationids"
+        ))
+    }
+
+    fn z_listreceivedbyaddress(&self, a: &Address, minconf: Option<u32>) -> Result<ReceivedByAddress, ApiError> {
+        match a.addr_type {
+            AddrType::Shielded => self.send(&RpcRequest::new2(
+                "z_listreceivedbyaddress",
+                &a.addr,
+                match minconf {
+                    Some(conf) => conf,
+                    None => 1
+                }
+            )),
+            _ => Err(ApiError::Other(format!("Not a Shielded address: {}", a.addr))) // ApiError::Parameter
+        }
+    }
+
+    fn z_mergetoaddress(
+        &self,
+        from_addresses: &FromAddresses,
+        to_address: &Address,
+        fee: Option<f64>,
+        transparent_limit: Option<u32>,
+        shielded_limit: Option<u32>,
+        maximum_utxo_size: Option<u64>,
+        memo: Option<String>
+    ) -> Result<MergeResult, ApiError> {
+        match (maximum_utxo_size, memo) {
+            (Some(size), None) => self.send(&RpcRequest::new6(
+                "z_mergetoaddress",
+                &from_addresses.0,
+                &to_address.addr,
+                match fee {
+                    Some(fee) => fee,
+                    None => 0.0001,
+                },
+                match transparent_limit {
+                    Some(limit) => limit,
+                    None => 50
+                },
+                match shielded_limit {
+                    Some(limit) => limit,
+                    None => 90
+                },
+                size
+            )),
+            (Some(size), Some(ref memo)) => self.send(&RpcRequest::new7(
+                "z_mergetoaddress",
+                &from_addresses.0,
+                &to_address.addr,
+                match fee {
+                    Some(fee) => fee,
+                    None => 0.0001,
+                },
+                match transparent_limit {
+                    Some(limit) => limit,
+                    None => 50
+                },
+                match shielded_limit {
+                    Some(limit) => limit,
+                    None => 90
+                },
+                size,
+                memo
+            )),
+            (None, Some(_)) =>
+                Err(ApiError::Other("cannot specify memo without specifying maximum_utxo_size".to_string())),
+            _ => self.send(&RpcRequest::new5(
+                "z_mergetoaddress",
+                &from_addresses.0,
+                &to_address.addr,
+                match fee {
+                    Some(fee) => fee,
+                    None => 0.0001,
+                },
+                match transparent_limit {
+                    Some(limit) => limit,
+                    None => 50
+                },
+                match shielded_limit {
+                    Some(limit) => limit,
+                    None => 90
+                }
+            ))
+        }
+    }
+
+    fn z_sendmany(
+        &self,
+        from_address: &Address,
+        amounts: &Amounts,
+        minconf: Option<u32>,
+        fee: Option<f64>,
+    ) -> Result<String, ApiError> {
+        self.send(&RpcRequest::new4(
+            "z_sendmany",
+            &from_address.addr,
+            &amounts.0,
+            match minconf {
+                Some(conf) => conf,
+                None => 1,
+            },
+            match fee {
+                Some(fee) => fee,
+                None => 0.0001
+            }
+        ))
+    }
+
+    fn z_shieldcoinbase(&self, from_address: &Address, to_address: &Address, fee: Option<f64>, limit: Option<u32>) -> Result<ShieldResult, ApiError> {
+        self.send(&RpcRequest::new4(
+            "z_shieldcoinbase",
+            &from_address,
+            &to_address,
+            match fee {
+                Some(fee) => fee,
+                None => 0.0001,
+            },
+            match limit {
+                Some(limit) => limit,
+                None => 50
+            }
         ))
     }
 }

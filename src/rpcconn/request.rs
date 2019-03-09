@@ -74,8 +74,6 @@ impl RpcRequest<()> {
     }
 
     pub fn new5<A, B, C, D, E>(
-        version: JsonRpcVersion,
-        id: &str,
         method: &str,
         first: A,
         second: B,
@@ -90,12 +88,10 @@ impl RpcRequest<()> {
             D: Serialize,
             E: Serialize,
     {
-        RpcRequest::new(version, id, method, (first, second, third, fourth, fifth))
+        RpcRequest::new(JsonRpcVersion::V1, "777", method, (first, second, third, fourth, fifth))
     }
 
     pub fn new6<A, B, C, D, E, F>(
-        version: JsonRpcVersion,
-        id: &str,
         method: &str,
         first: A,
         second: B,
@@ -113,10 +109,35 @@ impl RpcRequest<()> {
             F: Serialize,
     {
         RpcRequest::new(
-            version,
-            id,
+            JsonRpcVersion::V1, "777",
             method,
             (first, second, third, fourth, fifth, sixth),
+        )
+    }
+
+    pub fn new7<A, B, C, D, E, F, G>(
+        method: &str,
+        first: A,
+        second: B,
+        third: C,
+        fourth: D,
+        fifth: E,
+        sixth: F,
+        seventh: G,
+    ) -> RpcRequest<(A, B, C, D, E, F, G)>
+        where
+            A: Serialize,
+            B: Serialize,
+            C: Serialize,
+            D: Serialize,
+            E: Serialize,
+            F: Serialize,
+            G: Serialize,
+    {
+        RpcRequest::new(
+            JsonRpcVersion::V1, "777",
+            method,
+            (first, second, third, fourth, fifth, sixth, seventh),
         )
     }
 

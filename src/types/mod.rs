@@ -6,6 +6,7 @@ mod keys;
 mod script;
 mod mining;
 mod network;
+mod shielded;
 
 pub mod arguments;
 
@@ -18,5 +19,6 @@ pub use self::{
     script::*,
     mining::*,
     network::*,
-    arguments::*,
+    shielded::*,
+//    arguments::*
 };

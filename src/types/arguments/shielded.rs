@@ -33,7 +33,7 @@ pub struct OperationIds(Vec<OperationId>);
 
 impl OperationIds {
     pub fn from(vec: Vec<OperationId>) -> OperationIds {
-        OperationIds{ 0: vec.to_owned() }
+        OperationIds{ 0: vec }
     }
 }
 

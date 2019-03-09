@@ -37,6 +37,12 @@ Below is a list of RPC calls in this Rust client as of KMDversion 0.3.3b
 - Several network RPCs return no response from komodod. These RPCs are unsupported until further notice, being:
     - addnode
     - clearbanned
+    - z_importkey
+    - z_importviewingkey
+    - z_importwallet
+- Things checked before actual request:
+    - address in address parameter is valid (basic length check for now)
+    
 
 #### RPCs
 
@@ -296,22 +302,24 @@ Below is a list of RPC calls in this Rust client as of KMDversion 0.3.3b
 - [ ]    setpubkey pubkey
 - [ ]    settxfee amount
 - [ ]    signmessage "t-addr" "message"
-- [ ]    z_exportkey "zaddr"
-- [ ]    z_exportviewingkey "zaddr"
-- [ ]    z_exportwallet "filename"
-- [ ]    z_getbalance "address" ( minconf )
-- [ ]    z_getnewaddress ( type )
-- [ ]    z_getoperationresult (["operationid", ... ])
-- [ ]    z_getoperationstatus (["operationid", ... ])
-- [ ]    z_gettotalbalance ( minconf includeWatchonly )
+
+##### Shielded ([see API](https://zcash.readthedocs.io/en/latest/rtd_pages/payment_api.html))
+- [x]    z_exportkey "zaddr"
+- [ ]    z_exportviewingkey "zaddr" *unsupported for sapling (https://github.com/zcash/zcash/issues/3060)* 
+- [x]    z_exportwallet "filename"
+- [x]    z_getbalance "address" ( minconf )
+- [x]    z_getnewaddress ( type )
+- [x]    z_getoperationresult (["operationid", ... ])
+- [x]    z_getoperationstatus (["operationid", ... ])
+- [x]    z_gettotalbalance ( minconf includeWatchonly )
 - [ ]    z_importkey "zkey" ( rescan startHeight ) (*no output*)
 - [ ]    z_importviewingkey "vkey" ( rescan startHeight ) (*no output*)
 - [ ]    z_importwallet "filename" (*no output*)
-- [ ]    z_listaddresses ( includeWatchonly )
-- [ ]    z_listoperationids
-- [ ]    z_listreceivedbyaddress "address" ( minconf )
-- [ ]    z_mergetoaddress ["fromaddress", ... ] "toaddress" ( fee ) ( transparent_limit ) ( shielded_limit ) ( memo )
-- [ ]    z_sendmany "fromaddress" [{"address":... ,"amount":...},...] ( minconf ) ( fee )
+- [x]    z_listaddresses ( includeWatchonly )
+- [x]    z_listoperationids
+- [x]    z_listreceivedbyaddress "address" ( minconf )
+- [x]    z_mergetoaddress ["fromaddress", ... ] "toaddress" ( fee ) ( transparent_limit ) ( shielded_limit ) ( memo )
+- [x]    z_sendmany "fromaddress" [{"address":... ,"amount":...},...] ( minconf ) ( fee )
 - [ ]    z_shieldcoinbase "fromaddress" "tozaddress" ( fee ) ( limit )
 - [ ]    zcbenchmark benchmarktype samplecount
 - [ ]    zcrawjoinsplit rawtx inputs outputs vpub_old vpub_new

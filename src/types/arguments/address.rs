@@ -35,12 +35,17 @@
 //}
 
 use ApiError;
+use serde::{Deserialize, Deserializer, Serialize, Serializer};
+use serde::de::Error;
+use std::fmt;
+use std::ops::Add;
+use types::blockchain::ChainTipStatus::Active;
 
 /// Address is either Transparent (address starts with `R`) or Shielded (all sapling, starts with `zs`)
-#[derive(Deserialize, Serialize, Debug)]
+#[derive(Debug, Clone)]
 pub struct Address {
-    addr: String,
-    addr_type: AddrType,
+    pub(crate) addr: String,
+    pub(crate) addr_type: AddrType,
 }
 
 impl Address {
@@ -58,17 +63,43 @@ impl Address {
             _ => Err(ApiError::Other(format!("Address has incorrect length")))
         }
     }
+
+    /// for use in `z_shieldcoinbase` to merge all coinbases to a Shielded address
+    pub fn any() -> Address {
+        Address {
+            addr: "*".to_string(),
+            addr_type: AddrType::Transparent
+        }
+    }
 }
 
-#[derive(Deserialize, Serialize, Debug)]
-enum AddrType {
+impl<'de> Deserialize<'de> for Address {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+        where
+            D: Deserializer<'de>,
+    {
+        let s: &str = Deserialize::deserialize(deserializer)?;
+        Address::from(s)
+            .map_err(D::Error::custom)
+    }
+}
+
+impl Serialize for Address {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error> where
+        S: Serializer {
+        serializer.serialize_str(&self.addr)
+    }
+}
+
+#[derive(Deserialize, Serialize, Debug, Clone)]
+pub(crate) enum AddrType {
     Transparent,
     Shielded
 }
 
 // for use in `z_mergetoaddress` RPC
 #[derive(Deserialize, Serialize, Debug)]
-pub struct FromAddresses(Vec<String>);
+pub struct FromAddresses(pub(crate) Vec<String>);
 
 impl FromAddresses {
     // if not used, assume wildcard
@@ -86,6 +117,14 @@ impl FromAddresses {
     pub fn all() -> FromAddresses {
         FromAddresses { 0: vec!["*".to_string() ]}
     }
+
+    pub fn any_taddr() -> FromAddresses {
+        FromAddresses { 0: vec!["ANY_TADDR".to_string()] }
+    }
+
+    pub fn any_zaddr() -> FromAddresses {
+        FromAddresses { 0: vec!["ANY_ZADDR".to_string()] }
+    }
 }
 
 // for use in `z_shieldcoinbase` RPC
@@ -97,18 +136,14 @@ impl FromAddress {
     pub fn from(address: Address) -> FromAddress {
         FromAddress { 0: address.addr }
     }
-
-    pub fn all() -> FromAddress {
-        FromAddress { 0: format!("*") }
-    }
 }
 
 // for use in `z_sendmany` RPC
-pub struct Amounts(Vec<Amount>);
+pub struct Amounts(pub(crate) Vec<Amount>);
 
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct Amount {
-    pub addr: Address,
+    pub address: Address,
     pub amount: f64,
     pub memo: Option<String>,
 }
