@@ -25,7 +25,7 @@ pub use komodocore::Client;
 
 pub use error::ApiError;
 
-pub use types::*; // this basically eliminates mentioning 'types'
+pub use types::*;
 pub use rpcconn::*;
 
 pub use bitcoin::network::constants::Network;

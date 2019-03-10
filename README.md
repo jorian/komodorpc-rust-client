@@ -19,6 +19,7 @@ todo:
 - [ ]   define own `Chain` if needed assetchain isn't in enum
 - [ ]   properly expose arguments / types
 - [x]   handle special case: wildcard `"*"` in `fromaddresses`, `z_mergetoaddress`
+- [ ]   supply Client with manual RPC credentials
 
 This wrapper aims to:
 - be stateless, aka be a thin layer. It's up to the app using this library to maintain state.
@@ -40,6 +41,7 @@ Below is a list of RPC calls in this Rust client as of KMDversion 0.3.3b
     - z_importkey
     - z_importviewingkey
     - z_importwallet
+- `z_exportviewingkey` is not supported yet for sapling
 - Things checked before actual request:
     - address in address parameter is valid (basic length check for now)
     
@@ -320,9 +322,9 @@ Below is a list of RPC calls in this Rust client as of KMDversion 0.3.3b
 - [x]    z_listreceivedbyaddress "address" ( minconf )
 - [x]    z_mergetoaddress ["fromaddress", ... ] "toaddress" ( fee ) ( transparent_limit ) ( shielded_limit ) ( memo )
 - [x]    z_sendmany "fromaddress" [{"address":... ,"amount":...},...] ( minconf ) ( fee )
-- [ ]    z_shieldcoinbase "fromaddress" "tozaddress" ( fee ) ( limit )
-- [ ]    zcbenchmark benchmarktype samplecount
-- [ ]    zcrawjoinsplit rawtx inputs outputs vpub_old vpub_new
-- [ ]    zcrawkeygen
-- [ ]    zcrawreceive zcsecretkey encryptednote
-- [ ]    zcsamplejoinsplit
+- [x]    z_shieldcoinbase "fromaddress" "tozaddress" ( fee ) ( limit )
+- [ ]    ~~zcbenchmark benchmarktype samplecount~~ *deprecated*
+- [ ]    ~~zcrawjoinsplit rawtx inputs outputs vpub_old vpub_new~~ *deprecated*
+- [ ]    ~~zcrawkeygen~~ *deprecated*
+- [ ]    ~~zcrawreceive zcsecretkey encryptednote~~ *deprecated*
+- [ ]    ~~zcsamplejoinsplit~~ *deprecated*

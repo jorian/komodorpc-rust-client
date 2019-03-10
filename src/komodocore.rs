@@ -29,14 +29,17 @@ use error::ApiError::Other;
 use types::arguments::address::{Address, Amounts};
 use arguments::address::{AddrType, FromAddresses};
 
+type Result<T> = std::result::Result<T, ApiError>;
+
 pub struct Client {
     client: RpcClient,
 }
 
 impl Client {
     /// Constructs a new `Client` that talks to the Komodo main chain. It assumes Komodo has
-    /// been installed, since it fetches the needed RPC authentication parameters from the config file.
-    pub fn new_komodo_client() -> Result<Self, ApiError> {
+    /// been installed and run at least once, since it fetches the needed RPC authentication parameters
+    /// from the config file which is created upon initialisation.
+    pub fn new_komodo_client() -> Result<Self> {
         let config = Config::get_for(&Chain::KMD)?;
         let rpc_client = Client::construct_rpc_client(&config);
 
@@ -45,7 +48,10 @@ impl Client {
         })
     }
 
-    pub fn new_assetchain_client(ac: &Chain) -> Result<Self, ApiError> {
+    /// Constructs a new `Client` that talks to the specified assetchain. It assumes Komodo has
+    /// been installed and the assetchain has been started at least once, in order to be able to fetch
+    /// the needed RPC authentication parameters from the assetchain config file.
+    pub fn new_assetchain_client(ac: &Chain) -> Result<Self> {
         let config = Config::get_for(&ac)?;
         let rpc_client = Client::construct_rpc_client(&config);
 
@@ -76,7 +82,7 @@ impl Client {
     fn send<R: DeserializeOwned + Debug, P: Serialize + Debug>(
         &self,
         request: &RpcRequest<P>
-    ) -> Result<R, ApiError> {
+    ) -> Result<R> {
         dbg!(&request);
         self.client.send(request)
     }
@@ -89,12 +95,13 @@ struct Config {
 }
 
 impl Config {
-    pub fn get_for(chain: &Chain) -> Result<Self, ApiError> {
+    pub fn get_for(chain: &Chain) -> Result<Self> {
         let mut config_path: PathBuf;
 
         // find location of configuration file:
         match os_info::get().os_type() {
             OSType::Ubuntu | OSType::Linux => {
+                // Linux: /home/$USER/
                 if let Some(mut path) = dirs::home_dir() {
                     path.push(".komodo");
                     config_path = path;
@@ -103,7 +110,6 @@ impl Config {
                 }
             },
             OSType::Macos | OSType::Windows => {
-
                 // MacOS: /Users/Alice/Library/Application Support
                 // Windows: C:\Users\Alice\AppData\Roaming
                 if let Some(mut path) = dirs::data_dir() {
@@ -144,55 +150,55 @@ impl Config {
         let _rpc_password = map.get("rpcpassword").ok_or(ApiError::Config(String::from("no rpcpassword in config file")))?;
         let _rpc_port =
             match chain {
-                Chain::KMD => "7771", // todo: KMD doesn't put rpcport in conf file at install
+                Chain::KMD => "7771", // KMD doesn't put rpcport in conf file at install
                 _ => map.get("rpcport").ok_or(ApiError::Config(String::from("no rpcport in config file")))?,
             };
 
         Ok(Config {
             rpc_user:       _rpc_user.to_owned(),
             rpc_password:   _rpc_password.to_owned(),
-            rpc_port:       _rpc_port.parse::<u16>().unwrap()
+            rpc_port:       _rpc_port.parse::<u16>()?
         })
     }
 }
 
 impl KomodoRpcApi for Client {
-    fn get_address_balance(&self, addresses: &arguments::AddressList) -> Result<AddressBalance, ApiError> {
+    fn get_address_balance(&self, addresses: &arguments::AddressList) -> Result<AddressBalance> {
         self.send(&RpcRequest::new1(
             "getaddressbalance",
             addresses
         ))
     }
 
-    fn get_address_deltas(&self, addresses: &AddressList) -> Result<AddressDeltas, ApiError> {
+    fn get_address_deltas(&self, addresses: &AddressList) -> Result<AddressDeltas> {
         self.send(&RpcRequest::new1(
             "getaddressdeltas",
             addresses
         ))
     }
 
-    fn get_address_mempool(&self, addresses: &AddressList) -> Result<AddressMempool, ApiError> {
+    fn get_address_mempool(&self, addresses: &AddressList) -> Result<AddressMempool> {
         self.send(&RpcRequest::new1(
             "getaddressmempool",
             addresses
         ))
     }
 
-    fn get_address_tx_ids(&self, addresses: &AddressList) -> Result<AddressTxIDs, ApiError> {
+    fn get_address_tx_ids(&self, addresses: &AddressList) -> Result<AddressTxIDs> {
         self.send(&RpcRequest::new1(
             "getaddresstxids",
             addresses
         ))
     }
 
-    fn get_address_utxos(&self, addresses: &AddressList) -> Result<AddressUtxos, ApiError> {
+    fn get_address_utxos(&self, addresses: &AddressList) -> Result<AddressUtxos> {
         self.send(&RpcRequest::new1(
             "getaddressutxos",
             addresses
         ))
     }
 
-    fn get_snapshot_max(&self, n: u32) -> Result<Snapshot, ApiError> {
+    fn get_snapshot_max(&self, n: u32) -> Result<Snapshot> {
         // parameter must be string:
         let n = n.to_string();
         self.send(&RpcRequest::new1(
@@ -201,13 +207,13 @@ impl KomodoRpcApi for Client {
         ))
     }
 
-    fn get_snapshot(&self) -> Result<Snapshot, ApiError> {
+    fn get_snapshot(&self) -> Result<Snapshot> {
         self.send(&RpcRequest::new0(
             "getsnapshot"
         ))
     }
 
-    fn coinsupply(&self, n: u32) -> Result<Coinsupply, ApiError> {
+    fn coinsupply(&self, n: u32) -> Result<Coinsupply> {
         let n = n.to_string();
         self.send(&RpcRequest::new1(
             "coinsupply",
@@ -215,77 +221,77 @@ impl KomodoRpcApi for Client {
         ))
     }
 
-    fn get_best_block_hash(&self) -> Result<BlockHash, ApiError> {
+    fn get_best_block_hash(&self) -> Result<BlockHash> {
         self.send(&RpcRequest::new0(
             "getbestblockhash",
         ))
     }
 
-    fn get_block(&self, hashorheight: String) -> Result<Block, ApiError> {
+    fn get_block(&self, hashorheight: String) -> Result<Block> {
         self.send(&RpcRequest::new1(
             "getblock",
             hashorheight
         ))
     }
 
-    fn get_blockchain_info(&self) -> Result<BlockchainInfo, ApiError> {
+    fn get_blockchain_info(&self) -> Result<BlockchainInfo> {
         self.send(&RpcRequest::new0(
             "getblockchaininfo"
         ))
     }
 
-    fn get_block_count(&self) -> Result<Blockcount, ApiError> {
+    fn get_block_count(&self) -> Result<Blockcount> {
         self.send(&RpcRequest::new0(
             "getblockcount"
         ))
     }
 
-    fn get_block_hash(&self, n: u32) -> Result<BlockHash, ApiError> {
+    fn get_block_hash(&self, n: u32) -> Result<BlockHash> {
         self.send(&RpcRequest::new1(
             "getblockhash",
             n
         ))
     }
 
-    fn get_block_header(&self, hash: String) -> Result<BlockHeader, ApiError> {
+    fn get_block_header(&self, hash: String) -> Result<BlockHeader> {
         self.send(&RpcRequest::new1(
             "getblockheader",
             hash
         ))
     }
 
-    fn get_chaintips(&self) -> Result<ChainTips, ApiError> {
+    fn get_chaintips(&self) -> Result<ChainTips> {
         self.send(&RpcRequest::new0(
             "getchaintips"
         ))
     }
 
-    fn get_difficulty(&self) -> Result<f64, ApiError> {
+    fn get_difficulty(&self) -> Result<f64> {
         self.send(&RpcRequest::new0(
             "getdifficulty",
         ))
     }
 
-    fn get_mempool_info(&self) -> Result<MempoolInfo, ApiError> {
+    fn get_mempool_info(&self) -> Result<MempoolInfo> {
         self.send(&RpcRequest::new0(
             "getmempoolinfo"
         ))
     }
 
-    fn get_raw_mempool(&self) -> Result<RawMempool, ApiError> {
+    fn get_raw_mempool(&self) -> Result<RawMempool> {
         self.send(&RpcRequest::new0(
             "getrawmempool"
         ))
     }
 
-    fn get_raw_mempool_verbose(&self) -> Result<RawMempoolVerbose, ApiError> {
+    fn get_raw_mempool_verbose(&self) -> Result<RawMempoolVerbose> {
         self.send(&RpcRequest::new1(
             "getrawmempool",
             true
         ))
     }
 
-    fn get_tx_out(&self, txid: String, index: u8) -> Result<TxOut, ApiError> {
+    fn get_tx_out(&self, txid: String, index: u8) -> Result<TxOut> {
         self.send(&RpcRequest::new2(
             "gettxout",
             txid,
@@ -293,33 +299,33 @@ impl KomodoRpcApi for Client {
         ))
     }
 
-    fn get_tx_out_set_info(&self) -> Result<TxOutSetInfo, ApiError> {
+    fn get_tx_out_set_info(&self) -> Result<TxOutSetInfo> {
         self.send(&RpcRequest::new0(
             "gettxoutsetinfo"
         ))
     }
 
-    fn minerids(&self, height: String) -> Result<MinerIDs, ApiError> { // why is height a string?
+    fn minerids(&self, height: String) -> Result<MinerIDs> { // why is height a string?
         self.send(&RpcRequest::new1(
             "minerids",
             height
         ))
     }
 
-    fn notaries(&self, height: String) -> Result<Notaries, ApiError> { // why is height a string?
+    fn notaries(&self, height: String) -> Result<Notaries> { // why is height a string?
         self.send(&RpcRequest::new1(
             "notaries",
             height
         ))
     }
 
-    fn get_info(&self) -> Result<Info, ApiError> {
+    fn get_info(&self) -> Result<Info> {
         self.send(&RpcRequest::new0(
             "getinfo"
         ))
     }
 
-    fn get_block_subsidy(&self, height: Option<u64>) -> Result<BlockSubsidy, ApiError> {
+    fn get_block_subsidy(&self, height: Option<u64>) -> Result<BlockSubsidy> {
         match height {
             Some(n) => {
                 self.send(&RpcRequest::new1(
@@ -335,7 +341,7 @@ impl KomodoRpcApi for Client {
         }
     }
 
-    fn get_block_template(&self, jsonrequestobject: Option<&RequestObject>) -> Result<BlockTemplate, ApiError> {
+    fn get_block_template(&self, jsonrequestobject: Option<&RequestObject>) -> Result<BlockTemplate> {
         match jsonrequestobject {
             Some(request) => {
                 self.send(&RpcRequest::new1(
@@ -350,32 +356,32 @@ impl KomodoRpcApi for Client {
             }
         }    }
 
-    fn get_local_sol_ps(&self) -> Result<f64, ApiError> {
+    fn get_local_sol_ps(&self) -> Result<f64> {
         self.send(&RpcRequest::new0(
             "getlocalsolps"
         ))
     }
 
-    fn get_mining_info(&self) -> Result<MiningInfo, ApiError> {
+    fn get_mining_info(&self) -> Result<MiningInfo> {
         self.send(&RpcRequest::new0(
             "getmininginfo"
         ))
     }
 
-    fn get_network_hash_ps(&self) -> Result<u64, ApiError> {
+    fn get_network_hash_ps(&self) -> Result<u64> {
         self.send(&RpcRequest::new0(
             "getnetworkhashps"
         ))
     }
 
-    fn get_network_sol_ps(&self) -> Result<u64, ApiError> {
+    fn get_network_sol_ps(&self) -> Result<u64> {
         self.send(&RpcRequest::new0(
             "getnetworksolps"
         ))
     }
 
     // todo untested
-    fn prioritise_transaction(&self, txid: TransactionId, prio_delta: f64, fee_delta: u32) -> Result<bool, ApiError> {
+    fn prioritise_transaction(&self, txid: TransactionId, prio_delta: f64, fee_delta: u32) -> Result<bool> {
         self.send(&RpcRequest::new3(
             "prioritisetransaction",
             txid,
@@ -385,7 +391,7 @@ impl KomodoRpcApi for Client {
     }
 
     // todo untested
-    fn submit_block(&self, hexdata: String, jsonparametersobject: Option<ParametersObject>) -> Result<SubmitBlockResult, ApiError> {
+    fn submit_block(&self, hexdata: String, jsonparametersobject: Option<ParametersObject>) -> Result<SubmitBlockResult> {
         match jsonparametersobject {
             Some(object) => {
                 self.send(&RpcRequest::new2(
@@ -403,7 +409,7 @@ impl KomodoRpcApi for Client {
         }
     }
 
-//    fn addnode(&self, node: String, action: AddNodeCommand) -> Result<(), ApiError> {
+//    fn addnode(&self, node: String, action: AddNodeCommand) -> Result<()> {
 //        self.send(&RpcRequest::new2(
 //            "addnode",
 //            node,
@@ -411,20 +417,20 @@ impl KomodoRpcApi for Client {
 //        ))
 //    }
 
-//    fn clear_banned(&self) -> Result<(), ApiError> {
+//    fn clear_banned(&self) -> Result<()> {
 //        self.send(&RpcRequest::new0(
 //            "clearbanned",
 //        ))
 //    }
 
-//    fn disconnect_node(&self, node: String) -> Result<(), ApiError> {
+//    fn disconnect_node(&self, node: String) -> Result<()> {
 //        self.send(&RpcRequest::new1(
 //            "addnode",
 //            node
 //        ))
 //    }
 
-    fn get_added_node_info(&self, dns: bool, node: Option<&str>) -> Result<Vec<AddedNodeInfo>, ApiError> {
+    fn get_added_node_info(&self, dns: bool, node: Option<&str>) -> Result<Vec<AddedNodeInfo>> {
         match node {
             Some(address) => {
                 self.send(&RpcRequest::new2(
@@ -442,43 +448,43 @@ impl KomodoRpcApi for Client {
         }
     }
 
-    fn get_connection_count(&self) -> Result<u32, ApiError> {
+    fn get_connection_count(&self) -> Result<u32> {
         self.send(&RpcRequest::new0(
             "getconnectioncount"
         ))
     }
 
-    fn get_deprecation_info(&self) -> Result<DeprecationInfo, ApiError> {
+    fn get_deprecation_info(&self) -> Result<DeprecationInfo> {
         self.send(&RpcRequest::new0(
             "getdeprecationinfo"
         ))
     }
 
-    fn get_net_totals(&self) -> Result<NetTotals, ApiError> {
+    fn get_net_totals(&self) -> Result<NetTotals> {
         self.send(&RpcRequest::new0(
             "getnettotals"
         ))
     }
 
-    fn get_network_info(&self) -> Result<NetworkInfo, ApiError> {
+    fn get_network_info(&self) -> Result<NetworkInfo> {
         self.send(&RpcRequest::new0(
             "getnetworkinfo"
         ))
     }
 
-    fn get_peer_info(&self) -> Result<Vec<Peer>, ApiError> {
+    fn get_peer_info(&self) -> Result<Vec<Peer>> {
         self.send(&RpcRequest::new0(
             "getpeerinfo"
         ))
     }
 
-    fn list_banned(&self) -> Result<Vec<Option<BannedNode>>, ApiError> {
+    fn list_banned(&self) -> Result<Vec<Option<BannedNode>>> {
         self.send(&RpcRequest::new0(
             "listbanned"
         ))
     }
 
-//    fn ping(&self) -> Result<(), ApiError> {
+//    fn ping(&self) -> Result<()> {
 //        self.send(&RpcRequest::new0(
 //            "ping"
 //        ))
@@ -490,7 +496,7 @@ impl KomodoRpcApi for Client {
         command: String,
         bantime: Option<u32>,
         absolute: Option<bool>
-    ) -> Result<(), ApiError> {
+    ) -> Result<()> {
         match bantime {
             Some(time) => {
                 match absolute {
@@ -525,7 +531,7 @@ impl KomodoRpcApi for Client {
         }
     }
 
-    fn create_raw_transaction(&self, inputs: CreateRawTransactionInputs, outputs: CreateRawTransactionOutputs) -> Result<SerializedRawTransaction, ApiError> {
+    fn create_raw_transaction(&self, inputs: CreateRawTransactionInputs, outputs: CreateRawTransactionOutputs) -> Result<SerializedRawTransaction> {
         self.send(&RpcRequest::new2(
             "createrawtransaction",
             inputs,
@@ -533,28 +539,28 @@ impl KomodoRpcApi for Client {
         ))
     }
 
-    fn decode_raw_transaction(&self, hexstring: &str) -> Result<RawTransaction, ApiError> {
+    fn decode_raw_transaction(&self, hexstring: &str) -> Result<RawTransaction> {
         self.send(&RpcRequest::new1(
             "decoderawtransaction",
             hexstring
         ))
     }
 
-    fn decode_script(&self, hexstring: &str) -> Result<DecodedScript, ApiError> {
+    fn decode_script(&self, hexstring: &str) -> Result<DecodedScript> {
         self.send(&RpcRequest::new1(
             "decodescript",
             hexstring
         ))
     }
 
-    fn get_raw_transaction(&self, txid: arguments::TransactionId) -> Result<SerializedRawTransaction, ApiError> {
+    fn get_raw_transaction(&self, txid: arguments::TransactionId) -> Result<SerializedRawTransaction> {
         self.send(&RpcRequest::new1(
             "getrawtransaction",
             txid
         ))
     }
 
-    fn get_raw_transaction_verbose(&self, txid: arguments::TransactionId) -> Result<RawTransaction, ApiError> {
+    fn get_raw_transaction_verbose(&self, txid: arguments::TransactionId) -> Result<RawTransaction> {
         self.send(&RpcRequest::new2(
             "getrawtransaction",
             txid,
@@ -562,7 +568,7 @@ impl KomodoRpcApi for Client {
         ))
     }
 
-    fn sign_raw_transaction_with_wallet(&self, hexstring: SerializedRawTransaction) -> Result<SignedRawTransaction, ApiError> {
+    fn sign_raw_transaction_with_wallet(&self, hexstring: SerializedRawTransaction) -> Result<SignedRawTransaction> {
         self.send(&RpcRequest::new1(
             "signrawtransaction",
             hexstring
@@ -575,7 +581,7 @@ impl KomodoRpcApi for Client {
         txoutput_detail: Option<Vec<TransactionOutputDetail>>,
         private_keys: Option<Vec<&PrivateKey>>,
         signature_hash_type: Option<SigHashType>
-    ) -> Result<SignedRawTransaction, ApiError> {
+    ) -> Result<SignedRawTransaction> {
         self.send(&RpcRequest::new4(
             "signrawtransaction",
             hexstring,
@@ -585,35 +591,35 @@ impl KomodoRpcApi for Client {
         ))
     }
 
-    fn send_raw_transaction(&self, signed_tx: &SignedRawTransaction) -> Result<TransactionId, ApiError> {
+    fn send_raw_transaction(&self, signed_tx: &SignedRawTransaction) -> Result<TransactionId> {
         self.send(&RpcRequest::new1(
             "sendrawtransaction",
             &signed_tx.hex
         ))
     }
 
-    fn backup_wallet(&self, file_name: &str) -> Result<String, ApiError> {
+    fn backup_wallet(&self, file_name: &str) -> Result<String> {
         self.send(&RpcRequest::new1(
             "backupwallet",
             file_name
         ))
     }
 
-    fn dump_privkey(&self, address: &str) -> Result<String, ApiError> {
+    fn dump_privkey(&self, address: &str) -> Result<String> {
         self.send(&RpcRequest::new1(
             "dumpprivkey",
             address
         ))
     }
 
-    fn dump_wallet(&self, filename: &str) -> Result<String, ApiError> {
+    fn dump_wallet(&self, filename: &str) -> Result<String> {
         self.send(&RpcRequest::new1(
             "dumpwallet",
             filename
         ))
     }
 
-    fn get_balance(&self, minconf: Option<u32>, include_watchonly: Option<bool>) -> Result<f64, ApiError> {
+    fn get_balance(&self, minconf: Option<u32>, include_watchonly: Option<bool>) -> Result<f64> {
         let second;
         let third;
 
@@ -643,13 +649,13 @@ impl KomodoRpcApi for Client {
         ))
     }
 
-    fn get_new_address(&self) -> Result<String, ApiError> {
+    fn get_new_address(&self) -> Result<String> {
         self.send(&RpcRequest::new0(
             "getnewaddress",
         ))
     }
 
-    fn get_raw_change_address(&self) -> Result<String, ApiError> {
+    fn get_raw_change_address(&self) -> Result<String> {
         self.send(&RpcRequest::new0(
             "getrawchangeaddress",
         ))
@@ -658,20 +664,20 @@ impl KomodoRpcApi for Client {
     fn get_transaction(
         &self,
         tx: &TransactionId,
-    ) -> Result<Transaction, ApiError> {
+    ) -> Result<Transaction> {
         self.send(&RpcRequest::new1(
             "gettransaction",
             tx,
         ))
     }
 
-    fn get_wallet_info(&self) -> Result<WalletInfo, ApiError> {
+    fn get_wallet_info(&self) -> Result<WalletInfo> {
         self.send(&RpcRequest::new0(
             "getwalletinfo"
         ))
     }
 
-    fn z_exportkey(&self, a: &Address) -> Result<PrivateKey, ApiError> {
+    fn z_exportkey(&self, a: &Address) -> Result<PrivateKey> {
         match a.addr_type {
             AddrType::Shielded => self.send(&RpcRequest::new1(
                 "z_exportkey",
@@ -681,7 +687,7 @@ impl KomodoRpcApi for Client {
         }
     }
 
-    fn z_exportviewingkey(&self, a: &Address) -> Result<ViewingKey, ApiError> {
+    fn z_exportviewingkey(&self, a: &Address) -> Result<ViewingKey> {
 //        match a.addr_type {
 //            AddrType::Shielded => self.send(&RpcRequest::new1(
 //                "z_exportviewingkey",
@@ -692,14 +698,14 @@ impl KomodoRpcApi for Client {
         unimplemented!()
     }
 
-    fn z_exportwallet(&self, s: &str) -> Result<String, ApiError> {
+    fn z_exportwallet(&self, s: &str) -> Result<String> {
         self.send(&RpcRequest::new1(
             "z_exportwallet",
             s
         ))
     }
 
-    fn z_getbalance(&self, addr: &Address, minconf: Option<u32>) -> Result<f64, ApiError> {
+    fn z_getbalance(&self, addr: &Address, minconf: Option<u32>) -> Result<f64> {
         match minconf {
             Some(conf) => self.send(&RpcRequest::new2(
                 "z_getbalance",
@@ -713,45 +719,45 @@ impl KomodoRpcApi for Client {
         }
     }
 
-    fn z_getnewaddress(&self) -> Result<Address, ApiError> {
+    fn z_getnewaddress(&self) -> Result<Address> {
         self.send(&RpcRequest::new0(
             "z_getnewaddress"
         ))
     }
 
-    fn z_getoperationresult(&self, v: Vec<&str>) -> Result<Operations, ApiError> {
+    fn z_getoperationresult(&self, v: Vec<&str>) -> Result<Operations> {
         self.send(&RpcRequest::new1(
             "z_getoperationresult",
             v
         ))
     }
 
-    fn z_getoperationstatus(&self, v: Vec<&str>) -> Result<Operations, ApiError> {
+    fn z_getoperationstatus(&self, v: Vec<&str>) -> Result<Operations> {
         self.send(&RpcRequest::new1(
             "z_getoperationstatus",
             v
         ))
     }
 
-    fn z_gettotalbalance(&self) -> Result<TotalBalance, ApiError> {
+    fn z_gettotalbalance(&self) -> Result<TotalBalance> {
         self.send(&RpcRequest::new0(
             "z_gettotalbalance"
         ))
     }
 
-    fn z_importkey(&self) -> Result<(), ApiError> {
+    fn z_importkey(&self) -> Result<()> {
         unimplemented!()
     }
 
-    fn z_importviewingkey(&self) -> Result<(), ApiError> {
+    fn z_importviewingkey(&self) -> Result<()> {
         unimplemented!()
     }
 
-    fn z_importwallet(&self) -> Result<(), ApiError> {
+    fn z_importwallet(&self) -> Result<()> {
         unimplemented!()
     }
 
-    fn z_listaddresses(&self, include_watch_only: Option<bool>) -> Result<Vec<Address>, ApiError> {
+    fn z_listaddresses(&self, include_watch_only: Option<bool>) -> Result<Vec<Address>> {
         match include_watch_only {
             Some(b) => self.send(&RpcRequest::new1(
                 "z_listaddresses",
@@ -763,13 +769,13 @@ impl KomodoRpcApi for Client {
         }
     }
 
-    fn z_listoperationids(&self) -> Result<Vec<String>, ApiError> {
+    fn z_listoperationids(&self) -> Result<Vec<String>> {
         self.send(&RpcRequest::new0(
             "z_listoperationids"
         ))
     }
 
-    fn z_listreceivedbyaddress(&self, a: &Address, minconf: Option<u32>) -> Result<ReceivedByAddress, ApiError> {
+    fn z_listreceivedbyaddress(&self, a: &Address, minconf: Option<u32>) -> Result<ReceivedByAddress> {
         match a.addr_type {
             AddrType::Shielded => self.send(&RpcRequest::new2(
                 "z_listreceivedbyaddress",
@@ -792,7 +798,7 @@ impl KomodoRpcApi for Client {
         shielded_limit: Option<u32>,
         maximum_utxo_size: Option<u64>,
         memo: Option<String>
-    ) -> Result<MergeResult, ApiError> {
+    ) -> Result<MergeResult> {
         match (maximum_utxo_size, memo) {
             (Some(size), None) => self.send(&RpcRequest::new6(
                 "z_mergetoaddress",
@@ -859,7 +865,7 @@ impl KomodoRpcApi for Client {
         amounts: &Amounts,
         minconf: Option<u32>,
         fee: Option<f64>,
-    ) -> Result<String, ApiError> {
+    ) -> Result<String> {
         self.send(&RpcRequest::new4(
             "z_sendmany",
             &from_address.addr,
@@ -875,7 +881,7 @@ impl KomodoRpcApi for Client {
         ))
     }
 
-    fn z_shieldcoinbase(&self, from_address: &Address, to_address: &Address, fee: Option<f64>, limit: Option<u32>) -> Result<ShieldResult, ApiError> {
+    fn z_shieldcoinbase(&self, from_address: &Address, to_address: &Address, fee: Option<f64>, limit: Option<u32>) -> Result<ShieldResult> {
         self.send(&RpcRequest::new4(
             "z_shieldcoinbase",
             &from_address,

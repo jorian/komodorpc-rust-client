@@ -3,6 +3,7 @@ use core::fmt;
 use std::fmt::Formatter;
 use std::error::Error;
 use std::io;
+use std::num::ParseIntError;
 
 #[derive(Debug)]
 pub enum ApiError {
@@ -10,7 +11,8 @@ pub enum ApiError {
     Client(ClientError),
     Config(String),
     IO(io::Error),
-    Other(String)
+    ParseInt(ParseIntError),
+    Other(String),
 }
 
 impl fmt::Display for ApiError {
@@ -24,6 +26,7 @@ impl fmt::Display for ApiError {
                 },
             ApiError::Config(ref err) => write!(f, "{}", err),
             ApiError::IO(ref cause) => write!(f, "IO error: {:?}", cause.kind()),
+            ApiError::ParseInt(ref err) => write!(f, "Parse error: {:?}", err.description()),
             ApiError::Other(ref err) => write!(f, "{}", err)
         }
     }
@@ -36,6 +39,7 @@ impl Error for ApiError {
             ApiError::Client(ref cause) => cause.description(),
             ApiError::Config(ref err) => err,
             ApiError::IO(ref cause) => cause.description(),
+            ApiError::ParseInt(ref cause) => cause.description(),
             ApiError::Other(ref err) => err,
         }
     }
@@ -46,6 +50,7 @@ impl Error for ApiError {
             ApiError::Client(ref cause) => Some(cause),
             ApiError::Config(_) => None,
             ApiError::IO(ref cause) => Some(cause),
+            ApiError::ParseInt(ref err) => Some(err),
             ApiError::Other(_) => None,
         }
     }
@@ -66,5 +71,11 @@ impl From<RpcError> for ApiError {
 impl From<ClientError> for ApiError {
     fn from(cause: ClientError) -> ApiError {
         ApiError::Client(cause)
+    }
+}
+
+impl From<ParseIntError> for ApiError {
+    fn from(e: ParseIntError) -> ApiError {
+        ApiError::ParseInt(e)
     }
 }
