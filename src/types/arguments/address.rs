@@ -37,9 +37,6 @@
 use ApiError;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use serde::de::Error;
-use std::fmt;
-use std::ops::Add;
-use types::blockchain::ChainTipStatus::Active;
 
 /// Address is either Transparent (address starts with `R`) or Shielded (all sapling, starts with `zs`)
 #[derive(Debug, Clone)]

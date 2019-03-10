@@ -1,34 +1,29 @@
 use std::fs;
+use std::path::PathBuf;
+use std::fmt::Debug;
+use std::collections::HashMap;
 
+use os_info::Type as OSType;
 use base64;
-use error::ApiError;
+use dirs;
 
 use HTTPClient;
 use RpcClient;
 use RpcRequest;
-
 use reqwest::header::{HeaderMap, HeaderValue, AUTHORIZATION};
+
 use serde::{de::DeserializeOwned, ser::Serialize};
-use std::fmt::Debug;
-use types::*;
+
 use TransactionId;
 use BlockHash;
 use KomodoRpcApi;
 use chains::Chain;
-use dirs;
-use os_info::Type as OSType;
 
-use arguments::AddressList;
-use arguments::CreateRawTransactionOutputs;
-use arguments::CreateRawTransactionInputs;
+use arguments::*;
+use arguments::address::*;
+use types::*;
 
-use std::collections::HashMap;
-
-use std::path::PathBuf;
-use error::ApiError::Other;
-use types::arguments::address::{Address, Amounts};
-use arguments::address::{AddrType, FromAddresses};
-
+use error::ApiError;
 type Result<T> = std::result::Result<T, ApiError>;
 
 pub struct Client {

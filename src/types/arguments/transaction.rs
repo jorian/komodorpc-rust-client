@@ -1,12 +1,9 @@
 use std::collections::HashMap;
 use TransactionId;
-use std::io::SeekFrom::Start;
 use types::address_index::AddressUtxos;
-use std::ops::Add;
 use bitcoin::util::hash::Sha256dHash;
 use ApiError;
 use std::iter::FromIterator;
-use types::arguments::address::Address;
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct CreateRawTransactionInputs(Vec<Input>);

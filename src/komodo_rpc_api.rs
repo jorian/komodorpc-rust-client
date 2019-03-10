@@ -2,7 +2,7 @@ use TransactionId;
 use BlockHash;
 use error::ApiError;
 use types::*;
-use types::arguments::address::{Address, AddrType, FromAddresses};
+use types::arguments::address::{Address, FromAddresses};
 use arguments::address::Amounts;
 
 

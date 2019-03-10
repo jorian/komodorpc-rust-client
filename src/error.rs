@@ -4,6 +4,7 @@ use std::fmt::Formatter;
 use std::error::Error;
 use std::io;
 use std::num::ParseIntError;
+use bitcoin::util::hash::HexError;
 
 #[derive(Debug)]
 pub enum ApiError {
@@ -12,6 +13,7 @@ pub enum ApiError {
     Config(String),
     IO(io::Error),
     ParseInt(ParseIntError),
+    Hex(bitcoin::util::hash::HexError),
     Other(String),
 }
 
@@ -27,6 +29,7 @@ impl fmt::Display for ApiError {
             ApiError::Config(ref err) => write!(f, "{}", err),
             ApiError::IO(ref cause) => write!(f, "IO error: {:?}", cause.kind()),
             ApiError::ParseInt(ref err) => write!(f, "Parse error: {:?}", err.description()),
+            ApiError::Hex(ref err) => write!(f, "Parse error: {:?}", err.description()),
             ApiError::Other(ref err) => write!(f, "{}", err)
         }
     }
@@ -40,6 +43,7 @@ impl Error for ApiError {
             ApiError::Config(ref err) => err,
             ApiError::IO(ref cause) => cause.description(),
             ApiError::ParseInt(ref cause) => cause.description(),
+            ApiError::Hex(ref cause) => cause.description(),
             ApiError::Other(ref err) => err,
         }
     }
@@ -51,6 +55,7 @@ impl Error for ApiError {
             ApiError::Config(_) => None,
             ApiError::IO(ref cause) => Some(cause),
             ApiError::ParseInt(ref err) => Some(err),
+            ApiError::Hex(ref err) => Some(err),
             ApiError::Other(_) => None,
         }
     }
@@ -77,5 +82,11 @@ impl From<ClientError> for ApiError {
 impl From<ParseIntError> for ApiError {
     fn from(e: ParseIntError) -> ApiError {
         ApiError::ParseInt(e)
+    }
+}
+
+impl From<HexError> for ApiError {
+    fn from(e: HexError) -> ApiError {
+        ApiError::Hex(e)
     }
 }
