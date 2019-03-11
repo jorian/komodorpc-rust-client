@@ -1,8 +1,10 @@
-// this needs to eventually fetch data from official sources, like Notary Nodes
-// also it should be able to add your own, manually.
+
+
 use core::fmt;
 
-#[derive(Debug, Clone, Copy)]
+/// A set of predefined, known assetchains.
+/// `Custom(String)` exists to define your own assetchain.
+#[derive(Debug, Clone)]
 pub enum Chain {
     KMD     ,
     REVS    ,
@@ -45,10 +47,14 @@ pub enum Chain {
     KMDICE  ,
     DION    ,
     DOPE    ,
+    Custom(String),
 }
 
 impl fmt::Display for Chain {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-         fmt::Debug::fmt(self, f)
+         match self {
+             Chain::Custom(name) => fmt::Debug::fmt(name, f),
+             _ => fmt::Debug::fmt(self, f)
+         }
     }
 }

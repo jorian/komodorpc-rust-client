@@ -16,6 +16,7 @@ use std::fmt;
 use error::ApiError;
 use std::error::Error;
 
+#[derive(Debug)]
 pub struct RpcClient {
     client: HttpClient,
     url: String,

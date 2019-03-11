@@ -16,7 +16,7 @@ todo:
 - [ ]   make sensible use of references in arguments
 - [ ]   use `Into<String>` as argument for String types
 - [ ]   get rid of needing AddressList for single address in parameter
-- [ ]   define own `Chain` if needed assetchain isn't in enum
+- [x]   define own `Chain` if needed assetchain isn't in enum
 - [ ]   properly expose arguments / types
 - [x]   handle special case: wildcard `"*"` in `fromaddresses`, `z_mergetoaddress`
 - [ ]   supply Client with manual RPC credentials

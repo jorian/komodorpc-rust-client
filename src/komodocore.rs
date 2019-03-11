@@ -24,8 +24,15 @@ use arguments::address::*;
 use types::*;
 
 use error::ApiError;
+use std::path::PathBuf;
+use error::ApiError::Other;
+use types::arguments::address::{Address, Amounts};
+use arguments::address::{AddrType, FromAddresses};
+use std::io::{Error as IOError, ErrorKind};
+
 type Result<T> = std::result::Result<T, ApiError>;
 
+#[derive(Debug)]
 pub struct Client {
     client: RpcClient,
 }
@@ -46,6 +53,9 @@ impl Client {
     /// Constructs a new `Client` that talks to the specified assetchain. It assumes Komodo has
     /// been installed and the assetchain has been started at least once, in order to be able to fetch
     /// the needed RPC authentication parameters from the assetchain config file.
+    ///
+    /// If `Custom(String)` is used as parameter, this function will throw a std::io::Error::NotFound if
+    /// the defined config folder does not exist.
     pub fn new_assetchain_client(ac: &Chain) -> Result<Self> {
         let config = Config::get_for(&ac)?;
         let rpc_client = Client::construct_rpc_client(&config);
@@ -121,6 +131,15 @@ impl Config {
         match chain {
             Chain::KMD => {
                 config_path.push("komodo.conf"); // conf name is lowercase
+            },
+            Chain::Custom(chain) => {
+                config_path.push(chain);
+
+                if !config_path.is_dir() {
+                    return Err(ApiError::IO(IOError::from(ErrorKind::NotFound)));
+                }
+
+                config_path.push(format!("{}.conf", chain.to_string()));
             },
             // assetchain configuration files live in their own directory:
             _ => {
