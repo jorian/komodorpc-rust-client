@@ -24,7 +24,6 @@ use arguments::address::*;
 use types::*;
 
 use error::ApiError;
-use std::path::PathBuf;
 use error::ApiError::Other;
 use types::arguments::address::{Address, Amounts};
 use arguments::address::{AddrType, FromAddresses};
@@ -41,7 +40,7 @@ impl Client {
     /// Constructs a new `Client` that talks to the Komodo main chain. It assumes Komodo has
     /// been installed and run at least once, since it fetches the needed RPC authentication parameters
     /// from the config file which is created upon initialisation.
-    pub fn new_komodo_client() -> Result<Self> {
+    pub fn new_komodo_client() -> Result<Client> {
         let config = Config::get_for(&Chain::KMD)?;
         let rpc_client = Client::construct_rpc_client(&config);
 
@@ -669,9 +668,16 @@ impl KomodoRpcApi for Client {
         ))
     }
 
-    fn get_raw_change_address(&self) -> Result<String> {
+    fn get_raw_change_address(&self) -> Result<Address> {
         self.send(&RpcRequest::new0(
             "getrawchangeaddress",
+        ))
+    }
+
+    fn get_received_by_address(&self, address: &Address) -> Result<f64> {
+        self.send(&RpcRequest::new1(
+            "getreceivedbyaddress",
+            &address.addr
         ))
     }
 
@@ -685,10 +691,49 @@ impl KomodoRpcApi for Client {
         ))
     }
 
+    fn get_unconfirmed_balance(&self) -> Result<f64> {
+        self.send(&RpcRequest::new0(
+            "getunconfirmedbalance"
+        ))
+    }
+
     fn get_wallet_info(&self) -> Result<WalletInfo> {
         self.send(&RpcRequest::new0(
             "getwalletinfo"
         ))
+    }
+
+    fn import_address(&self, address: &Address, label: Option<String>, rescan: bool) -> Result<()> {
+//        match label {
+//            Some(label) => self.send(&RpcRequest::new3(
+//                "importaddress",
+//                &label,
+//                rescan
+//            )),
+//            None => self.send(&RpcRequest::new3(
+//                "importaddress",
+//                "",
+//                rescan
+//            ))
+//        }
+        unimplemented!()
+    }
+
+    fn import_privkey(&self, key: &str, label: Option<&str>, rescan: bool) -> Result<Address> {
+        match label {
+            Some(label) => self.send(&RpcRequest::new3(
+                "importaddress",
+                key,
+                &label,
+                rescan
+            )),
+            None => self.send(&RpcRequest::new3(
+                "importaddress",
+                key,
+                "",
+                rescan
+            ))
+        }
     }
 
     fn z_exportkey(&self, a: &Address) -> Result<PrivateKey> {

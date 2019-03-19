@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 use TransactionId;
-use types::address_index::AddressUtxos;
+use types::address::AddressUtxos;
 use bitcoin::util::hash::Sha256dHash;
 use ApiError;
 use std::iter::FromIterator;

@@ -1,7 +1,7 @@
 mod transaction;
 mod info;
 mod blockchain;
-mod address_index;
+mod address;
 mod keys;
 mod script;
 mod mining;
@@ -14,7 +14,7 @@ pub use self::{
     info::*,
     transaction::*,
     blockchain::*,
-    address_index::*,
+    address::*,
     keys::*,
     script::*,
     mining::*,

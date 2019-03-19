@@ -81,3 +81,13 @@ fn from_str<'de, T, D>(deserializer: D) -> Result<T, D::Error>
     let s = String::deserialize(deserializer)?;
     T::from_str(&s).map_err(de::Error::custom)
 }
+
+#[derive(Debug, Deserialize)]
+pub struct AddressGroupings(Vec<Vec<Vec<AddressGrouping>>>);
+
+#[derive(Debug, Deserialize)]
+pub struct AddressGrouping {
+    address: String,
+    amount: f64,
+    account: Option<String>,
+}

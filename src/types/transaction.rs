@@ -9,11 +9,11 @@ pub struct SerializedRawTransaction(pub String);
 
 impl SerializedRawTransaction {
 
-    // This method sets the locktime of a transaction.
-    // A SerializedRawTransaction upon creation does not have a set locktime.
-    // To earn KMD rewards, it must be set to the current time - 777 seconds in little endian hex.
-    // The first 8 chars of the last 38 chars of the hex string is the place to set the locktime.
-    // NOTE: this only applies to KMD, not its assetchains.
+    /// This method sets the locktime of a transaction.
+    /// A SerializedRawTransaction upon creation does not have a set locktime.
+    /// To earn KMD rewards, it must be set to the current time - 777 seconds in little endian hex.
+    /// The first 8 chars of the last 38 chars of the hex string is the place to set the locktime.
+    /// NOTE: this only applies to KMD, not its assetchains.
     pub fn set_locktime(&mut self) {
         let current_time = SystemTime::now().duration_since(SystemTime::UNIX_EPOCH).unwrap(); // todo return result
         let hex_time = format!("{:x}", current_time.as_secs() - 777);

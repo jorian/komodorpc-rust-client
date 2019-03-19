@@ -41,6 +41,8 @@ Below is a list of RPC calls in this Rust client as of KMDversion 0.3.3b
     - z_importkey
     - z_importviewingkey
     - z_importwallet
+    - importaddress
+    - importwallet
 - `z_exportviewingkey` is not supported yet for sapling
 - Things checked before actual request:
     - address in address parameter is valid (basic length check for now)
@@ -271,22 +273,22 @@ Below is a list of RPC calls in this Rust client as of KMDversion 0.3.3b
 - [x]    dumpprivkey "komodoaddress" 
 - [x]    dumpwallet "filename" (*requires `-exportdir` to be set*)
 - [ ]    encryptwallet "passphrase"
-- [ ]    getaccount "KMD_address" (*deprecated*)
-- [ ]    getaccountaddress "account" (*deprecated*)
-- [ ]    getaddressesbyaccount "account" (*deprecated*)
+- [ ]    ~~getaccount "KMD_address"~~ (*deprecated*)
+- [ ]    ~~getaccountaddress "account"~~ (*deprecated*)
+- [ ]    ~~getaddressesbyaccount "account"~~ (*deprecated*)
 - [x]    getbalance ( "account" minconf includeWatchonly ) (*account deprecated*)
 - [x]    getnewaddress ( "account" ) (*account deprecated*)
-- [ ]    getrawchangeaddress
-- [ ]    getreceivedbyaccount "account" ( minconf ) (*account deprecated*)
-- [ ]    getreceivedbyaddress "KMD_address" ( minconf )
+- [x]    getrawchangeaddress
+- [ ]    ~~getreceivedbyaccount "account" ( minconf )~~ (*account deprecated*)
+- [x]    getreceivedbyaddress "KMD_address" ( minconf )
 - [x]    gettransaction "txid" ( includeWatchonly )
-- [ ]    getunconfirmedbalance
+- [x]    getunconfirmedbalance
 - [x]    getwalletinfo
-- [ ]    importaddress "address" ( "label" rescan )
-- [ ]    importprivkey "komodoprivkey" ( "label" rescan )
-- [ ]    importwallet "filename"
-- [ ]    keypoolrefill ( newsize )
-- [ ]    listaccounts ( minconf includeWatchonly)
+- [ ]    importaddress "address" ( "label" rescan ) (*empty response*)
+- [x]    importprivkey "komodoprivkey" ( "label" rescan ) 
+- [ ]    importwallet "filename" (*empty response*)
+- [ ]    keypoolrefill ( newsize ) (*empty response*)
+- [ ]    ~~listaccounts ( minconf includeWatchonly)~~ (*deprecated*)
 - [ ]    listaddressgroupings
 - [ ]    listlockunspent
 - [ ]    listreceivedbyaccount ( minconf includeempty includeWatchonly)
