@@ -3,6 +3,8 @@ use TransactionId;
 use ScriptPubKey;
 
 use std::time::SystemTime;
+use types::arguments::address::Address;
+use std::ops::Add;
 
 #[derive(Deserialize, Serialize, Debug)]
 pub struct SerializedRawTransaction(pub String);
@@ -184,3 +186,81 @@ pub enum SigHashType {
     #[serde(rename = "SINGLE|ANYONECANPAY")]
     SingleAnyoneCanPay,
 }
+
+#[derive(Deserialize, Debug)]
+pub struct Unspent {
+    txid: TransactionId,
+    vout: u8,
+    generated: bool,
+    address: Address,
+    account: Option<String>, //does not exist for an utxo in a change address
+    amount: f64,
+    interest: Option<f64>,
+    #[serde(rename = "scriptPubKey")]
+    pub script_pub_key: String,
+    rawconfirmations: u64,
+    confirmations: u64,
+    spendable: bool,
+}
+
+#[derive(Deserialize, Serialize, Debug)]
+pub struct LockedUnspent {
+    pub txid: TransactionId,
+    pub vout: u8
+}
+
+#[derive(Deserialize, Serialize, Debug)]
+pub struct ReceivedByAddress {
+    address: Address,
+    account: Option<String>, //accounts are deprecated
+    amount: f64,
+    rawconfirmations: u64,
+    confirmations: u64,
+    txids: Vec<TransactionId>,
+}
+
+#[derive(Deserialize, Serialize, Debug)]
+pub struct TxListSinceBlock {
+    transactions: Vec<ListTransaction>,
+    lastblock: String,
+}
+
+#[derive(Deserialize, Serialize, Debug)]
+pub struct ListTransaction {
+    account: String,
+    address: Address,
+    category: TxCategory,
+    amount: f64,
+    vout: u32,
+    fee: Option<f64>,
+    rawconfirmations: u64,
+    confirmations: u64,
+    blockhash: String,
+    blockindex: u64,
+    blocktime: u64,
+    expiryheight: u64,
+    txid: TransactionId,
+    walletconflicts: Vec<Option<String>>,
+    time: u64,
+    timereceived: u64,
+    vjoinsplit: Vec<Option<VJoinsplit>>,
+    size: u32,
+    comment: Option<String>,
+    to: Option<String>,
+}
+
+#[derive(Deserialize, Serialize, Debug)]
+pub enum TxCategory {
+    #[serde(rename = "send")]
+    Send,
+    #[serde(rename = "receive")]
+    Receive,
+    #[serde(rename = "move")]
+    Move
+}
+
+#[derive(Deserialize, Serialize, Debug)]
+pub struct ListTransactions(Vec<ListTransaction>);
+
+#[derive(Deserialize, Serialize, Debug)]
+pub struct ResentWalletTransactions(Vec<TransactionId>);

@@ -20,9 +20,11 @@ todo:
 - [ ]   properly expose arguments / types
 - [x]   handle special case: wildcard `"*"` in `fromaddresses`, `z_mergetoaddress`
 - [ ]   supply Client with manual RPC credentials
+- [ ]   struct Unspent contains account in response, which is deprecated. Need to circumvent
+- [ ]   `listaddressgroupings` returns an array with 3 different types, for each distinct address. how to fix in serde
 
 This wrapper aims to:
-- be stateless, aka be a thin layer. It's up to the app using this library to maintain state.
+- be stateless, i.e. a thin layer. It's up to the app using this library to maintain state.
 
 ### Features
 - Convert an utxolist retrieved through `getaddressutxos` to inputs in `createrawtransaction`
@@ -43,10 +45,11 @@ Below is a list of RPC calls in this Rust client as of KMDversion 0.3.3b
     - z_importwallet
     - importaddress
     - importwallet
-- `z_exportviewingkey` is not supported yet for sapling
+- Sapling does not support `z_exportviewingkey`, or viewing keys in general, yet
 - Things checked before actual request:
     - address in address parameter is valid (basic length check for now)
-    
+- `sendtoaddress` returns a transaction id that is little-endian, which is reversed from what you see on the explorer. Call `be_hex_string()` on the `TransactionId` type and you get the big-endian txid.
+    - The transaction id that is deserialized will always be little-endian.
 
 #### RPCs
 
@@ -290,19 +293,19 @@ Below is a list of RPC calls in this Rust client as of KMDversion 0.3.3b
 - [ ]    keypoolrefill ( newsize ) (*empty response*)
 - [ ]    ~~listaccounts ( minconf includeWatchonly)~~ (*deprecated*)
 - [ ]    listaddressgroupings
-- [ ]    listlockunspent
-- [ ]    listreceivedbyaccount ( minconf includeempty includeWatchonly)
-- [ ]    listreceivedbyaddress ( minconf includeempty includeWatchonly)
-- [ ]    listsinceblock ( "blockhash" target-confirmations includeWatchonly)
-- [ ]    listtransactions ( "account" count from includeWatchonly)
-- [ ]    listunspent ( minconf maxconf  ["address",...] )
-- [ ]    lockunspent unlock [{"txid":"txid","vout":n},...]
-- [ ]    move "fromaccount" "toaccount" amount ( minconf "comment" )
-- [ ]    resendwallettransactions
-- [ ]    sendfrom "fromaccount" "toKMDaddress" amount ( minconf "comment" "comment-to" )
-- [ ]    sendmany "fromaccount" {"address":amount,...} ( minconf "comment" ["address",...] )
-- [ ]    sendtoaddress "KMD_address" amount ( "comment" "comment-to" subtractfeefromamount )
-- [ ]    setaccount "KMD_address" "account" (*deprecated*)
+- [x]    listlockunspent
+- [ ]    ~~listreceivedbyaccount ( minconf includeempty includeWatchonly)~~ (*deprecated*)
+- [x]    listreceivedbyaddress ( minconf includeempty includeWatchonly)
+- [x]    listsinceblock ( "blockhash" target-confirmations includeWatchonly)
+- [x]    listtransactions ( "account" count from includeWatchonly)
+- [x]    listunspent ( minconf maxconf  ["address",...] )
+- [x]    lockunspent unlock [{"txid":"txid","vout":n},...]
+- [ ]    ~~move "fromaccount" "toaccount" amount ( minconf "comment" )~~ (*deprecated*)
+- [x]    resendwallettransactions
+- [ ]    ~~sendfrom "fromaccount" "toKMDaddress" amount ( minconf "comment" "comment-to" )~~ (*deprecated*)
+- [x]    sendmany "fromaccount" {"address":amount,...} ( minconf "comment" ["address",...] )
+- [x]    sendtoaddress "KMD_address" amount ( "comment" "comment-to" subtractfeefromamount )
+- [ ]    ~~setaccount "KMD_address" "account"~~ (*deprecated*)
 - [ ]    setpubkey pubkey
 - [ ]    settxfee amount
 - [ ]    signmessage "t-addr" "message"

@@ -4,6 +4,8 @@ use error;
 use types::*;
 use types::arguments::address::{Address, FromAddresses};
 use arguments::address::Amounts;
+use std::collections::HashMap;
+use types::arguments::SendManyAmounts;
 
 type Result<T> = std::result::Result<T, ApiError>;
 
@@ -95,6 +97,16 @@ pub trait KomodoRpcApi {
     fn import_address(&self, address: &Address, label: Option<String>, rescan: bool) -> Result<()>;
     fn import_privkey(&self, key: &str, label: Option<&str>, rescan: bool) -> Result<Address>;
     fn import_wallet(&self, path: &str) -> Result<()>;
+    fn list_address_groupings(&self) -> Result<AddressGrouping>;
+    fn list_lock_unspent(&self) -> Result<Vec<LockedUnspent>>;
+    fn list_received_by_address(&self, minconf: Option<u32>, include_empty: Option<bool>, include_watch_only: Option<bool>) -> Result<Vec<ReceivedByAddress>>;
+    fn list_since_block(&self, blockhash: Option<&str>, confs: Option<u64>, include_watch_only: Option<bool>) -> Result<TxListSinceBlock>;
+    fn list_transactions(&self, count: Option<u32>, from: Option<u32>, include_watch_only: Option<bool>) -> Result<ListTransactions>;
+    fn list_unspent(&self, minconf: Option<u32>, maxconf: Option<u32>, addr_filter: Option<Vec<Address>>) -> Result<Vec<Unspent>>;
+    fn lock_unspent(&self, unlock: bool, txns: Vec<LockedUnspent>) -> Result<bool>;
+    fn resend_wallet_transactions(&self) -> Result<ResentWalletTransactions>;
+    fn send_many(&self, amounts: SendManyAmounts, minconf: Option<u32>, comment: Option<&str>, subtractfeefromaddresses: Option<Vec<Address>>) -> Result<TransactionId>;
+    fn send_to_address(&self, address: Address, amount: f64, comment: Option<&str>, comment_to: Option<&str>, subtractfee: Option<bool>) -> Result<TransactionId>;
 
     fn z_exportkey(&self, a: &Address) -> Result<PrivateKey>;
     fn z_exportviewingkey(&self, a: &Address) -> Result<ViewingKey>; //todo unsupported https://github.com/zcash/zcash/issues/3060

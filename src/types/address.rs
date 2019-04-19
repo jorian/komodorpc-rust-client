@@ -1,6 +1,7 @@
 use serde::de::{self, Deserialize, Deserializer};
 use std::str::FromStr;
 use std::fmt::Display;
+use types::arguments::address::Address;
 
 #[derive(Debug, Deserialize)]
 pub struct AddressBalance {
@@ -87,7 +88,22 @@ pub struct AddressGroupings(Vec<Vec<Vec<AddressGrouping>>>);
 
 #[derive(Debug, Deserialize)]
 pub struct AddressGrouping {
-    address: String,
+    address: Address,
     amount: f64,
     account: Option<String>,
 }
+
+//impl<'de> Deserialize<'de> for AddressGrouping {
+//    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error> where
+//        D: Deserializer<'de> {
+//        let s: &str = Deserialize::deserialize(deserializer)?;
+//        dbg!(&s);
+//
+//        Ok(AddressGrouping {
+//            address: Address::from("RKakNo1Vz86xiCLB5vq5UBe4P7sB9Gw6pv").unwrap(),
+//            amount: 10.0,
+//            account: None,
+//        })
+//
+//    }
+//}

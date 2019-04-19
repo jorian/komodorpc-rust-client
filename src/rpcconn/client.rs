@@ -71,7 +71,11 @@ impl RpcClient {
                 let mut buf = String::new();
                 let _ = res.read_to_string(&mut buf);
 
-                serde_json::from_str(&buf).map_err(|err| ClientError::Json(err))
+                let s = serde_json::from_str(&buf).map_err(|err| ClientError::Json(err));
+
+                dbg!(&s);
+
+                s
             });
 
         let res = res.map(RpcResponse::into_result);

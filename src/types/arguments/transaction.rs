@@ -56,6 +56,19 @@ impl CreateRawTransactionOutputs {
     }
 }
 
+#[derive(Debug, Deserialize, Serialize)]
+pub struct SendManyAmounts(HashMap<String, f64>);
+
+impl SendManyAmounts {
+    pub fn new() -> Self {
+        SendManyAmounts(HashMap::new())
+    }
+
+    pub fn add(&mut self, address: &str, amount: f64) {
+        self.0.insert(address.to_owned(), amount);
+    }
+}
+
 #[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct P2SHInput {
     pub txid: TransactionId,

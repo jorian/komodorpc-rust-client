@@ -28,6 +28,7 @@ use error::ApiError::Other;
 use types::arguments::address::{Address, Amounts};
 use arguments::address::{AddrType, FromAddresses};
 use std::io::{Error as IOError, ErrorKind};
+use std::cmp::min;
 
 type Result<T> = std::result::Result<T, ApiError>;
 
@@ -733,6 +734,359 @@ impl KomodoRpcApi for Client {
                 "",
                 rescan
             ))
+        }
+    }
+
+
+    fn import_wallet(&self, path: &str) -> Result<()> {
+        unimplemented!()
+    }
+
+    fn list_address_groupings(&self) -> Result<AddressGrouping> {
+//        self.send(&RpcRequest::new0(
+//            "listaddressgroupings"
+//        ))
+        unimplemented!()
+    }
+
+    fn list_lock_unspent(&self) -> Result<Vec<LockedUnspent>> {
+        self.send(&RpcRequest::new0(
+            "listlockunspent"
+        ))
+    }
+
+    fn list_received_by_address(&self, minconf: Option<u32>, include_empty: Option<bool>, include_watch_only: Option<bool>) -> Result<Vec<ReceivedByAddress>> {
+        match (minconf, include_empty, include_watch_only) {
+            (Some(min), None, None) => self.send(&RpcRequest::new1(
+                "listreceivedbyaddress",
+                min
+            )),
+            (None, Some(b), None) => self.send(&RpcRequest::new2(
+                "listreceivedbyaddress",
+                1,
+                b
+            )),
+            (Some(min), Some(b), None) => self.send(&RpcRequest::new2(
+                "listreceivedbyaddress",
+                min,
+                b
+            )),
+            (None, None, Some(wo)) => self.send(&RpcRequest::new3(
+                "listreceivedbyaddress",
+                1,
+                false,
+                wo
+            )),
+            (None, Some(b), Some(wo)) => self.send(&RpcRequest::new3(
+                "listreceivedbyaddress",
+                1,
+                b,
+                wo
+            )),
+            (Some(min), None, Some(wo)) => self.send(&RpcRequest::new3(
+                "listreceivedbyaddress",
+                min,
+                false,
+                wo
+            )),
+            (Some(min), Some(b), Some(wo)) => self.send(&RpcRequest::new3(
+                "listreceivedbyaddress",
+                min,
+                b,
+                wo
+            )),
+            _ => self.send(&RpcRequest::new0(
+                "listreceivedbyaddress",
+            ))
+        }
+    }
+
+    fn list_since_block(&self, blockhash: Option<&str>, confs: Option<u64>, include_watch_only: Option<bool>) -> Result<TxListSinceBlock> {
+        match (blockhash, confs, include_watch_only) {
+            (Some(hash), None, None) => self.send(&RpcRequest::new1(
+                "listsinceblock",
+                hash
+            )),
+            (Some(hash), Some(confs), None) => self.send(&RpcRequest::new2(
+                "listsinceblock",
+                hash,
+                confs
+            )),
+            (Some(hash), None, Some(watchonly)) => self.send(&RpcRequest::new3(
+                "listsinceblock",
+                hash,
+                1,
+                watchonly
+            )),
+            (Some(hash), Some(confs), Some(watchonly)) => self.send(&RpcRequest::new3(
+                "listsinceblock",
+                hash,
+                confs,
+                watchonly
+            )),
+            (None, Some(confs), None) => self.send(&RpcRequest::new2(
+                "listsinceblock",
+                "",
+                confs
+            )),
+            (None, Some(confs), Some(watchonly)) => self.send(&RpcRequest::new3(
+                "listsinceblock",
+                "",
+                confs,
+                watchonly
+            )),
+            (None, None, Some(watchonly)) => self.send(&RpcRequest::new3(
+                "listsinceblock",
+                "",
+                1,
+                watchonly
+            )),
+            _ => self.send(&RpcRequest::new0(
+                "listsinceblock"
+            )),
+        }
+    }
+
+    fn list_transactions(&self, count: Option<u32>, from: Option<u32>, include_watch_only: Option<bool>) -> Result<ListTransactions> {
+        match (count, from, include_watch_only) {
+            (Some(count), None, None) => self.send(&RpcRequest::new2(
+                "listtransactions",
+                "",
+                count
+            )),
+            (Some(count), Some(from), None) => self.send(&RpcRequest::new3(
+                "listtransactions",
+                "",
+                count,
+                from
+            )),
+            (Some(count), None, Some(watchonly)) => self.send(&RpcRequest::new4(
+                "listtransactions",
+                "",
+                count,
+                0,
+                watchonly
+            )),
+            (Some(count), Some(from), Some(watchonly)) => self.send(&RpcRequest::new4(
+                "listtransactions",
+                "",
+                count,
+                from,
+                watchonly
+            )),
+            (None, Some(from), None) => self.send(&RpcRequest::new3(
+                "listtransactions",
+                "",
+                10,
+                from
+            )),
+            (None, None, Some(watchonly)) => self.send(&RpcRequest::new4(
+                "listtransactions",
+                "",
+                10,
+                0,
+                watchonly
+            )),
+            (None, Some(from), Some(watchonly)) => self.send(&RpcRequest::new4(
+                "listtransactions",
+                "",
+                10,
+                from,
+                watchonly
+            )),
+            _ => self.send(&RpcRequest::new0(
+                "listtransactions"
+            )),
+        }
+    }
+
+    fn list_unspent(&self, minconf: Option<u32>, maxconf: Option<u32>, addr_filter: Option<Vec<Address>>) -> Result<Vec<Unspent>> {
+        match (minconf, maxconf, addr_filter) {
+            (None, None, Some(filter)) => self.send(&RpcRequest::new3(
+                "listunspent",
+                1,
+                9999999,
+                filter
+            )),
+            (Some(min), None, Some(filter)) => self.send(&RpcRequest::new3(
+                "listunspent",
+                min,
+                9999999,
+                filter
+            )),
+            (None, Some(max), Some(filter)) => self.send(&RpcRequest::new3(
+                "listunspent",
+                1,
+                max,
+                filter
+            )),
+            (Some(min), Some(max), Some(filter)) => self.send(&RpcRequest::new3(
+                "listunspent",
+                min,
+                max,
+                filter
+            )),
+            (Some(min), None, None) => self.send(&RpcRequest::new2(
+                "listunspent",
+                min,
+                9999999
+            )),
+            (None, Some(max), None) => self.send(&RpcRequest::new2(
+                "listunspent",
+                1,
+                max
+            )),
+            (Some(min), Some(max), None) => self.send(&RpcRequest::new2(
+                "listunspent",
+                min,
+                max
+            )),
+            _ => self.send(&RpcRequest::new0(
+                "listunspent"
+            ))
+        }
+    }
+
+    fn lock_unspent(&self, unlock: bool, txns: Vec<LockedUnspent>) -> Result<bool> {
+        self.send(&RpcRequest::new2(
+            "lockunspent",
+            unlock,
+            txns
+        ))
+    }
+
+    fn resend_wallet_transactions(&self) -> Result<ResentWalletTransactions> {
+        self.send(&RpcRequest::new0(
+            "resendwallettransactions"
+        ))
+    }
+
+    fn send_many(&self, amounts: SendManyAmounts, minconf: Option<u32>, comment: Option<&str>, subtractfeefromaddresses: Option<Vec<Address>>) -> Result<TransactionId> {
+        match (minconf, comment, subtractfeefromaddresses) {
+            (Some(minconf), None, None) => self.send(&RpcRequest::new3(
+                "sendmany",
+                "",
+                amounts,
+                minconf
+            )),
+            (Some(minconf), Some(comment), None) => self.send(&RpcRequest::new4(
+                "sendmany",
+                "",
+                amounts,
+                minconf,
+                comment
+            )),
+            (Some(minconf), None, Some(fees)) => self.send(&RpcRequest::new5(
+                "sendmany",
+                "",
+                amounts,
+                minconf,
+                "",
+                fees
+            )),
+            (Some(minconf), Some(comment), Some(fees)) => self.send(&RpcRequest::new5(
+                "sendmany",
+                "",
+                amounts,
+                minconf,
+                comment,
+                fees
+            )),
+            (None, Some(comment), None) => self.send(&RpcRequest::new4(
+                "sendmany",
+                "",
+                amounts,
+                1,
+                comment
+            )),
+            (None, None, Some(fees)) => self.send(&RpcRequest::new5(
+                "sendmany",
+                "",
+                amounts,
+                1,
+                "",
+                fees
+            )),
+            (None, Some(comment), Some(fees)) => self.send(&RpcRequest::new5(
+                "sendmany",
+                "",
+                amounts,
+                1,
+                comment,
+                fees
+            )),
+            _ => self.send(&RpcRequest::new2(
+                "sendmany",
+                "",
+                amounts
+            )),
+        }
+    }
+
+    fn send_to_address(&self, address: Address, amount: f64, comment: Option<&str>, comment_to: Option<&str>, subtractfee: Option<bool>) -> Result<TransactionId> {
+        match address.addr_type {
+            AddrType::Transparent => {
+                match (comment, comment_to, subtractfee) {
+                    (Some(comment), None, None) => self.send(&RpcRequest::new3(
+                        "sendtoaddress",
+                        address,
+                        amount,
+                        comment
+                    )),
+                    (Some(comment), Some(comment_to), None) => self.send(&RpcRequest::new4(
+                        "sendtoaddress",
+                        address,
+                        amount,
+                        comment,
+                        comment_to
+                    )),
+                    (Some(comment), None, Some(subtractfee)) => self.send(&RpcRequest::new5(
+                        "sendtoaddress",
+                        address,
+                        amount,
+                        comment,
+                        "",
+                        subtractfee
+                    )),
+                    (Some(comment), Some(comment_to), Some(subtractfee)) => self.send(&RpcRequest::new5(
+                        "sendtoaddress",
+                        address,
+                        amount,
+                        comment,
+                        comment_to,
+                        subtractfee
+                    )),
+                    (None, Some(comment_to), None) => self.send(&RpcRequest::new4(
+                        "sendtoaddress",
+                        address,
+                        amount,
+                        "",
+                        comment_to
+                    )),
+                    (None, None, Some(subtractfee)) => self.send(&RpcRequest::new5(
+                        "sendtoaddress",
+                        address,
+                        amount,
+                        "",
+                        "",
+                        subtractfee
+                    )),
+                    (None, Some(comment_to), Some(subtractfee)) => self.send(&RpcRequest::new5(
+                        "sendtoaddress",
+                        address,
+                        amount,
+                        "",
+                        comment_to,
+                        subtractfee
+                    )),
+                    _ => self.send(&RpcRequest::new2(
+                        "sendtoaddress",
+                        address,
+                        amount
+                    ))
+                }
+            },
+            _ => Err(ApiError::Other(String::from("address is not transparent")))
         }
     }
 
