@@ -1090,6 +1090,29 @@ impl KomodoRpcApi for Client {
         }
     }
 
+    fn set_pubkey(&self, pubkey: &str) -> Result<SetPubkey> {
+//        self.send(&RpcRequest::new1(
+//            "setpubkey",
+//            pubkey
+//        ))
+        unimplemented!()
+    }
+
+    fn set_txfee(&self, fee: f64) -> Result<bool> {
+        self.send(&RpcRequest::new1(
+            "settxfee",
+            fee
+        ))
+    }
+
+    fn sign_message(&self, address: Address, message: &str) -> Result<String> {
+        self.send(&RpcRequest::new2(
+            "signmessage",
+            address,
+            message
+        ))
+    }
+
     fn z_exportkey(&self, a: &Address) -> Result<PrivateKey> {
         match a.addr_type {
             AddrType::Shielded => self.send(&RpcRequest::new1(

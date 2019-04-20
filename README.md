@@ -306,9 +306,9 @@ Below is a list of RPC calls in this Rust client as of KMDversion 0.3.3b
 - [x]    sendmany "fromaccount" {"address":amount,...} ( minconf "comment" ["address",...] )
 - [x]    sendtoaddress "KMD_address" amount ( "comment" "comment-to" subtractfeefromamount )
 - [ ]    ~~setaccount "KMD_address" "account"~~ (*deprecated*)
-- [ ]    setpubkey pubkey
-- [ ]    settxfee amount
-- [ ]    signmessage "t-addr" "message"
+- [ ]    ~~setpubkey pubkey~~ (*unsupported due to wrong return type*)
+- [x]    settxfee amount
+- [x]    signmessage "t-addr" "message"
 
 ##### Shielded ([see API](https://zcash.readthedocs.io/en/latest/rtd_pages/payment_api.html))
 - [x]    z_exportkey "zaddr"

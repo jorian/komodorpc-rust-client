@@ -6,6 +6,7 @@ use types::arguments::address::{Address, FromAddresses};
 use arguments::address::Amounts;
 use std::collections::HashMap;
 use types::arguments::SendManyAmounts;
+use std::ops::Add;
 
 type Result<T> = std::result::Result<T, ApiError>;
 
@@ -107,6 +108,9 @@ pub trait KomodoRpcApi {
     fn resend_wallet_transactions(&self) -> Result<ResentWalletTransactions>;
     fn send_many(&self, amounts: SendManyAmounts, minconf: Option<u32>, comment: Option<&str>, subtractfeefromaddresses: Option<Vec<Address>>) -> Result<TransactionId>;
     fn send_to_address(&self, address: Address, amount: f64, comment: Option<&str>, comment_to: Option<&str>, subtractfee: Option<bool>) -> Result<TransactionId>;
+    fn set_pubkey(&self, pubkey: &str) -> Result<SetPubkey>;
+    fn set_txfee(&self, fee: f64) -> Result<bool>;
+    fn sign_message(&self, address: Address, message: &str) -> Result<String>;
 
     fn z_exportkey(&self, a: &Address) -> Result<PrivateKey>;
     fn z_exportviewingkey(&self, a: &Address) -> Result<ViewingKey>; //todo unsupported https://github.com/zcash/zcash/issues/3060
