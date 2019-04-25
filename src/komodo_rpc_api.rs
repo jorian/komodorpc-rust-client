@@ -1,12 +1,9 @@
 use ::{TransactionId, ApiError};
 use BlockHash;
-use error;
 use types::*;
 use types::arguments::address::{Address, FromAddresses};
 use arguments::address::Amounts;
-use std::collections::HashMap;
 use types::arguments::SendManyAmounts;
-use std::ops::Add;
 
 type Result<T> = std::result::Result<T, ApiError>;
 
@@ -83,7 +80,7 @@ pub trait KomodoRpcApi {
     ) -> Result<SignedRawTransaction>;
     fn send_raw_transaction(&self, signed_tx: &SignedRawTransaction) -> Result<TransactionId>;
 
-    fn createmultisig(&self, nrequired: u8, keys: Vec<&str>) -> Result<Multisig>;
+    fn create_multisig(&self, nrequired: u8, keys: Vec<&str>) -> Result<Multisig>;
 
     fn backup_wallet(&self, file_name: &str) -> Result<String>;
 

@@ -20,15 +20,12 @@ use KomodoRpcApi;
 use chains::Chain;
 
 use arguments::*;
-use arguments::address::*;
 use types::*;
 
 use error::ApiError;
-use error::ApiError::Other;
 use types::arguments::address::{Address, Amounts};
 use arguments::address::{AddrType, FromAddresses};
 use std::io::{Error as IOError, ErrorKind};
-use std::cmp::min;
 
 type Result<T> = std::result::Result<T, ApiError>;
 
@@ -612,7 +609,7 @@ impl KomodoRpcApi for Client {
         ))
     }
 
-    fn createmultisig(&self, nrequired: u8, keys: Vec<&str>) -> Result<Multisig> {
+    fn create_multisig(&self, nrequired: u8, keys: Vec<&str>) -> Result<Multisig> {
         self.send(&RpcRequest::new2(
             "createmultisig",
             nrequired,
