@@ -264,3 +264,10 @@ pub struct ListTransactions(Vec<ListTransaction>);
 
 #[derive(Deserialize, Serialize, Debug)]
 pub struct ResentWalletTransactions(Vec<TransactionId>);
+
+#[derive(Deserialize, Serialize, Debug)]
+pub struct SetPubkey {
+    pubkey: String,
+    ismine: bool,
+    address: Address,
+}
