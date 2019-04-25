@@ -95,7 +95,7 @@ pub struct AddressGrouping {
 
 #[derive(Debug, Deserialize)]
 pub struct Multisig {
-    address: Address,
+    pub address: Address,
     #[serde(rename = "redeemScript")]
     redeem_script: String
 }

@@ -73,7 +73,7 @@ impl RpcClient {
 
                 let s = serde_json::from_str(&buf).map_err(|err| ClientError::Json(err));
 
-                dbg!(&s);
+//                dbg!(&s);
 
                 s
             });

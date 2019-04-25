@@ -85,7 +85,7 @@ impl Client {
         &self,
         request: &RpcRequest<P>
     ) -> Result<R> {
-        dbg!(&request);
+//        dbg!(&request);
         self.client.send(request)
     }
 }

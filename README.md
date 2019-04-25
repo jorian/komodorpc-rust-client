@@ -255,7 +255,7 @@ Below is a list of RPC calls in this Rust client as of KMDversion 0.3.3b
 - [ ]    tokentransfer tokenid destpubkey amount
 
 ##### Util
-- [ ]    createmultisig nrequired ["key",...]
+- [x]    createmultisig nrequired ["key",...]
 - [ ]    decodeccopret hex
 - [ ]    estimatefee nblocks
 - [ ]    estimatepriority nblocks
