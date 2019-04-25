@@ -612,6 +612,14 @@ impl KomodoRpcApi for Client {
         ))
     }
 
+    fn createmultisig(&self, nrequired: u8, keys: Vec<&str>) -> Result<Multisig> {
+        self.send(&RpcRequest::new2(
+            "createmultisig",
+            nrequired,
+            keys
+        ))
+    }
+
     fn backup_wallet(&self, file_name: &str) -> Result<String> {
         self.send(&RpcRequest::new1(
             "backupwallet",

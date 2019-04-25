@@ -82,6 +82,8 @@ pub trait KomodoRpcApi {
     ) -> Result<SignedRawTransaction>;
     fn send_raw_transaction(&self, signed_tx: &SignedRawTransaction) -> Result<TransactionId>;
 
+    fn createmultisig(&self, nrequired: u8, keys: Vec<&str>) -> Result<Multisig>;
+
     fn backup_wallet(&self, file_name: &str) -> Result<String>;
 
     fn dump_privkey(&self, address: &str) -> Result<String>;

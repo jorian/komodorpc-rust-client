@@ -93,6 +93,13 @@ pub struct AddressGrouping {
     account: Option<String>,
 }
 
+#[derive(Debug, Deserialize)]
+pub struct Multisig {
+    address: Address,
+    #[serde(rename = "redeemScript")]
+    redeem_script: String
+}
+
 //impl<'de> Deserialize<'de> for AddressGrouping {
 //    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error> where
 //        D: Deserializer<'de> {
