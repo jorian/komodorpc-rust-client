@@ -20,15 +20,12 @@ use KomodoRpcApi;
 use chains::Chain;
 
 use arguments::*;
-use arguments::address::*;
 use types::*;
 
 use error::ApiError;
-use error::ApiError::Other;
 use types::arguments::address::{Address, Amounts};
 use arguments::address::{AddrType, FromAddresses};
 use std::io::{Error as IOError, ErrorKind};
-use std::cmp::min;
 
 type Result<T> = std::result::Result<T, ApiError>;
 

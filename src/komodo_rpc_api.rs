@@ -1,12 +1,9 @@
 use ::{TransactionId, ApiError};
 use BlockHash;
-use error;
 use types::*;
 use types::arguments::address::{Address, FromAddresses};
 use arguments::address::Amounts;
-use std::collections::HashMap;
 use types::arguments::SendManyAmounts;
-use std::ops::Add;
 
 type Result<T> = std::result::Result<T, ApiError>;
 

@@ -4,7 +4,6 @@ use ScriptPubKey;
 
 use std::time::SystemTime;
 use types::arguments::address::Address;
-use std::ops::Add;
 
 #[derive(Deserialize, Serialize, Debug)]
 pub struct SerializedRawTransaction(pub String);
