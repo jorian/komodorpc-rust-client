@@ -17,7 +17,7 @@ impl SerializedRawTransaction {
     /// NOTE: this only applies to KMD, not its assetchains.
     pub fn set_locktime(&mut self) {
         let current_time = SystemTime::now().duration_since(SystemTime::UNIX_EPOCH).unwrap(); // todo return result
-        let hex_time = format!("{:x}", current_time.as_secs() - 777);
+        let hex_time = format!("{:x}", current_time.as_secs() - 120);
 
         let mut rev_hexified_time = String::new();
 

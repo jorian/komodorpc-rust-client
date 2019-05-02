@@ -37,12 +37,31 @@
 use ApiError;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use serde::de::Error;
+use std::convert::TryFrom;
 
 /// Address is either Transparent (address starts with `R`) or Shielded (all sapling, starts with `zs`)
 #[derive(Debug, Clone)]
 pub struct Address {
     pub(crate) addr: String,
     pub(crate) addr_type: AddrType,
+}
+
+impl TryFrom<&String> for Address {
+    type Error = ApiError;
+
+    fn try_from(addr_str: &String) -> Result<Self, Self::Error> {
+        match addr_str.len() {
+            78 => Ok(Address {
+                addr: addr_str.to_string(),
+                addr_type: AddrType::Shielded,
+            }),
+            34 => Ok(Address {
+                addr: addr_str.to_string(),
+                addr_type: AddrType::Transparent,
+            }),
+            _ => Err(ApiError::Other(format!("Address has incorrect length")))
+        }
+    }
 }
 
 impl Address {
