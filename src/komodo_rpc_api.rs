@@ -3,7 +3,7 @@ use BlockHash;
 use types::*;
 use types::arguments::address::{Address, FromAddresses};
 use arguments::address::Amounts;
-use types::arguments::SendManyAmounts;
+use types::arguments::{SendManyAmounts, P2SHInput, P2SHInputSet};
 
 type Result<T> = std::result::Result<T, ApiError>;
 
@@ -74,7 +74,7 @@ pub trait KomodoRpcApi {
     fn sign_raw_transaction_with_key(
         &self,
         hexstring: &SerializedRawTransaction,
-        txoutput_detail: Option<Vec<TransactionOutputDetail>>,
+        txoutput_detail: Option<P2SHInputSet>,
         private_keys: Option<Vec<&PrivateKey>>,
         signature_hash_type: Option<SigHashType>,
     ) -> Result<SignedRawTransaction>;

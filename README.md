@@ -22,6 +22,8 @@ todo:
 - [ ]   supply Client with manual RPC credentials
 - [ ]   struct Unspent contains account in response, which is deprecated. Need to circumvent
 - [ ]   `listaddressgroupings` returns an array with 3 different types, for each distinct address. how to fix in serde
+- [ ]   add helper functions to several types
+    - a selection of utxos upon entering an amount to `address_utxos`
 
 This wrapper aims to:
 - be stateless, i.e. a thin layer. It's up to the app using this library to maintain state.

@@ -1,7 +1,9 @@
+use arguments::address::Address;
+
 // input to several AddressIndex RPCs
 #[derive(Debug, Deserialize, Serialize)]
 pub struct AddressList {
-    pub addresses: Vec<String>,
+    pub addresses: Vec<Address>,
 }
 
 impl AddressList {
@@ -10,6 +12,18 @@ impl AddressList {
     }
 
     pub fn add(&mut self, address: &str) {
-        self.addresses.push(address.parse().unwrap())
+        self.addresses.push(Address::from(address).unwrap())
+    }
+
+    pub fn from(address: &str) -> Self {
+        AddressList {
+            addresses: vec![Address::from(address).unwrap()]
+        }
+    }
+
+    pub fn from_address(address: &Address) -> Self {
+        AddressList {
+            addresses: vec![address.clone()]
+        }
     }
 }

@@ -149,6 +149,12 @@ pub struct SignedRawTransaction {
     pub errors: Option<Vec<SignRawTransactionError>>,
 }
 
+impl SignedRawTransaction {
+    pub fn to_string(&self) -> String {
+        self.hex.clone()
+    }
+}
+
 #[derive(Deserialize, Serialize, Debug)]
 pub struct SignRawTransactionError {
     pub txid: String,

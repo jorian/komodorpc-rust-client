@@ -1,6 +1,6 @@
-extern crate base64;
+//extern crate base64;
 extern crate bitcoin;
-extern crate hex as std_hex;
+//extern crate hex as std_hex;
 extern crate serde;
 #[macro_use]
 extern crate serde_derive;

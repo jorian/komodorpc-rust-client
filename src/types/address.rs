@@ -40,10 +40,10 @@ pub struct AddressMempoolDelta {
 #[derive(Debug, Deserialize)]
 pub struct AddressTxIDs(pub Vec<String>); // todo: a vec with txids, needs work.
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Clone)]
 pub struct AddressUtxos(pub Vec<AddressUtxo>);
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Clone)]
 pub struct AddressUtxo {
     pub address: String,
     pub txid: String,

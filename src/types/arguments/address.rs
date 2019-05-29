@@ -87,6 +87,10 @@ impl Address {
             addr_type: AddrType::Transparent
         }
     }
+
+    pub fn to_string(&self) -> String {
+        self.addr.clone()
+    }
 }
 
 impl<'de> Deserialize<'de> for Address {
