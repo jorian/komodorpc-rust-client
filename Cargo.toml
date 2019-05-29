@@ -18,4 +18,5 @@ bitcoin = { version = "0.14", features = ["serde"] }
 #hex = "0.3"
 dirs = "1.0"
 reqwest = "0.9.5"
+#![feature(uniform_paths)]
 os_info = "1.1.0"
