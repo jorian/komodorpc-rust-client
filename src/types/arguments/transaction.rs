@@ -1,9 +1,12 @@
 use std::collections::HashMap;
-use TransactionId;
+use ::{TransactionId, SerializedRawTransaction};
 use types::address::AddressUtxos;
 use bitcoin::util::hash::Sha256dHash;
-use ApiError;
+use ::{ApiError, SignedRawTransaction};
 use std::iter::FromIterator;
+use types::arguments::keys::Rescan::No;
+use RawTransaction;
+use types::arguments::address::Address;
 
 #[derive(Debug, Deserialize, Serialize)]
 pub struct CreateRawTransactionInputs(Vec<Input>);
@@ -43,15 +46,17 @@ struct Input {
     vout: u32
 }
 
+
+
 #[derive(Debug, Deserialize, Serialize)]
-pub struct CreateRawTransactionOutputs(HashMap<String, f64>);
+pub struct CreateRawTransactionOutputs(HashMap<Address, f64>);
 
 impl CreateRawTransactionOutputs {
     pub fn new() -> Self {
         CreateRawTransactionOutputs(HashMap::new())
     }
 
-    pub fn add(&mut self, address: &str, amount: f64) {
+    pub fn add(&mut self, address: &Address, amount: f64) {
         self.0.insert(address.to_owned(), amount);
     }
 }
@@ -80,7 +85,7 @@ pub struct P2SHInput {
     pub amount: f64,
 }
 
-#[derive(Serialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone)]
 pub struct P2SHInputSet(pub Vec<P2SHInput>);
 
 impl P2SHInputSet {

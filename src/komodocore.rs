@@ -589,7 +589,7 @@ impl KomodoRpcApi for Client {
     fn sign_raw_transaction_with_key(
         &self,
         hexstring: &SerializedRawTransaction,
-        txoutput_detail: Option<P2SHInputSet>,
+        txoutput_detail: Option<&P2SHInputSet>,
         private_keys: Option<Vec<&PrivateKey>>,
         signature_hash_type: Option<SigHashType>
     ) -> Result<SignedRawTransaction> {

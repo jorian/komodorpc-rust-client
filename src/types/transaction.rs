@@ -39,6 +39,10 @@ impl SerializedRawTransaction {
 
         self.0 = result;
     }
+
+    pub fn from_hex(hex: String) -> Self {
+        SerializedRawTransaction(hex.clone())
+    }
 }
 
 #[derive(Deserialize, Serialize, Debug)]
@@ -120,7 +124,7 @@ pub struct ScriptSig {
 #[derive(Deserialize, Serialize, Debug)]
 pub struct Vout {
     pub value: f64,
-    pub interest: f64,
+    pub interest: Option<f64>,
     pub n: u32,
     #[serde(rename = "scriptPubKey")]
     pub script_pubkey: ScriptPubKey,

@@ -38,9 +38,10 @@ use ApiError;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use serde::de::Error;
 use std::convert::TryFrom;
+use std::cmp;
 
 /// Address is either Transparent (address starts with `R`) or Shielded (all sapling, starts with `zs`)
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Hash, Eq)]
 pub struct Address {
     pub(crate) addr: String,
     pub(crate) addr_type: AddrType,
@@ -63,6 +64,14 @@ impl TryFrom<&String> for Address {
         }
     }
 }
+
+impl PartialEq for Address {
+    fn eq(&self, other: &Self) -> bool {
+        self.addr.eq(&other.addr)
+    }
+}
+
+//impl Eq for Address { }
 
 impl Address {
     // todo check if address is correctly encoded
@@ -111,7 +120,7 @@ impl Serialize for Address {
     }
 }
 
-#[derive(Deserialize, Serialize, Debug, Clone)]
+#[derive(Deserialize, Serialize, Debug, Clone, Hash, PartialEq, Eq)]
 pub(crate) enum AddrType {
     Transparent,
     Shielded
