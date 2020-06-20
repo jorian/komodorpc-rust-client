@@ -177,14 +177,14 @@ pub struct RawMempoolTransactionInfo {
 
 #[derive(Debug, Deserialize)]
 pub struct TxOut {
-    bestblock: BlockHash,
-    confirmations: u32,
-    rawconfirmations: u32,
-    value: f64,
+    pub bestblock: BlockHash,
+    pub confirmations: u32,
+    pub rawconfirmations: u32,
+    pub value: f64,
     #[serde(rename="scriptPubKey")]
-    script_pubkey: ScriptPubKey,
-    version: u32,
-    coinbase: bool,
+    pub script_pubkey: ScriptPubKey,
+    pub version: u32,
+    pub coinbase: bool,
 }
 
 #[derive(Debug, Deserialize, Serialize)]
@@ -200,32 +200,32 @@ pub struct ScriptPubKey {
 
 #[derive(Debug, Deserialize)]
 pub struct MinerIDs {
-    mined: Vec<MinerID>,
-    numnotaries: u8
+    pub mined: Vec<MinerID>,
+    pub numnotaries: u8
 }
 
 #[derive(Debug, Deserialize)]
 pub struct MinerID {
-    notaryid: Option<u8>,
+    pub notaryid: Option<u8>,
     #[serde(rename="KMDaddress")]
-    kmd_address: Option<String>,
-    pubkey: String, // response could contain `external miners` instead of miner pubkey
-    blocks: u32
+    pub kmd_address: Option<String>,
+    pub pubkey: String, // response could contain `external miners` instead of miner pubkey
+    pub blocks: u32
 }
 
 #[derive(Debug, Deserialize)]
 pub struct Notaries {
-    notaries: Vec<Notary>,
-    numnotaries: u8,
-    height: u32,
-    timestamp: u64
+    pub notaries: Vec<Notary>,
+    pub numnotaries: u8,
+    pub height: u32,
+    pub timestamp: u64
 }
 
 #[derive(Debug, Deserialize)]
 pub struct Notary {
-    pubkey: String,
+    pub pubkey: String,
     #[serde(rename="BTCaddress")]
-    btc_address: String,
+    pub btc_address: String,
     #[serde(rename="KMDaddress")]
-    kmd_address: String,
+    pub kmd_address: String,
 }

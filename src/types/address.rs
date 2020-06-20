@@ -28,13 +28,13 @@ pub struct AddressMempool(pub Vec<AddressMempoolDelta>);
 
 #[derive(Debug, Deserialize)]
 pub struct AddressMempoolDelta {
-    address: String,
-    txid: String,
-    index: u32,
-    satoshis: i64,
-    timestamp: u64,
-    prevtxid: String,
-    prevout: u32,
+    pub address: String,
+    pub txid: String,
+    pub index: u32,
+    pub satoshis: i64,
+    pub timestamp: u64,
+    pub prevtxid: String,
+    pub prevout: u32,
 }
 
 #[derive(Debug, Deserialize)]
@@ -88,16 +88,16 @@ pub struct AddressGroupings(Vec<Vec<Vec<AddressGrouping>>>);
 
 #[derive(Debug, Deserialize)]
 pub struct AddressGrouping {
-    address: Address,
-    amount: f64,
-    account: Option<String>,
+    pub address: Address,
+    pub amount: f64,
+    pub account: Option<String>,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct Multisig {
     pub address: Address,
     #[serde(rename = "redeemScript")]
-    redeem_script: String
+    pub redeem_script: String
 }
 
 //impl<'de> Deserialize<'de> for AddressGrouping {

@@ -198,18 +198,18 @@ pub enum SigHashType {
 
 #[derive(Deserialize, Debug)]
 pub struct Unspent {
-    txid: TransactionId,
-    vout: u8,
-    generated: bool,
-    address: Address,
-    account: Option<String>, //does not exist for an utxo in a change address
-    amount: f64,
-    interest: Option<f64>,
+    pub txid: TransactionId,
+    pub vout: u8,
+    pub generated: bool,
+    pub address: Address,
+    pub account: Option<String>, //does not exist for an utxo in a change address
+    pub amount: f64,
+    pub interest: Option<f64>,
     #[serde(rename = "scriptPubKey")]
     pub script_pub_key: String,
-    rawconfirmations: u64,
-    confirmations: u64,
-    spendable: bool,
+    pub rawconfirmations: u64,
+    pub confirmations: u64,
+    pub spendable: bool,
 }
 
 #[derive(Deserialize, Serialize, Debug)]
@@ -220,42 +220,42 @@ pub struct LockedUnspent {
 
 #[derive(Deserialize, Serialize, Debug)]
 pub struct ReceivedByAddress {
-    address: Address,
-    account: Option<String>, //accounts are deprecated
-    amount: f64,
-    rawconfirmations: u64,
-    confirmations: u64,
-    txids: Vec<TransactionId>,
+    pub address: Address,
+    pub account: Option<String>, //accounts are deprecated
+    pub amount: f64,
+    pub rawconfirmations: u64,
+    pub confirmations: u64,
+    pub txids: Vec<TransactionId>,
 }
 
 #[derive(Deserialize, Serialize, Debug)]
 pub struct TxListSinceBlock {
-    transactions: Vec<ListTransaction>,
-    lastblock: String,
+    pub transactions: Vec<ListTransaction>,
+    pub lastblock: String,
 }
 
 #[derive(Deserialize, Serialize, Debug)]
 pub struct ListTransaction {
-    account: String,
-    address: Address,
-    category: TxCategory,
-    amount: f64,
-    vout: u32,
-    fee: Option<f64>,
-    rawconfirmations: u64,
-    confirmations: u64,
-    blockhash: String,
-    blockindex: u64,
-    blocktime: u64,
-    expiryheight: u64,
-    txid: TransactionId,
-    walletconflicts: Vec<Option<String>>,
-    time: u64,
-    timereceived: u64,
-    vjoinsplit: Vec<Option<VJoinsplit>>,
-    size: u32,
-    comment: Option<String>,
-    to: Option<String>,
+    pub account: String,
+    pub address: Address,
+    pub category: TxCategory,
+    pub amount: f64,
+    pub vout: u32,
+    pub fee: Option<f64>,
+    pub rawconfirmations: u64,
+    pub confirmations: u64,
+    pub blockhash: String,
+    pub blockindex: u64,
+    pub blocktime: u64,
+    pub expiryheight: u64,
+    pub txid: TransactionId,
+    pub walletconflicts: Vec<Option<String>>,
+    pub time: u64,
+    pub timereceived: u64,
+    pub vjoinsplit: Vec<Option<VJoinsplit>>,
+    pub size: u32,
+    pub comment: Option<String>,
+    pub to: Option<String>,
 }
 
 #[derive(Deserialize, Serialize, Debug)]
@@ -276,7 +276,7 @@ pub struct ResentWalletTransactions(Vec<TransactionId>);
 
 #[derive(Deserialize, Serialize, Debug)]
 pub struct SetPubkey {
-    pubkey: String,
-    ismine: bool,
-    address: Address,
+    pub pubkey: String,
+    pub ismine: bool,
+    pub address: Address,
 }

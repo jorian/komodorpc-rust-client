@@ -11,13 +11,13 @@ pub struct Balance(pub f64);
 #[derive(Debug, Deserialize)]
 pub struct TotalBalance {
     #[serde(deserialize_with = "from_str")]
-    transparent: f64,
+    pub transparent: f64,
     #[serde(deserialize_with = "from_str")]
-    interest: f64,
+    pub interest: f64,
     #[serde(deserialize_with = "from_str")]
-    private: f64,
+    pub private: f64,
     #[serde(deserialize_with = "from_str")]
-    total: f64,
+    pub total: f64,
 }
 
 fn from_str<'de, T, D>(deserializer: D) -> Result<T, D::Error>
@@ -34,27 +34,27 @@ pub struct Operations(pub Vec<Operation>);
 
 #[derive(Deserialize, Debug)]
 pub struct Operation {
-    id: String,
-    status: String, // failed, cancelled or success
-    creation_time: u64,
-    result: HashMap<String, String>,
-    execution_secs: f64,
-    method: String,
-    params: OperationParams,
+    pub id: String,
+    pub status: String, // failed, cancelled or success
+    pub creation_time: u64,
+    pub result: HashMap<String, String>,
+    pub execution_secs: f64,
+    pub method: String,
+    pub params: OperationParams,
 }
 
 #[derive(Deserialize, Debug)]
 pub struct OperationParams {
-    fromaddress: Address,
-    amounts: Vec<Amount>,
-    minconf: u32,
-    fee: f64
+    pub fromaddress: Address,
+    pub amounts: Vec<Amount>,
+    pub minconf: u32,
+    pub fee: f64
 }
 
 #[derive(Deserialize, Debug)]
 pub struct Amount {
-    address: Address,
-    amount: f64
+    pub address: Address,
+    pub amount: f64
 }
 
 #[derive(Deserialize, Debug)]
@@ -62,13 +62,13 @@ pub struct ReceivedByAddress(pub Vec<Received>);
 
 #[derive(Deserialize, Debug)]
 pub struct Received {
-    txid: TransactionId,
-    amount: f64,
-    memo: String,
-    outindex: u32,
-    rawconfirmations: u32,
-    confirmations: u32,
-    change: bool
+    pub txid: TransactionId,
+    pub amount: f64,
+    pub memo: String,
+    pub outindex: u32,
+    pub rawconfirmations: u32,
+    pub confirmations: u32,
+    pub change: bool
 }
 
 #[derive(Deserialize, Debug)]

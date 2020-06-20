@@ -91,6 +91,6 @@ pub struct Peer {
 
 #[derive(Deserialize, Serialize, Debug)]
 pub struct BannedNode {
-    address: String,
-    banned_until: u64
+    pub address: String,
+    pub banned_until: u64
 }

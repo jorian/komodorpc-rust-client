@@ -51,21 +51,21 @@ pub struct RequestObject {
 
 #[derive(Deserialize, Serialize, Debug)]
 pub struct MiningInfo {
-    blocks: u32,
-    currentblocksize: u32,
-    currentblocktx: u32,
-    difficulty: f64,
-    errors:  String,
-    genproclimit: i8,
-    localsolps: f64,
-    networksolps: u64,
-    networkhashps: u64,
-    pooledtx: u32,
-    testnet: bool,
-    chain: String,
-    staking: bool,
-    generate: bool,
-    numthreads: u8
+    pub blocks: u32,
+    pub currentblocksize: u32,
+    pub currentblocktx: u32,
+    pub difficulty: f64,
+    pub errors:  String,
+    pub genproclimit: i8,
+    pub localsolps: f64,
+    pub networksolps: u64,
+    pub networkhashps: u64,
+    pub pooledtx: u32,
+    pub testnet: bool,
+    pub chain: String,
+    pub staking: bool,
+    pub generate: bool,
+    pub numthreads: u8
 }
 
 #[derive(Deserialize, Serialize, Debug)]
