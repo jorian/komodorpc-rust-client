@@ -62,9 +62,14 @@ pub struct Snapshot {
     pub average: f64,
     pub utxos: u64,
     pub total_addresses: u64,
-    pub start_height: u64,
     pub ending_height: u64,
     pub end_time: u64,
+    pub ignored_addresses: u32,
+    pub skipped_cc_utxos: u32,
+    pub cc_utxo_value: u32,
+    #[serde(rename = "total_includeCCvouts")]
+    pub total_include_ccvouts: f64,
+
 }
 
 #[derive(Debug, Deserialize)]

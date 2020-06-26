@@ -12,7 +12,7 @@ todo:
 - [ ]   argument Address into type
 - [x]   handle empty responses (setaccount)
 - [x]   improve error handling Client
-- [ ]   find redeemScript in previous transactions (if any)
+- [ ]   ~~find redeemScript in previous transactions (if any)~~
 - [ ]   make sensible use of references in arguments
 - [ ]   use `Into<String>` as argument for String types
 - [ ]   get rid of needing AddressList for single address in parameter
@@ -48,12 +48,17 @@ Below is a list of RPC calls in this Rust client as of KMDversion 0.3.3b
     - importaddress
     - importwallet
 - Sapling does not support `z_exportviewingkey`, or viewing keys in general, yet
-- Things checked before actual request:
+- RPC arguments checked before actual request:
     - address in address parameter is valid (basic length check for now)
 - `sendtoaddress` returns a transaction id that is little-endian, which is reversed from what you see on the explorer. Call `be_hex_string()` on the `TransactionId` type and you get the big-endian txid.
     - The transaction id that is deserialized will always be little-endian.
 
 #### RPCs
+
+##### CClib
+- [ ]    cclib method [evalcode] [JSON params]
+- [ ]    cclibaddress [evalcode] [pubkey]
+- [ ]    cclibinfo
 
 ##### FSM 
 - [ ]    FSMaddress [pubkey]
@@ -62,11 +67,13 @@ Below is a list of RPC calls in this Rust client as of KMDversion 0.3.3b
 - [ ]    FSMlist
 
 ##### Addressindex
+- [ ]    checknotarization
 - [x]    getaddressbalance
 - [x]    getaddressdeltas
 - [x]    getaddressmempool
 - [x]    getaddresstxids
 - [x]    getaddressutxos
+- [ ]    getnotarypayinfo
 - [x]    getsnapshot
 
 ##### Auction 
@@ -78,7 +85,6 @@ Below is a list of RPC calls in this Rust client as of KMDversion 0.3.3b
 - [x]    getblock "hash|height" ( verbose )
 - [x]    getblockchaininfo
 - [x]    getblockcount
-- [x]    getwalletinfo
 - [x]    getblockhash index
 - [ ]    getblockhashes timestamp (*requires timestampindex=1*)
 - [x]    getblockheader "hash" ( verbose )
@@ -108,7 +114,10 @@ Below is a list of RPC calls in this Rust client as of KMDversion 0.3.3b
 - [ ]    channelsrefund stoptxid origtxid
 
 ##### Control
+- [ ]    geterablockheights
+- [ ]    getiguanajson
 - [x]    getinfo
+- [ ]    getnotarysendmany
 - [ ]    help ( "command" )
 - [ ]    stop
 
@@ -117,11 +126,29 @@ Below is a list of RPC calls in this Rust client as of KMDversion 0.3.3b
 - [ ]    assetchainproof needs a txid
 - [ ]    calc_MoM height MoMdepth
 - [ ]    getNotarisationsForBlock blockHash
+- [ ]    getimports "hash|height"
+- [ ]    getwalletburntransactions "count"
 - [ ]    height_MoM height
+- [ ]    importdual only works on -ac_import chains
+- [ ]    importgatewaybind only works on -ac_import chains
+- [ ]    importgatewaycompletesigning only works on -ac_import chains
+- [ ]    importgatewayddress [pubkey]
+- [ ]    importgatewaydeposit only works on -ac_import chains
+- [ ]    importgatewaybind only works on -ac_import chains
+- [ ]    importgatewaymarkdone completesigningtx coin
+- [ ]    importgatewayspartialsign only works on -ac_import chains
+- [ ]    importgatewaypendingdeposits bindtxid coin
+- [ ]    importgatewaypendingwithdraws bindtxid coin
+- [ ]    importgatewayprocessed bindtxid coin
+- [ ]    importgatewaywithdraw only works on -ac_import chains
+- [ ]    migrate_checkburntransactionsource burntxid
 - [ ]    migrate_completeimporttransaction importTx
 - [ ]    migrate_converttoexport rawTx dest_symbol export_amount
-- [ ]    migrate_createimporttransaction burnTx payouts
+- [ ]    migrate_createburntransaction dest_symbol dest_addr amount [tokenid]
+- [ ]    migrate_createimporttransaction burnTx payouts [notarytxid-1]..[notarytxid-N]
+- [ ]    migrate_createnotaryapprovaltransaction burntxid txoutproof
 - [ ]    scanNotarisationsDB blockHeight symbol [blocksLimit=1440]
+- [ ]    selfimport only works on -ac_import chains
 
 ##### Dice
 - [ ]    diceaddfunds name fundingtxid amount
@@ -149,12 +176,14 @@ Below is a list of RPC calls in this Rust client as of KMDversion 0.3.3b
 - [ ]    gatewaysclaim bindtxid coin deposittxid destpub amount
 - [ ]    gatewayscompletesigning withdrawtxid coin hex
 - [ ]    gatewaysdeposit bindtxid height coin cointxid claimvout deposithex proof destpub amount
+- [ ]    gatewaysdumpprivkey bindtxid address
+- [ ]    gatewaysexternaladdress bindtxid pubkey
 - [ ]    gatewaysinfo bindtxid
 - [ ]    gatewayslist
 - [ ]    gatewaysmarkdone completesigningtx cointxid
-- [ ]    gatewaysmultisig txidaddr
 - [ ]    gatewayspartialsign txidaddr refcoin hex
-- [ ]    gatewayspending bindtxid coin
+- [ ]    gatewayspendingdeposits bindtxid coin
+- [ ]    gatewayspendingwithdraws bindtxid coin
 - [ ]    gatewaysprocessed bindtxid coin
 - [ ]    gatewayswithdraw bindtxid coin withdrawpub amount
 
@@ -164,13 +193,26 @@ Below is a list of RPC calls in this Rust client as of KMDversion 0.3.3b
 - [ ]    setgenerate generate ( genproclimit )
 
 ##### Heir
-- [ ]    heiraddress func txid amount [destpubkey]
+- [ ]    heiradd txfee funds fundingtxid
+- [ ]    heiraddress pubkey
+- [ ]    heirclaim txfee funds fundingtxid
+- [ ]    heirfund txfee funds heirname heirpubkey inactivitytime memo [tokenid]
+- [ ]    heirinfo fundingtxid
+- [ ]    heirlist
 
 ##### Lotto 
 - [ ]    lottoaddress [pubkey]
 
 ##### Marmara
-- [ ]    marmaraadress [pubkey]
+- [ ]    Marmaraaddress [pubkey]
+- [ ]    marmaracreditloop txid
+- [ ]    marmarainfo firstheight lastheight minamount maxamount [currency issuerpk]
+- [ ]    marmaraissue receiverpk amount currency matures approvaltxid
+- [ ]    marmaralock amount unlockht
+- [ ]    marmarapoolpayout perc firstheight "[[\"pubkey\":shares], ...]"
+- [ ]    marmarareceive senderpk amount currency matures batontxid
+- [ ]    marmarasettlement batontxid
+- [ ]    marmaratransfer receiverpk amount currency matures approvaltxid
 
 ##### Mining 
 - [x]    getblocksubsidy height
@@ -200,6 +242,7 @@ Below is a list of RPC calls in this Rust client as of KMDversion 0.3.3b
 - [ ]    oraclesaddress [pubkey]
 - [ ]    oraclescreate name description format
 - [ ]    oraclesdata oracletxid hexstr
+- [ ]    oraclesfund oracletxid
 - [ ]    oraclesinfo oracletxid
 - [ ]    oracleslist
 - [ ]    oraclesregister oracletxid datafee
@@ -208,19 +251,32 @@ Below is a list of RPC calls in this Rust client as of KMDversion 0.3.3b
 
 ##### Payments 
 - [ ]    paymentsaddress [pubkey]
+- [ ]    paymentsairdrop "[lockedblocks,minamount,mintoaddress,top,bottom,fixedFlag,%22excludeAddress%22,...,%22excludeAddressN%22]"
+- [ ]    payments_airdroptokens "[%22tokenid%22,lockedblocks,minamount,mintoaddress,top,bottom,fixedFlag,%22excludePubKey%22,...,%22excludePubKeyN%22]"
+- [ ]    paymentscreate "[lockedblocks,minamount,%22paytxid0%22,...,%22paytxidN%22]"
+- [ ]    paymentsfund "[%22createtxid%22,amount(,useopret)]"
+- [ ]    paymentsinfo "[%22createtxid%22]"
+- [ ]    paymentslist
+- [ ]    paymentsmerge "[%22createtxid%22]"
+- [ ]    paymentsrelease "[%22createtxid%22,amount,(skipminimum)]"
+- [ ]    paymentstxidopret "[allocation,%22scriptPubKey%22(,%22destopret%22)]"
 
 ##### Pegs 
 - [ ]    pegssaddress [pubkey]
 
 ##### Prices 
-- [ ]    pricesaddfunding fundingtxid bettoken amount
+- [ ]    mypriceslist [all|open|closed]
+- [ ]    prices maxsamples
+- [ ]    pricesaddfunding bettxid amount
 - [ ]    pricesaddress [pubkey]
-- [ ]    pricesbet fundingtxid bettoken amount leverage
-- [ ]    pricescreate bettoken oracletxid margin mode longtoken shorttoken maxleverage funding N [pubkeys]
-- [ ]    pricesfinish fundingtxid bettoken bettxid
-- [ ]    pricesinfo fundingtxid
-- [ ]    priceslist
-- [ ]    pricesstatus fundingtxid bettoken bettxid
+- [ ]    pricesbet amount leverage "synthetic-expression"
+- [ ]    pricescashout bettxid
+- [ ]    pricesgetorderbook
+- [ ]    pricesinfo bettxid [height]
+- [ ]    priceslist [all|open|closed]
+- [ ]    pricesrefillfund amount
+- [ ]    pricesrekt bettxid height
+- [ ]    pricessetcostbasis bettxid
 
 ##### Rawtransactions 
 - [x]    createrawtransaction [{"txid":"id","vout":n},...] {"address":amount,...}
@@ -241,6 +297,8 @@ Below is a list of RPC calls in this Rust client as of KMDversion 0.3.3b
 - [ ]    rewardsunlock name fundingtxid [txid]
 
 ##### Tokens 
+- [ ]    assetsaddress [pubkey]
+- [ ]    mytokenorders [evalcode]
 - [ ]    tokenaddress [pubkey]
 - [ ]    tokenask numtokens tokenid price
 - [ ]    tokenbalance tokenid [pubkey]
@@ -248,7 +306,7 @@ Below is a list of RPC calls in this Rust client as of KMDversion 0.3.3b
 - [ ]    tokencancelask tokenid asktxid
 - [ ]    tokencancelbid tokenid bidtxid
 - [ ]    tokenconvert evalcode tokenid pubkey amount
-- [ ]    tokencreate name supply description
+- [ ]    tokencreate name supply description [description] [data]
 - [ ]    tokenfillask tokenid asktxid fillunits
 - [ ]    tokenfillbid tokenid bidtxid fillamount
 - [ ]    tokeninfo tokenid
@@ -262,10 +320,10 @@ Below is a list of RPC calls in this Rust client as of KMDversion 0.3.3b
 - [ ]    estimatefee nblocks
 - [ ]    estimatepriority nblocks
 - [ ]    invalidateblock "hash"
-- [ ]    jumblr_deposit "depositaddress"
-- [ ]    jumblr_pause
-- [ ]    jumblr_resume
-- [ ]    jumblr_secret "secretaddress"
+- [ ]    ~~jumblr_deposit "depositaddress"~~
+- [ ]    ~~jumblr_pause~~
+- [ ]    ~~jumblr_resume~~
+- [ ]    ~~jumblr_secret "secretaddress"~~
 - [ ]    reconsiderblock "hash"
 - [ ]    txnotarizedconfirmed txid
 - [ ]    validateaddress "komodoaddress"
@@ -275,6 +333,7 @@ Below is a list of RPC calls in this Rust client as of KMDversion 0.3.3b
 ##### Wallet 
 - [ ]    addmultisigaddress nrequired ["key",...] ( "account" )
 - [x]    backupwallet "destination" (*requires `-exportdir` to be set*)
+- [ ]    cleanwallettransactions "txid"
 - [x]    dumpprivkey "komodoaddress" 
 - [x]    dumpwallet "filename" (*requires `-exportdir` to be set*)
 - [ ]    encryptwallet "passphrase"
