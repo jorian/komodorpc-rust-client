@@ -4,6 +4,7 @@ use ApiError;
 pub struct ZKey(String);
 
 impl ZKey {
+    #[allow(dead_code)]
     pub fn from(key: &str) -> Result<ZKey, ApiError> {
         // todo validate zkey
         Ok(ZKey { 0: key.to_string() })

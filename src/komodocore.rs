@@ -709,21 +709,21 @@ impl KomodoRpcApi for Client {
         ))
     }
 
-    fn import_address(&self, address: &Address, label: Option<String>, rescan: bool) -> Result<()> {
-//        match label {
-//            Some(label) => self.send(&RpcRequest::new3(
-//                "importaddress",
-//                &label,
-//                rescan
-//            )),
-//            None => self.send(&RpcRequest::new3(
-//                "importaddress",
-//                "",
-//                rescan
-//            ))
-//        }
-        unimplemented!()
-    }
+    // fn import_address(&self, address: &Address, label: Option<String>, rescan: bool) -> Result<()> {
+    //    match label {
+    //        Some(label) => self.send(&RpcRequest::new3(
+    //            "importaddress",
+    //            &label,
+    //            rescan
+    //        )),
+    //        None => self.send(&RpcRequest::new3(
+    //            "importaddress",
+    //            "",
+    //            rescan
+    //        ))
+    //    }
+    //     unimplemented!()
+    // }
 
     fn import_privkey(&self, key: &str, label: Option<&str>, rescan: bool) -> Result<Address> {
         match label {
@@ -743,7 +743,7 @@ impl KomodoRpcApi for Client {
     }
 
 
-    fn import_wallet(&self, path: &str) -> Result<()> {
+    fn import_wallet(&self, _path: &str) -> Result<()> {
         unimplemented!()
     }
 
@@ -1095,7 +1095,7 @@ impl KomodoRpcApi for Client {
         }
     }
 
-    fn set_pubkey(&self, pubkey: &str) -> Result<SetPubkey> {
+    fn set_pubkey(&self, _pubkey: &str) -> Result<SetPubkey> {
 //        self.send(&RpcRequest::new1(
 //            "setpubkey",
 //            pubkey
@@ -1128,7 +1128,7 @@ impl KomodoRpcApi for Client {
         }
     }
 
-    fn z_exportviewingkey(&self, a: &Address) -> Result<ViewingKey> {
+    fn z_exportviewingkey(&self, _a: &Address) -> Result<ViewingKey> {
 //        match a.addr_type {
 //            AddrType::Shielded => self.send(&RpcRequest::new1(
 //                "z_exportviewingkey",

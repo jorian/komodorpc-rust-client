@@ -1,11 +1,8 @@
 use std::collections::HashMap;
-use ::{TransactionId, SerializedRawTransaction};
 use types::address::AddressUtxos;
 use bitcoin::util::hash::Sha256dHash;
-use ::{ApiError, SignedRawTransaction};
+use ::{ApiError, TransactionId};
 use std::iter::FromIterator;
-use types::arguments::keys::Rescan::No;
-use RawTransaction;
 use types::arguments::address::Address;
 
 #[derive(Debug, Deserialize, Serialize)]

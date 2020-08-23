@@ -38,7 +38,6 @@ use ApiError;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use serde::de::Error;
 use std::convert::TryFrom;
-use std::cmp;
 
 /// Address is either Transparent (address starts with `R`) or Shielded (all sapling, starts with `zs`)
 #[derive(Debug, Clone, Hash, Eq)]

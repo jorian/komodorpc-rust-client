@@ -28,27 +28,15 @@ impl fmt::Display for ApiError {
                 },
             ApiError::Config(ref err) => write!(f, "{}", err),
             ApiError::IO(ref cause) => write!(f, "IO error: {:?}", cause.kind()),
-            ApiError::ParseInt(ref err) => write!(f, "Parse error: {:?}", err.description()),
-            ApiError::Hex(ref err) => write!(f, "Parse error: {:?}", err.description()),
+            ApiError::ParseInt(ref err) => write!(f, "Parse error: {:?}", err.to_string()),
+            ApiError::Hex(ref err) => write!(f, "Parse error: {:?}", err.to_string()),
             ApiError::Other(ref err) => write!(f, "{}", err)
         }
     }
 }
 
 impl Error for ApiError {
-    fn description(&self) -> &str {
-        match *self {
-            ApiError::RPC(ref cause) => cause.description(),
-            ApiError::Client(ref cause) => cause.description(),
-            ApiError::Config(ref err) => err,
-            ApiError::IO(ref cause) => cause.description(),
-            ApiError::ParseInt(ref cause) => cause.description(),
-            ApiError::Hex(ref cause) => cause.description(),
-            ApiError::Other(ref err) => err,
-        }
-    }
-
-    fn cause(&self) -> Option<&Error> {
+    fn cause(&self) -> Option<&dyn Error> {
         match *self {
             ApiError::RPC(ref cause) => Some(cause),
             ApiError::Client(ref cause) => Some(cause),

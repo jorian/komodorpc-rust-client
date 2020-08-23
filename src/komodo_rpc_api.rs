@@ -3,7 +3,7 @@ use BlockHash;
 use types::*;
 use types::arguments::address::{Address, FromAddresses};
 use arguments::address::Amounts;
-use types::arguments::{SendManyAmounts, P2SHInput, P2SHInputSet};
+use types::arguments::{SendManyAmounts, P2SHInputSet};
 
 type Result<T> = std::result::Result<T, ApiError>;
 
@@ -94,7 +94,7 @@ pub trait KomodoRpcApi {
     fn get_transaction(&self, tx: &TransactionId) -> Result<Transaction>;
     fn get_unconfirmed_balance(&self) -> Result<f64>;
     fn get_wallet_info(&self) -> Result<WalletInfo>;
-    fn import_address(&self, address: &Address, label: Option<String>, rescan: bool) -> Result<()>;
+    // fn import_address(&self, address: &Address, label: Option<String>, rescan: bool) -> Result<()>;
     fn import_privkey(&self, key: &str, label: Option<&str>, rescan: bool) -> Result<Address>;
     fn import_wallet(&self, path: &str) -> Result<()>;
     fn list_address_groupings(&self) -> Result<AddressGrouping>;

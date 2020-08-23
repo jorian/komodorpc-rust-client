@@ -14,7 +14,6 @@ use std::error;
 use std::fmt;
 
 use error::ApiError;
-use std::error::Error;
 
 #[derive(Debug)]
 pub struct RpcClient {
@@ -29,18 +28,14 @@ pub enum ClientError {
 }
 
 impl error::Error for ClientError {
-    //noinspection RsUnresolvedReference
-    fn description(&self) -> &str {
-        match self {
-            ClientError::Transport(ref e) => e.description(),
-            ClientError::Json(ref e) => e.description(),
-        }
+    fn cause(&self) -> Option<&dyn error::Error> {
+        self.source()
     }
 }
 
 impl fmt::Display for ClientError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "Something bad happened: {}", self.description())
+        write!(f, "Something bad happened: {}", self.to_string())
     }
 }
 
